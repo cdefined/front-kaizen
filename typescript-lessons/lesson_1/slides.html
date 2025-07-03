@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta lang="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript 入門 - 基礎編</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <style>
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            color: #667eea;
+            text-transform: none;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .code-wrapper code {
+            font-size: 1.3em;
+        }
+
+        .reveal .code-wrapper .code-medium {
+            font-size: 1.19em;
+        }
+
+        .reveal .code-wrapper .code-medium-small {
+            font-size: 1.1em;
+        }
+
+        .reveal .code-wrapper .code-small,
+        .code-small {
+            font-size: 0.9em;
+        }
+
+        .code-small .code-wrapper {
+            width: 100%;
+        }
+
+        ul>li {
+            line-height: 2em;
+        }
+
+        .lifecycle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .lifecycle div {
+            background: rgba(255, 255, 255, 0.1);
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .lifecycle .arrow {
+            background: none;
+            font-size: 100px;
+            color: #667eea;
+            flex: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .js-side,
+        .ts-side {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .js-side h4 {
+            color: #f39c12;
+        }
+
+        .ts-side h4 {
+            color: #3498db;
+        }
+
+        .note {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 8px 0;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .reveal pre code {
+            max-height: 500px;
+            font-size: 0.7em;
+            line-height: 1.4;
+        }
+
+        .reveal code {
+            color: #ff79c6;
+        }
+
+        .reveal .code-comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .playground-demo {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .playground-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .playground-link:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title -->
+            <section class="title-slide">
+                <h1>TypeScript 入門</h1>
+                <h2>基礎編</h2>
+            </section>
+
+            <!-- Slide Group: What is TypeScript -->
+            <section>
+
+                <!-- Core Concept -->
+                <section>
+                    <h1>TypeScriptとは？</h1>
+                    <p><strong>TypeScript = JavaScript + 静的型システム</strong></p>
+
+                    <ul>
+                        <li>JavaScriptはTypeScriptの部分集合です</li>
+                        <li>実行にはJavaScriptへのトランスパイルが必要</li>
+                        <li>Microsoftが2012年に開発</li>
+                        <li>現在の最新バージョンは <strong>5.8.3</strong></li>
+                        <li>TypeScript自体もTypeScriptで書かれている</li>
+                    </ul>
+
+                    <div class="note">
+                        TypeScript 7 は、パフォーマンス向上のために Go で書き直される予定です。
+                    </div>
+                </section>
+
+
+                <!-- Compilation Flow -->
+                <section>
+                    <h2>TypeScriptのライフサイクル</h2>
+                    <div class="lifecycle">
+                        <div>
+                            <h4>.ts ファイル</h4>
+                            <p>TypeScriptコード</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div>
+                            <h4>tsc</h4>
+                            <p>型チェック & 変換</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div>
+                            <h4>.js ファイル</h4>
+                            <p>実行可能なJS</p>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <strong>重要:</strong> TypeScriptは実行時に存在しない。型情報はコンパイル時のみで使用される。
+                    </div>
+                </section>
+
+                <!-- TS → JS Code Example -->
+                <section>
+                    <h2>コード例（変換前後）</h2>
+                    <div class="comparison">
+                        <div class="ts-side">
+                            <h4>TypeScript</h4>
+                            <pre>
+                                <code class="language-typescript">
+    // hello.ts
+    function greet(name: string): string {
+        return `Hello, ${name}!`;
+    }
+                                </code>
+                            </pre>
+                        </div>
+                        <div class="js-side">
+                            <h4>JavaScript</h4>
+                            <pre>
+                                <code class="language-javascript">
+    // hello.js（コンパイル後）
+    function greet(name) {
+        return `Hello, ${name}!`;
+    }
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Turing Complete + Doom -->
+                <section>
+                    <h2>型だけでDoom</h2>
+                    <p>
+                        TypeScriptの型システムはチューリング完全であり、型だけで
+                        <a href="https://www.youtube.com/watch?v=0mCsluv5FXA" target="_blank">Doom</a>を再現可能。
+                    </p>
+                    <div class="note">
+                        このプロジェクトでは3.5兆行の型定義と177TBのデータを処理し、1フレームの描画に12日間かかりました。
+                    </div>
+                </section>
+
+            </section>
+
+
+            <!-- Why TypeScript? -->
+            <section>
+                <section>
+                    <h1>なぜ2025年にTypeScript？</h1>
+
+                    <div class="fragment fade-in">
+                        <h2>1. 型安全性 - バグの早期発見</h2>
+                        <div class="comparison">
+                            <div class="js-side code-small">
+                                <h4>JavaScript - 実行時エラー</h4>
+                                <pre><code class="language-javascript">function getUser(id) {
+  return users.find(u => u.id === id);
+}
+
+const user = getUser("123");
+console.log(user.name.toUpperCase());
+// ☠️ TypeError: Cannot read property 'name' of undefined
+</code></pre>
+                            </div>
+                            <div class="ts-side code-small">
+                                <h4>TypeScript - コンパイル時に防げる</h4>
+                                <pre><code class="language-typescript">function getUser(id: string): User | undefined {
+  return users.find(u => u.id === id);
+}
+
+const user = getUser("123");
+console.log(user.name.toUpperCase());
+// ❌ Error: Object is possibly 'undefined'
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>2. チーム開発に強い</h2>
+                    <ul>
+                        <li><strong>共通理解:</strong> 型定義がAPIの仕様書になる</li>
+                        <li><strong>安全なリファクタ:</strong> 型が変更の影響を可視化</li>
+                        <li><strong>IDE支援:</strong> 補完、警告、ジャンプ機能など</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>3. ドキュメントと型の一体化</h2>
+                    <ul>
+                        <li><strong>ドリフト防止:</strong> コードと仕様が常に一致</li>
+                        <li><strong>自動生成:</strong> 型とコメントからAPI仕様を生成</li>
+                        <li><strong>型ベースの検証:</strong> zodなどでランタイムにも活用可</li>
+                    </ul>
+                </section>
+
+                <!-- DX -->
+                <section>
+                    <h2>4. なめらかな開発体験</h2>
+                    <ul>
+                        <li>初期設計から型を定義すると堅牢なコードに導かれる</li>
+                        <li>コードレビューが効率化される</li>
+                        <li>バックエンドと契約駆動開発しやすい</li>
+                    </ul>
+                </section>
+
+                <!-- AI -->
+                <section>
+                    <h2>5. AIとコード</h2>
+                    <ul>
+                        <li><strong>型 = ヒント:</strong> Copilot/ChatGPTが正確に意図を読み取れる</li>
+                        <li><strong>非型言語では:</strong> 推測ベースで不安定な提案が多い</li>
+                        <li><strong>型情報の活用:</strong> 設計レベルの支援も可能になる</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- How to start -->
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h1>TypeScriptのセットアップ</h1>
+                    <p>導入方法、コンパイル方法、<code>tsconfig.json</code>の設定、<code>.d.ts</code>ファイル</p>
+                </section>
+
+                <section>
+                    <h2>TypeScriptの導入方法</h2>
+                    <ul>
+                        <li>npm でインストール (グローバル or ローカル)</li>
+                        <li>最近のエディターには組み込みサポート</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>npmでのインストール</h2>
+                    <pre><code># グローバル (どこでもCLI使用可能)
+npm install -g typescript
+
+# ローカル (プロジェクト推奨)
+npm install --save-dev typescript</code></pre>
+                </section>
+
+                <section>
+                    <h2>基本的なコンパイル</h2>
+                    <pre><code># 全てをコンパイル
+>>> tsc
+
+# 型チェックのみ (JSファイル出力なし)
+>>> tsc --noEmit
+
+# 監視モード (変更時に自動再コンパイル)
+>>> tsc --watch</code></pre>
+                </section>
+
+                <section>
+                    <h2>tsconfig.json って何？</h2>
+                    <ul>
+                        <li>TypeScriptにコンパイル方法を指示</li>
+                        <li>プロジェクトの境界を定義 (どのファイルを含むか)</li>
+                        <li>型チェックルールを設定</li>
+                    </ul>
+                    <div class="note">
+                        <strong>Tip:</strong> <code>tsc --init</code> で基本的なtsconfig.jsonを自動生成できる
+                    </div>
+                </section>
+
+                <section>
+                    <h2>tsconfig.json の基本設定</h2>
+                    <pre><code class="code-medium language-json">{
+  "compilerOptions": {
+    "target": "ES2020",             // 出力されるJavaScriptのバージョン
+    "module": "ESNext",             // 使用するモジュール方式
+    "outDir": "./dist",             // コンパイル後のJavaScriptファイルの出力先ディレクトリ
+    "rootDir": "./src",             // ソースのTypeScriptファイルがあるルートディレクトリ
+    "strict": true,                 // 厳格な型チェックをすべて有効にする（推奨設定）
+    "esModuleInterop": true         // CommonJSのモジュールをESモジュールのようにimport可能にする
+  },
+  "include": ["src/**/*"],          // コンパイル対象に含めるファイル
+  "exclude": ["node_modules"]       // コンパイルから除外するファイルやフォルダ
+}</code></pre>
+                </section>
+
+                <section>
+                    <h2>d.ts ファイルとは？</h2>
+                    <ul>
+                        <li>型定義のみを記述するファイル</li>
+                        <li>JSライブラリにTypeScriptの型情報を追加</li>
+                        <li>実際のコードは含まない</li>
+                    </ul>
+
+                    <pre><code data-trim class="code-medium">// example.d.ts - 型定義ファイル
+declare function myLibFunction(x: string): number;
+declare const VERSION: string;
+
+// モジュールの型定義
+declare module "some-js-library" {
+  export function doSomething(data: any): Promise<string>;
+}</code></pre>
+
+                    <div class="note">
+                        <strong>実例:</strong> <code>npm install @types/node</code> でNode.jsのAPI型定義を取得
+                    </div>
+                </section>
+            </section>
+
+            <!-- Basic Types -->
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h1>基本の型</h1>
+                    <h3>TypeScriptの型システムの基礎</h3>
+                    <p>プリミティブ型、配列、オブジェクト、<code>any</code>、<code>unknown</code></p>
+                </section>
+
+                <!-- Primitives -->
+                <section>
+                    <h2>プリミティブ型</h2>
+                    <pre><code data-trim class="language-typescript">// 基本的なプリミティブ型
+let characterName: string = "古手梨花";
+let age: number = 11;
+let isAlive: boolean = true;
+let deathCount: null = null;
+let mysteryStatus: undefined = undefined;
+
+// symbol と bigint (ES2015+)
+let fragmentId: symbol = Symbol("fragment");
+let loopCount: bigint = 100000000000000000000n;
+</code></pre>
+                    <div class="note">
+                        文字列、数値、真偽値、<code>null</code>、<code>undefined</code>、<code>symbol</code>、<code>bigint</code>
+                    </div>
+                </section>
+
+                <!-- Arrays -->
+                <section>
+                    <h2>配列型</h2>
+                    <pre><code data-trim class="language-typescript">// 配列の型定義 - 2つの書き方
+let clubGrades: number[] = [1, 2, 3, 2, 1];
+let clubMembers: Array&lt;string&gt; = ["竜宮レナ", "園崎魅音", "古手梨花", "北条沙都子"];
+
+// 読み取り専用配列
+let rules: ReadonlyArray&lt;string&gt; = ["鬼隠し", "綿流し", "祟殺し"];
+// rules.push("暇潰し"); // エラー！
+
+// 読み取り専用配列（readonly 修飾子）
+let legends: readonly string[] = ["雛見沢症候群", "綿流しの儀式", "祟りの噂"];
+// legends.pop(); // エラー！
+</code></pre>
+                    <div class="note">
+                        <code>Type[]</code> vs <code>Array&lt;Type&gt;</code> - どちらでもOK、チーム規約で統一
+                    </div>
+                </section>
+
+                <section>
+                    <h2>配列型</h2>
+                    <pre><code data-trim class="language-typescript">// 混合型の配列
+let evidence: (string | number)[] = ["鬼隠し", 1983, "綿流し", 1982];
+
+// 多次元配列
+let board: string[][] = [
+  ["X", "O", "X"],
+  [" ", "X", "O"],
+  ["O", " ", " "]
+];
+</code></pre>
+                </section>
+
+                <!-- Objects -->
+                <section>
+                    <h2>オブジェクト型</h2>
+                    <pre><code data-trim class="code-medium-small">// オブジェクトの型定義
+let clubMember: { name: string; age: number; weapon?: string } = {
+    name: "竜宮レナ",
+    age: 16
+};
+
+// インデックスシグネチャ
+let suspicionLevels: { [character: string]: number } = {
+    "前原圭一": 3,
+    "竜宮レナ": 5,
+    "園崎魅音": 2
+};</code></pre>
+                </section>
+                <section>
+                    <h2>オブジェクト型</h2>
+                    <pre><code data-trim class="code-medium-small">// ネストしたオブジェクト
+let village: {
+    name: string;
+    location: {
+        prefecture: string;
+        population: number;
+    };
+} = {
+    name: "雛見沢村",
+    location: {
+        prefecture: "岐阜県",
+        population: 2000
+    }
+};</code></pre>
+                </section>
+                <section>
+                    <h2>オプショナルプロパティ</h2>
+                    <p><strong>?マーク</strong>は「省略可能」を意味し。<code>weapon</code>は省略可能。</p>
+                    <pre><code data-trim class="code-medium-small">let character: { 
+    name: string; 
+    weapon?: string; // string | undefined
+} = {
+    name: "古手梨花"
+};
+
+if (character.weapon) { 
+    console.log(character.weapon.toUpperCase()); // 安全なアクセス方法：型ガード
+}
+
+console.log(character.weapon?.toUpperCase()); // 安全なアクセス方法：オプショナルチェーン</code></pre>
+                    <p><code>undefined</code>との違い</p>
+                    <pre><code data-trim class="code-medium-small">let explicitUndefined: { name: string; weapon: string | undefined } = {
+    name: "前原圭一",
+    weapon: undefined  // 明示的にundefinedを設定する必要がある
+};</code></pre>
+                </section>
+
+                <!-- any type -->
+                <section>
+                    <h2>any型</h2>
+                    <pre><code data-trim class="code-medium language-typescript">// any型 - TypeScriptの型チェックを無効化
+let mysteryData: any = "綿流し";
+mysteryData = 1983;
+mysteryData = true;
+mysteryData = { killer: "unknown" };
+
+// なんでもできてしまう（危険）
+mysteryData.oyashiro.curse.activate; // エラーにならない
+mysteryData(); // エラーにならない
+mysteryData[0][1][2]; // エラーにならない
+
+// 型の利益を失う
+let result = mysteryData + 5; // resultの型もany
+</code></pre>
+                    <div class="note">
+                        <code>any</code>はTypeScriptの型安全性を完全に無効化する
+                    </div>
+                </section>
+
+                <!-- Baka any -->
+                <section>
+                    <h2>any型の問題</h2>
+                    <ul>
+                        <li>型チェックが無効化される</li>
+                        <li>コード補完が効かない</li>
+                        <li>ランタイムエラーの原因</li>
+                        <li>リファクタリングが困難</li>
+                        <li>TypeScriptの恩恵を失う</li>
+                    </ul>
+                </section>
+
+                <!-- unknown type -->
+                <section>
+                    <h2>unknown型</h2>
+                    <pre><code data-trim class="code-medium-small language-typescript">let secret: unknown = investigate();
+
+// 直接操作はエラー
+// villageSecret.toUpperCase(); // エラー！
+// villageSecret + 5; // エラー！
+
+// 型ガードが必要
+if (typeof secret === "string") {
+  console.log(secret.toUpperCase()); // OK
+}
+
+if (typeof secret === "number") {
+  console.log(secret.toFixed(2)); // OK
+}</code></pre>
+                    <div class="note">
+                        <code>unknown</code>は使用前に型チェックを強制する
+                    </div>
+                </section>
+
+                <!-- Quiz -->
+                <section>
+                    <h4>理解度チェック①</h4>
+                    <div class="quiz">
+                        <h3>どちらがエラーになる？</h3>
+                        <pre><code class="language-typescript">let mysteryA: any = "梨花";
+let mysteryB: unknown = "梨花";
+
+mysteryA.toUpperCase(); // A
+mysteryB.toUpperCase(); // B</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) mysteryA.toUpperCase()</div>
+                            <div class="quiz-option">B) mysteryB.toUpperCase()</div>
+                            <div class="quiz-option">C) 両方エラー</div>
+                            <div class="quiz-option">D) 両方エラーなし</div>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> B) <code>unknown</code>は型ガードが必要。<code>any</code>は何でもOK（危険）
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz -->
+                <section>
+                    <h4>理解度チェック②</h4>
+                    <div class="quiz">
+                        <h3>次のコードで型エラーになるのは？</h3>
+                        <pre><code class="language-typescript">let clubMembers: string[] = ["圭一", "レナ", "魅音"];
+let suspicionLevels: number[] = [3, 5, 2];
+
+clubMembers.push("梨花"); // A
+clubMembers.push(4); // B
+suspicionLevels[0] = 10; // C
+console.log(suspicionLevels.length); // D</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) clubMembers.push("梨花");</div>
+                            <div class="quiz-option">B) clubMembers.push(4);</div>
+                            <div class="quiz-option">C) suspicionLevels[0] = 10;</div>
+                            <div class="quiz-option">D) suspicionLevels.length;</div>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> B) <code>string[]</code>に<code>number</code>は追加できない
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz: objects -->
+                <section>
+                    <h4>理解度チェック③</h4>
+                    <div class="quiz">
+                        <h3>どの代入が可能？</h3>
+                        <pre><code class="language-typescript code-medium">let villager = {
+    name: "入江京介",
+    age: 35,
+    occupation: "医師"
+};
+
+villager.name = "富竹ジロウ"; // A
+villager.email = "irie@clinic.com"; // B
+villager.age = "三十五歳"; // C
+villager = null; // D</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) villager.name = "富竹ジロウ";</div>
+                            <div class="quiz-option">B) villager.email = "irie@clinic.com";</div>
+                            <div class="quiz-option">C) villager.age = "三十五歳";</div>
+                            <div class="quiz-option">D) villager = null;</div>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> A) のみ。存在する<code>string</code>型プロパティへの代入
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz -->
+                <section>
+                    <h4>理解度チェック④</h4>
+                    <div class="quiz">
+                        <h3>どの操作がエラーになる？</h3>
+                        <pre><code class="language-typescript">let gameArcs: ReadonlyArray&lt;string&gt; = ["鬼隠し", "綿流し", "祟殺し"];
+
+gameArcs[0] // A 
+console.log(gameArcs.length) // B 
+gameArcs.push("暇潰し") // C 
+let copy = [...gameArcs] // D 
+</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) gameArcs[0]</div>
+                            <div class="quiz-option">B) gameArcs.length</div>
+                            <div class="quiz-option">C) gameArcs.push("暇潰し")</div>
+                            <div class="quiz-option">D) [...gameArcs]</div>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> C) <code>ReadonlyArray</code>は変更操作が禁止
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <!-- Type Inference -->
+                <section>
+                    <h1>型推論 - TypeScriptが賢く推測</h1>
+                    <pre><code class="language-typescript">// 明示的な型注釈
+let price: number = 1000;
+
+// 型推論（推奨パターン）
+let discount = 0.1;        // number型と推論
+let productName = "ノートPC"; // string型と推論
+let isAvailable = true;    // boolean型と推論
+
+// 配列の型推論
+let numbers = [1, 2, 3, 4];           // number[]型
+let mixed = [1, "hello", true];       // (string | number | boolean)[]型
+let empty = [];                       // any[]型（注意）
+
+// 関数の戻り値も推論される
+function calculate(x: number, y: number) {
+    return x * y; // number型を返すと推論
+}
+
+// オブジェクトの型推論
+let config = {
+    apiUrl: "https://api.example.com",
+    timeout: 5000,
+    retries: 3
+}; // 構造から型を推論
+
+// コンテキストベースの推論
+const nums = [1, 2, 3];
+const doubled = nums.map(n => n * 2); // nはnumber型と推論
+</code></pre>
+
+                    <div class="note">
+                        <strong>ベストプラクティス:</strong> 型推論に任せられるものは任せる。ただし関数の引数は必ず明示的に書く
+                    </div>
+                </section>
+
+                <!-- Union Types -->
+                <section>
+                    <h1>Union型 - 複数の型を許可</h1>
+                    <pre><code class="language-typescript">// 基本的なUnion型
+let userId: number | string = 123;
+userId = "user_456"; // 再代入OK
+
+// 関数引数でのUnion型
+function formatId(id: number | string): string {
+    if (typeof id === "number") {
+        return `ID: ${id.toString().padStart(6, '0')}`;
+    } else {
+        return `ID: ${id.toUpperCase()}`;
+    }
+}
+
+// null許可型（よく使う）
+let message: string | null = null;
+if (message !== null) {
+    console.log(message.toUpperCase()); // ここでstring確定
+}
+
+// リテラル型のUnion（enum的な使い方）
+type Status = "pending" | "approved" | "rejected";
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+function makeRequest(url: string, method: HttpMethod) {
+    // 実装
+}
+
+makeRequest("/api/users", "GET");    // ✓ Valid
+makeRequest("/api/users", "PATCH");  // ❌ Error
+
+// オブジェクトのUnion
+type ApiResponse = 
+    | { success: true; data: any }
+    | { success: false; error: string };
+
+function handleResponse(response: ApiResponse) {
+    if (response.success) {
+        console.log(response.data);    // TypeScriptが存在を理解
+    } else {
+        console.log(response.error);   // TypeScriptが存在を理解
+    }
+}
+</code></pre>
+                </section>
+
+                <!-- Functions -->
+                <section>
+                    <h1>関数の型定義</h1>
+                    <pre><code class="language-typescript">// 基本的な関数
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+// アロー関数
+const multiply = (x: number, y: number): number => x * y;
+
+// オプショナル引数（?を使う）
+function greet(name: string, title?: string): string {
+    if (title) {
+        return `${title} ${name}`;
+    }
+    return `Hello, ${name}`;
+}
+
+// デフォルト引数
+function createUser(name: string, age: number = 18) {
+    return { name, age }; // 戻り値の型は推論される
+}
+
+// Rest引数
+function sum(...numbers: number[]): number {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+// コールバック関数の型
+function processData(
+    data: string[], 
+    callback: (item: string) => string
+): string[] {
+    return data.map(callback);
+}
+
+// 使用例
+const uppercased = processData(["hello", "world"], s => s.toUpperCase());
+
+// 関数オーバーロード
+function convert(input: string): number;
+function convert(input: number): string;
+function convert(input: string | number): string | number {
+    if (typeof input === "string") {
+        return parseInt(input, 10);
+    } else {
+        return input.toString();
+    }
+}
+</code></pre>
+                </section>
+
+                <!-- Slide 8: void and never -->
+                <section>
+                    <h1>void型とnever型</h1>
+                    <pre><code class="language-typescript">// void型 - 戻り値なし（undefinedを返す）
+function logMessage(message: string): void {
+    console.log(`[LOG] ${message}`);
+    // 暗黙的にundefinedを返す
+}
+
+// voidは通常推論されるので省略可能
+function saveToDatabase(data: any) {
+    console.log("データを保存しました");
+}
+
+// never型 - 絶対に正常終了しない
+function throwError(message: string): never {
+    throw new Error(message);
+    // この後のコードは実行されない
+}
+
+function infiniteLoop(): never {
+    while (true) {
+        console.log("永続実行中...");
+    }
+}
+
+// neverの実用例：exhaustive checking
+type Color = "red" | "green" | "blue";
+
+function getColorHex(color: Color): string {
+    switch (color) {
+        case "red":
+            return "#FF0000";
+        case "green":
+            return "#00FF00";
+        case "blue":
+            return "#0000FF";
+        default:
+            // 新しい色をUnionに追加したらここでエラー
+            const exhaustiveCheck: never = color;
+            throw new Error(`未処理の色: ${exhaustiveCheck}`);
+    }
+}
+</code></pre>
+
+                    <div class="note">
+                        <strong>Tip:</strong> never型でexhaustive checkingを実装すると、Union型に新しい値を追加した時のバグを防げる
+                    </div>
+                </section>
+
+                <!-- Baka any (extended edition) -->
+                <section>
+                    <h2>なぜany型は避けるべきか</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 45%;">
+                            <h3>❌ any型の問題</h3>
+                            <ul>
+                                <li>型チェックが無効化される</li>
+                                <li>コード補完が効かない</li>
+                                <li>ランタイムエラーの原因</li>
+                                <li>リファクタリングが困難</li>
+                                <li>TypeScriptの恩恵を失う</li>
+                            </ul>
+                        </div>
+                        <div style="width: 45%;">
+                            <h3>✅ 代替案</h3>
+                            <ul>
+                                <li><code>unknown</code> - 安全な「なんでも」型</li>
+                                <li><code>object</code> - オブジェクト型</li>
+                                <li>Union型 - <code>string | number</code></li>
+                                <li>適切な型定義を作成</li>
+                                <li>型アサーション（慎重に）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <pre><code data-trim class="language-typescript">// ❌ 避けるべき
+function processEvidence(evidence: any): any {
+    return evidence.clue.toUpperCase();
+}
+
+// ✅ 推奨
+function processEvidence(evidence: unknown): string {
+    if (typeof evidence === "object" && evidence !== null && "clue" in evidence) {
+        const obj = evidence as { clue: string };
+        return obj.clue.toUpperCase();
+    }
+    throw new Error("オヤシロ様の祟りです");
+}
+</code></pre>
+                </section>
+
+                <!-- Quiz Slide 1 -->
+                <section>
+                    <h1>理解度チェック①</h1>
+                    <div class="quiz">
+                        <h3>次のコードで型エラーになるのはどれ？</h3>
+                        <pre><code class="language-typescript">let value: string | number = 42;
+
+// A) value = "hello";
+// B) value = true;
+// C) value = null;
+// D) value = 100;</code></pre>
+
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) value = "hello";</div>
+                            <div class="quiz-option">B) value = true;</div>
+                            <div class="quiz-option">C) value = null;</div>
+                            <div class="quiz-option">D) value = 100;</div>
+                        </div>
+                    </div>
+
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> B と C。string | number型にはbooleanとnullは含まれていない
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Slide 2 -->
+                <section>
+                    <h1>理解度チェック②</h1>
+                    <div class="quiz">
+                        <h3>この関数の戻り値の型は？</h3>
+                        <pre><code class="language-typescript">function process(input: string) {
+    if (input.length > 5) {
+        return input.toUpperCase();
+    }
+    return input.length;
+}</code></pre>
+
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) string</div>
+                            <div class="quiz-option">B) number</div>
+                            <div class="quiz-option">C) string | number</div>
+                            <div class="quiz-option">D) any</div>
+                        </div>
+                    </div>
+
+                    <div class="fragment">
+                        <div class="note">
+                            <strong>答え:</strong> C) string | number。TypeScriptが自動的にUnion型を推論する
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice -->
+                <section>
+                    <h1>練習しよう！</h1>
+                    <ol>
+                        <li>2つの数を受け取り、合計を返す関数</li>
+                        <li>名前と年齢（オプション）を受け取り、オブジェクトにする関数</li>
+                        <li>数値の配列を受け取り、合計を返す関数</li>
+                        <li>数字または文字列を受け取り、文字列として返す関数</li>
+                    </ol>
+                </section>
+
+                <!-- TypeScript Playground -->
+                <section>
+                    <h1>TypeScript Playground</h1>
+
+                    <div class="playground-demo">
+                        <a href="https://www.typescriptlang.org/play" class="playground-link" target="_blank">
+                            🚀 TypeScript Playground で試してみよう
+                        </a>
+                    </div>
+
+                    <h2>Playgroundでできること:</h2>
+                    <ul>
+                        <li>ブラウザでTypeScriptを実行・テスト</li>
+                        <li>コンパイル結果をリアルタイム確認</li>
+                        <li>型エラーの詳細表示</li>
+                        <li>異なるターゲット（ES5, ES2020等）の比較</li>
+                        <li>型定義の探索とテスト</li>
+                    </ul>
+
+                    <div class="note">
+                        <strong>Tip:</strong> Playgroundは学習だけでなく、チームでの型の議論やバグの再現にも使える
+                    </div>
+                </section>
+
+                <!-- Homework -->
+                <section>
+                    <h1>宿題・実践課題</h1>
+
+                    <h2>基礎練習 (TypeScript Playground)</h2>
+                    <ol>
+                        <li><strong>Calculator関数:</strong> 四則演算を行う関数を作成（Union型を使用）</li>
+                        <li><strong>User Profile Builder:</strong> ユーザー情報を作成する関数（オプション引数使用）</li>
+                        <li><strong>Data Validator:</strong> unknownなデータを検証する型ガード関数</li>
+                    </ol>
+
+                    <h2>発展課題</h2>
+                    <ul>
+                        <li>既存のJavaScriptプロジェクトに.tsファイルを1つ追加してみる</li>
+                        <li>favorite VSCode extensions for TypeScript を調べる</li>
+                        <li>DefinitelyTyped (@types/node など) を調べる</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>注意:</strong> 完璧を目指さず、まずは基本の型注釈から始めてください
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section>
+                    <h1>第1回まとめ</h1>
+
+                    <h2>今日学んだこと</h2>
+                    <ul>
+                        <li>TypeScriptの定義とコンパイルプロセス</li>
+                        <li>基本型（プリミティブ、配列、オブジェクト）</li>
+                        <li>型推論の仕組みと活用方法</li>
+                        <li>Union型による柔軟な型定義</li>
+                        <li>関数の型定義（引数、戻り値、オーバーロード）</li>
+                        <li>void型とnever型の使い分け</li>
+                    </ul>
+
+                    <ul>
+                        <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
+                        <li><strong>コマンドライン操作:</strong> プロジェクト設定と tsconfig.json</li>
+                        <li><strong>基本型:</strong> primitive types、arrays、objects</li>
+                        <li><strong>型推論:</strong> TypeScript の自動型判定システム</li>
+                        <li><strong>Union型:</strong> 複数の型を許可する方法</li>
+                        <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
+                        <li><strong>void と never:</strong> 特殊な戻り値型</li>
+                    </ul>
+
+                    <h2>実践での重要ポイント</h2>
+                    <ul>
+                        <li>型推論を活用しつつ、必要な箇所では明示的な型注釈を使用</li>
+                        <li>unknown > any を心がける</li>
+                        <li>Union型とtype guardで安全な型チェック</li>
+                        <li>never型でexhaustive checkingを実装</li>
+                    </ul>
+
+                    <h2>次回予告</h2>
+                    <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
+                    <p>より複雑なデータ構造と再利用可能な型定義について学習します</p>
+
+                    <div class="note">
+                        TypeScript Playgroundで実際にコードを書いて型エラーを体験することが一番の学習方法です！
+                    </div>
+                </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            width: 1800,
+            height: 900,
+            margin: 0.1,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight],
+            highlight: {
+                escapeHTML: true
+            }
+        });
+
+        // Quiz interaction
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                // Remove previous selections
+                this.parentNode.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.background = 'rgba(255,255,255,0.1)';
+                });
+
+                // Highlight selected option
+                this.style.background = 'rgba(102, 126, 234, 0.5)';
+            });
+        });
+    </script>
+</body>
+
+</html>
