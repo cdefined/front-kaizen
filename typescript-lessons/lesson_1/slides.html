@@ -53,6 +53,12 @@
             width: 100%;
         }
 
+        .reveal .comparison .hljs {
+            max-height: 350px;
+            min-height: unset;
+            height: 100%;
+        }
+
         ul>li {
             line-height: 2em;
         }
@@ -148,6 +154,11 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .fragment.correct-answer.visible {
+            border-left: 4px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.3);
+        }
+
         .reveal pre code {
             max-height: 500px;
             font-size: 0.7em;
@@ -168,7 +179,7 @@
             margin: 30px 0;
         }
 
-        .playground-link {
+        .reveal .playground-link {
             display: inline-block;
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -630,12 +641,13 @@ mysteryA.toUpperCase(); // A
 mysteryB.toUpperCase(); // B</code></pre>
                         <div class="quiz-options">
                             <div class="quiz-option">A) mysteryA.toUpperCase()</div>
-                            <div class="quiz-option">B) mysteryB.toUpperCase()</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
+                                mysteryB.toUpperCase()</div>
                             <div class="quiz-option">C) 両方エラー</div>
                             <div class="quiz-option">D) 両方エラーなし</div>
                         </div>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="1">
                         <div class="note">
                             <strong>答え:</strong> B) <code>unknown</code>は型ガードが必要。<code>any</code>は何でもOK（危険）
                         </div>
@@ -656,12 +668,13 @@ suspicionLevels[0] = 10; // C
 console.log(suspicionLevels.length); // D</code></pre>
                         <div class="quiz-options">
                             <div class="quiz-option">A) clubMembers.push("梨花");</div>
-                            <div class="quiz-option">B) clubMembers.push(4);</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
+                                clubMembers.push(4);</div>
                             <div class="quiz-option">C) suspicionLevels[0] = 10;</div>
                             <div class="quiz-option">D) suspicionLevels.length;</div>
                         </div>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="1">
                         <div class="note">
                             <strong>答え:</strong> B) <code>string[]</code>に<code>number</code>は追加できない
                         </div>
@@ -673,10 +686,10 @@ console.log(suspicionLevels.length); // D</code></pre>
                     <h4>理解度チェック③</h4>
                     <div class="quiz">
                         <h3>どの代入が可能？</h3>
-                        <pre><code class="language-typescript code-medium">let villager = {
-    name: "入江京介",
-    age: 35,
-    occupation: "医師"
+                        <pre><code class="language-typescript code-medium">let villager: { name: string; age: number; occupation: string } = {
+  name: "入江京介",
+  age: 35,
+  occupation: "医師",
 };
 
 villager.name = "富竹ジロウ"; // A
@@ -684,13 +697,14 @@ villager.email = "irie@clinic.com"; // B
 villager.age = "三十五歳"; // C
 villager = null; // D</code></pre>
                         <div class="quiz-options">
-                            <div class="quiz-option">A) villager.name = "富竹ジロウ";</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A)
+                                villager.name = "富竹ジロウ";</div>
                             <div class="quiz-option">B) villager.email = "irie@clinic.com";</div>
                             <div class="quiz-option">C) villager.age = "三十五歳";</div>
                             <div class="quiz-option">D) villager = null;</div>
                         </div>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="1">
                         <div class="note">
                             <strong>答え:</strong> A) のみ。存在する<code>string</code>型プロパティへの代入
                         </div>
@@ -704,7 +718,7 @@ villager = null; // D</code></pre>
                         <h3>どの操作がエラーになる？</h3>
                         <pre><code class="language-typescript">let gameArcs: ReadonlyArray&lt;string&gt; = ["鬼隠し", "綿流し", "祟殺し"];
 
-gameArcs[0] // A 
+console.log(gameArcs[0]) // A 
 console.log(gameArcs.length) // B 
 gameArcs.push("暇潰し") // C 
 let copy = [...gameArcs] // D 
@@ -712,11 +726,12 @@ let copy = [...gameArcs] // D
                         <div class="quiz-options">
                             <div class="quiz-option">A) gameArcs[0]</div>
                             <div class="quiz-option">B) gameArcs.length</div>
-                            <div class="quiz-option">C) gameArcs.push("暇潰し")</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
+                                gameArcs.push("暇潰し")</div>
                             <div class="quiz-option">D) [...gameArcs]</div>
                         </div>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="1">
                         <div class="note">
                             <strong>答え:</strong> C) <code>ReadonlyArray</code>は変更操作が禁止
                         </div>
@@ -724,68 +739,115 @@ let copy = [...gameArcs] // D
                 </section>
             </section>
 
+            <!-- Type Inference -->
             <section>
-                <!-- Type Inference -->
                 <section>
-                    <h1>型推論 - TypeScriptが賢く推測</h1>
-                    <pre><code class="language-typescript">// 明示的な型注釈
-let price: number = 1000;
+                    <h1>型推論 「Type Inference」</h1>
+                    <pre><code class="language-typescript code-medium-small">// 基本的な型推論
+let price = 1000;        // number
+let name = "商品A";      // string
+let available = true;    // boolean
 
-// 型推論（推奨パターン）
-let discount = 0.1;        // number型と推論
-let productName = "ノートPC"; // string型と推論
-let isAvailable = true;    // boolean型と推論
+// 配列推論
+let items = [1, 2, 3];   // number[]
+let mixed = [1, "text"]; // (number | string)[]</code></pre>
+                </section>
 
-// 配列の型推論
-let numbers = [1, 2, 3, 4];           // number[]型
-let mixed = [1, "hello", true];       // (string | number | boolean)[]型
-let empty = [];                       // any[]型（注意）
-
-// 関数の戻り値も推論される
-function calculate(x: number, y: number) {
-    return x * y; // number型を返すと推論
+                <section>
+                    <h2>d.tsファイルでの型情報</h2>
+                    <pre><code class="language-typescript code-medium-small">// 元のコード
+export function processOrder(id: number) {
+    const order = { id, status: "pending", total: 0 };
+    return order;
 }
 
-// オブジェクトの型推論
-let config = {
-    apiUrl: "https://api.example.com",
-    timeout: 5000,
-    retries: 3
-}; // 構造から型を推論
-
-// コンテキストベースの推論
-const nums = [1, 2, 3];
-const doubled = nums.map(n => n * 2); // nはnumber型と推論
-</code></pre>
-
+// 生成されるd.ts
+export declare function processOrder(id: number): {
+    id: number;
+    status: string;
+    total: number;
+};</code></pre>
                     <div class="note">
-                        <strong>ベストプラクティス:</strong> 型推論に任せられるものは任せる。ただし関数の引数は必ず明示的に書く
+                        <strong>Tip:</strong> 関数の戻り値は基本的に型推論に任せる。パラメータや複雑な型だけ明示する。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Union型 vertical section -->
+            <section>
+                <!-- Title slide -->
+                <section>
+                    <h1>Union型</h1>
+                    <h3>複数の型を許可する柔軟性</h3>
+                    <div class="fragment">
+                        <p>「AまたはB」の型を表現</p>
+                        <p><code>|</code> (pipe) 演算子で結合</p>
                     </div>
                 </section>
 
-                <!-- Union Types -->
+                <!-- Basic Union -->
                 <section>
-                    <h1>Union型 - 複数の型を許可</h1>
-                    <pre><code class="language-typescript">// 基本的なUnion型
+                    <h2>基本的なUnion型</h2>
+                    <pre><code class="language-typescript">// 数値または文字列
 let userId: number | string = 123;
 userId = "user_456"; // 再代入OK
 
-// 関数引数でのUnion型
-function formatId(id: number | string): string {
+// 複数の型を許可
+let value: string | number | boolean;
+value = "hello";  // ✓
+value = 42;       // ✓
+value = true;     // ✓
+value = null;     // ❌ Error</code></pre>
+                    <div class="note">
+                        型安全性を保ちながら柔軟性を確保
+                    </div>
+                </section>
+
+                <!-- Type Guards -->
+                <section>
+                    <h2>型ガードでの絞り込み</h2>
+                    <pre><code class="language-typescript code-medium-small">function formatId(id: number | string): string {
     if (typeof id === "number") {
+        // この中ではnumber型として扱われる
         return `ID: ${id.toString().padStart(6, '0')}`;
     } else {
+        // この中ではstring型として扱われる
         return `ID: ${id.toUpperCase()}`;
     }
 }
 
-// null許可型（よく使う）
+formatId(123);        // "ID: 000123"
+formatId("abc_456");  // "ID: ABC_456"</code></pre>
+                    <div class="note">
+                        <strong>型ガード:</strong> 実行時チェックでTypeScriptが型を理解
+                    </div>
+                </section>
+
+                <!-- Null Union -->
+                <section>
+                    <h2>null許可型</h2>
+                    <pre><code class="language-typescript code-medium-small">// よく使うパターン
 let message: string | null = null;
+let data: User | undefined;
+
+// null チェック後は型が絞り込まれる
 if (message !== null) {
-    console.log(message.toUpperCase()); // ここでstring確定
+    console.log(message.toUpperCase()); // string確定
 }
 
-// リテラル型のUnion（enum的な使い方）
+// Optional chaining と組み合わせ
+function processUser(user: User | null) {
+    console.log(user?.name?.toUpperCase());
+}</code></pre>
+                    <div class="note">
+                        <code>strictNullChecks</code>が有効なら必須の考慮
+                    </div>
+                </section>
+
+                <!-- Literal Union -->
+                <section>
+                    <h2>リテラル型のUnion</h2>
+                    <pre><code class="language-typescript code-medium-small">// enum的な使い方
 type Status = "pending" | "approved" | "rejected";
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -796,63 +858,106 @@ function makeRequest(url: string, method: HttpMethod) {
 makeRequest("/api/users", "GET");    // ✓ Valid
 makeRequest("/api/users", "PATCH");  // ❌ Error
 
-// オブジェクトのUnion
+// 数値リテラルも可能
+type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;</code></pre>
+                    <div class="fragment">
+                        <div class="note">
+                            文字列定数の集合を型として表現
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Discriminated Union -->
+                <section>
+                    <h2>判別可能なUnion</h2>
+                    <pre><code class="language-typescript">// 共通プロパティで判別
 type ApiResponse = 
     | { success: true; data: any }
     | { success: false; error: string };
 
 function handleResponse(response: ApiResponse) {
     if (response.success) {
-        console.log(response.data);    // TypeScriptが存在を理解
+        console.log(response.data);    // dataが存在することを理解
     } else {
-        console.log(response.error);   // TypeScriptが存在を理解
+        console.log(response.error);   // errorが存在することを理解
     }
-}
-</code></pre>
+}</code></pre>
+                    <div class="note">
+                        <strong>判別プロパティ:</strong> <code>success</code>で型を特定
+                    </div>
                 </section>
 
-                <!-- Functions -->
+                <!-- Quiz -->
+                <section>
+                    <h4>理解度チェック⑤</h4>
+                    <div class="quiz">
+                        <h3>どの代入がエラーになる？</h3>
+                        <pre><code class="language-typescript">type GameResult = "win" | "lose" | "draw";
+let result: GameResult;
+
+result = "win";     // A
+result = "victory"; // B
+result = "draw";    // C
+result = null;      // D</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) result = "win"</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) result =
+                                "victory"</div>
+                            <div class="quiz-option">C) result = "draw"</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) result =
+                                null</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B, D - 定義された文字列リテラル以外はエラー
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Functions -->
+            <section>
                 <section>
                     <h1>関数の型定義</h1>
-                    <pre><code class="language-typescript">// 基本的な関数
+                    <pre><code class="code-medium-small fragment">// 基本的な関数
 function add(a: number, b: number): number {
     return a + b;
 }
 
 // アロー関数
 const multiply = (x: number, y: number): number => x * y;
-
-// オプショナル引数（?を使う）
-function greet(name: string, title?: string): string {
-    if (title) {
-        return `${title} ${name}`;
-    }
-    return `Hello, ${name}`;
-}
-
-// デフォルト引数
-function createUser(name: string, age: number = 18) {
-    return { name, age }; // 戻り値の型は推論される
-}
-
-// Rest引数
-function sum(...numbers: number[]): number {
-    return numbers.reduce((total, num) => total + num, 0);
-}
-
-// コールバック関数の型
+</code></pre>
+                    <pre><code class="code-medium-small fragment language-typescript">// コールバック関数の型
 function processData(
     data: string[], 
     callback: (item: string) => string
 ): string[] {
     return data.map(callback);
-}
+}</code></pre>
+                </section>
+                <section>
+                    <h2>関数の型定義</h2>
+                    <pre><code class="code-medium-small">// オプショナル引数（?を使う）
+function greet(name: string, title?: string): string {
+    if (title) {
+        return `${title} ${name}`;
+    }
+    return `Hello, ${name}`;
+}</code></pre>
+                    <pre><code class="code-medium-small fragment">// デフォルト引数
+function createUser(name: string, age: number = 18) {
+    return { name, age }; // 戻り値の型は推論される
+}</code></pre>
 
-// 使用例
-const uppercased = processData(["hello", "world"], s => s.toUpperCase());
-
-// 関数オーバーロード
-function convert(input: string): number;
+                    <pre><code class="code-medium-small fragment">// Rest引数
+function sum(...numbers: number[]): number {
+    return numbers.reduce((total, num) => total + num, 0);
+}</code></pre>
+                </section>
+                <section>
+                    <h2>関数オーバーロード</h2>
+                    <pre><code>function convert(input: string): number;
 function convert(input: number): string;
 function convert(input: string | number): string | number {
     if (typeof input === "string") {
@@ -860,253 +965,376 @@ function convert(input: string | number): string | number {
     } else {
         return input.toString();
     }
-}
-</code></pre>
+}</code></pre>
+                    <div class="note">
+                        オーバーロードは関数の異なるシグネチャを定義することで、同じ関数名で異なる引数を受け取ることができる
+                    </div>
                 </section>
+            </section>
 
-                <!-- Slide 8: void and never -->
+            <!-- Void and never -->
+            <section>
                 <section>
                     <h1>void型とnever型</h1>
-                    <pre><code class="language-typescript">// void型 - 戻り値なし（undefinedを返す）
+                    <h3>特殊な戻り値の型</h3>
+                    <div class="fragment">
+                        <p><strong>void:</strong> 戻り値なし（undefined）</p>
+                        <p><strong>never:</strong> 絶対に戻らない</p>
+                    </div>
+                </section>
+
+                <!-- Void -->
+                <section>
+                    <h2>void型 - 戻り値なし</h2>
+                    <pre><code class="language-typescript code-medium-small">// void型 - undefinedを返す
 function logMessage(message: string): void {
-    console.log(`[LOG] ${message}`);
-    // 暗黙的にundefinedを返す
-}
+    console.log(`[LOG] ${message}`); // 暗黙的にundefinedを返す
+}</code></pre>
 
-// voidは通常推論されるので省略可能
+                    <pre><code class="language-typescript code-medium-small">// voidは通常推論されるので省略可能
 function saveToDatabase(data: any) {
-    console.log("データを保存しました");
+    console.log("データを保存しました"); // 戻り値の型は自動的にvoidになる
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// void関数からundefinedは返せる
+function processData(): void {
+    console.log("処理完了");
+    return; // OK
+    // return undefined; // これもOK
+    // return null; // ❌ Error
+}</code></pre>
+                    <div class="note">
+                        <strong>用途:</strong> 副作用のある関数（ログ出力、DOM操作など）
+                    </div>
+                </section>
+
+                <!-- Never -->
+                <section>
+                    <h2>never型 - 絶対に戻らない</h2>
+                    <pre><code class="language-typescript code-medium-small">function throwError(message: string): never { // never型 - 例外を投げる
+    throw new Error(message); // この後のコードは実行されない
 }
 
-// never型 - 絶対に正常終了しない
-function throwError(message: string): never {
-    throw new Error(message);
-    // この後のコードは実行されない
+function infiniteLoop(): never { // never型 - 無限ループ
+    while (true) {}
 }
 
-function infiniteLoop(): never {
-    while (true) {
-        console.log("永続実行中...");
+function processValue(value: unknown): string { // 関数が途中で例外を投げる場合
+    if (typeof value === "string") {
+        return value.toUpperCase();
     }
-}
+    throwError("文字列以外は処理できません"); // ここでnever型を返す
+}</code></pre>
+                    <div class="note">
+                        <strong>用途:</strong> エラーハンドリング、到達不可能コードの表現
+                    </div>
+                </section>
 
-// neverの実用例：exhaustive checking
-type Color = "red" | "green" | "blue";
+                <!-- Exhaustive Checking -->
+                <section>
+                    <h2>never型の実用例</h2>
+                    <h3>網羅性チェック　「Exhaustive Checking」</h3>
+                    <pre><code class="language-typescript code-medium-small">type Color = "amethyst" | "green";
 
 function getColorHex(color: Color): string {
     switch (color) {
-        case "red":
-            return "#FF0000";
+        case "amethyst":
+            return "#955CD0";
         case "green":
-            return "#00FF00";
-        case "blue":
-            return "#0000FF";
+            return "#8EDF5F";
         default:
             // 新しい色をUnionに追加したらここでエラー
             const exhaustiveCheck: never = color;
             throw new Error(`未処理の色: ${exhaustiveCheck}`);
     }
-}
-</code></pre>
-
+}</code></pre>
                     <div class="note">
-                        <strong>Tip:</strong> never型でexhaustive checkingを実装すると、Union型に新しい値を追加した時のバグを防げる
+                        <strong>メリット:</strong> Union型に新しい値を追加した時、処理漏れを防げる
                     </div>
                 </section>
 
-                <!-- Baka any (extended edition) -->
+                <!-- void vs never -->
                 <section>
-                    <h2>なぜany型は避けるべきか</h2>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div style="width: 45%;">
-                            <h3>❌ any型の問題</h3>
+                    <h2>void vs never の違い</h2>
+                    <div class="comparison">
+                        <div>
+                            <h3>void型</h3>
                             <ul>
-                                <li>型チェックが無効化される</li>
-                                <li>コード補完が効かない</li>
-                                <li>ランタイムエラーの原因</li>
-                                <li>リファクタリングが困難</li>
-                                <li>TypeScriptの恩恵を失う</li>
+                                <li>関数は<strong>正常終了</strong>する</li>
+                                <li><code>undefined</code>を返す</li>
+                                <li>副作用のある処理</li>
+                                <li>呼び出し元に制御が戻る</li>
                             </ul>
                         </div>
-                        <div style="width: 45%;">
-                            <h3>✅ 代替案</h3>
+                        <div>
+                            <h3>never型</h3>
                             <ul>
-                                <li><code>unknown</code> - 安全な「なんでも」型</li>
-                                <li><code>object</code> - オブジェクト型</li>
-                                <li>Union型 - <code>string | number</code></li>
-                                <li>適切な型定義を作成</li>
-                                <li>型アサーション（慎重に）</li>
+                                <li>関数は<strong>絶対に終了しない</strong></li>
+                                <li>何も返さない</li>
+                                <li>例外・無限ループ</li>
+                                <li>呼び出し元に制御が戻らない</li>
                             </ul>
                         </div>
                     </div>
-                    <pre><code data-trim class="language-typescript">// ❌ 避けるべき
-function processEvidence(evidence: any): any {
-    return evidence.clue.toUpperCase();
-}
-
-// ✅ 推奨
-function processEvidence(evidence: unknown): string {
-    if (typeof evidence === "object" && evidence !== null && "clue" in evidence) {
-        const obj = evidence as { clue: string };
-        return obj.clue.toUpperCase();
-    }
-    throw new Error("オヤシロ様の祟りです");
-}
-</code></pre>
                 </section>
 
-                <!-- Quiz Slide 1 -->
+                <!-- Quiz -->
                 <section>
-                    <h1>理解度チェック①</h1>
+                    <h4>理解度チェック⑥</h4>
                     <div class="quiz">
-                        <h3>次のコードで型エラーになるのはどれ？</h3>
-                        <pre><code class="language-typescript">let value: string | number = 42;
+                        <h3>どの関数がnever型を返すべき？</h3>
+                        <div class="comparison">
+                            <pre><code class="language-typescript code-small">// A
+function printHello() {
+    console.log("Hello!");
+}
 
-// A) value = "hello";
-// B) value = true;
-// C) value = null;
-// D) value = 100;</code></pre>
-
-                        <div class="quiz-options">
-                            <div class="quiz-option">A) value = "hello";</div>
-                            <div class="quiz-option">B) value = true;</div>
-                            <div class="quiz-option">C) value = null;</div>
-                            <div class="quiz-option">D) value = 100;</div>
-                        </div>
-                    </div>
-
-                    <div class="fragment">
-                        <div class="note">
-                            <strong>答え:</strong> B と C。string | number型にはbooleanとnullは含まれていない
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Quiz Slide 2 -->
-                <section>
-                    <h1>理解度チェック②</h1>
-                    <div class="quiz">
-                        <h3>この関数の戻り値の型は？</h3>
-                        <pre><code class="language-typescript">function process(input: string) {
-    if (input.length > 5) {
-        return input.toUpperCase();
+// B
+function divide(a: number, b: number) {
+    if (b === 0) {
+        throw new Error("ゼロ除算エラー");
     }
-    return input.length;
+    return a / b;
 }</code></pre>
 
+                            <pre><code class="language-typescript code-small">// C
+function panic(): never {
+    throw new Error("システムエラー");
+}
+
+// D
+function getUserName(): string | null {
+    return null;
+}</code></pre>
+                        </div>
                         <div class="quiz-options">
-                            <div class="quiz-option">A) string</div>
-                            <div class="quiz-option">B) number</div>
-                            <div class="quiz-option">C) string | number</div>
-                            <div class="quiz-option">D) any</div>
+                            <div class="quiz-option">A) printHello</div>
+                            <div class="quiz-option">B) divide</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) panic
+                            </div>
+                            <div class="quiz-option">D) getUserName</div>
                         </div>
                     </div>
-
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="1">
                         <div class="note">
-                            <strong>答え:</strong> C) string | number。TypeScriptが自動的にUnion型を推論する
+                            <strong>答え:</strong> C) panic - 常に例外を投げて絶対に戻らない
                         </div>
                     </div>
                 </section>
+            </section>
 
+            <section>
                 <!-- Practice -->
+                <!-- Title Slide -->
                 <section>
-                    <h1>練習しよう！</h1>
-                    <ol>
-                        <li>2つの数を受け取り、合計を返す関数</li>
-                        <li>名前と年齢（オプション）を受け取り、オブジェクトにする関数</li>
-                        <li>数値の配列を受け取り、合計を返す関数</li>
-                        <li>数字または文字列を受け取り、文字列として返す関数</li>
-                    </ol>
+                    <h1>TypeScript 実践演習</h1>
+                    <h3>3つの課題 (各5-10分)</h3>
+                    <p>今日学んだ内容を実際に使ってみよう！</p>
                 </section>
 
-                <!-- TypeScript Playground -->
+                <!-- Task 1 -->
                 <section>
-                    <h1>TypeScript Playground</h1>
+                    <h2><span class="task-number">課題1</span> Union型とtype guard</h2>
 
-                    <div class="playground-demo">
-                        <a href="https://www.typescriptlang.org/play" class="playground-link" target="_blank">
-                            🚀 TypeScript Playground で試してみよう
-                        </a>
-                    </div>
-
-                    <h2>Playgroundでできること:</h2>
+                    <p><strong>関数 processId を作成してください</strong></p>
                     <ul>
-                        <li>ブラウザでTypeScriptを実行・テスト</li>
-                        <li>コンパイル結果をリアルタイム確認</li>
-                        <li>型エラーの詳細表示</li>
-                        <li>異なるターゲット（ES5, ES2020等）の比較</li>
-                        <li>型定義の探索とテスト</li>
+                        <li>引数: id (number | string)</li>
+                        <li>戻り値: string</li>
+                        <li>numberの場合は "ID: 123"、stringの場合は "CODE: ABC" の形式で返す</li>
                     </ul>
 
-                    <div class="note">
-                        <strong>Tip:</strong> Playgroundは学習だけでなく、チームでの型の議論やバグの再現にも使える
-                    </div>
+                    <pre><code class="typescript">
+function processId(id: number | string): string {
+    // ここにコードを書いてください
+}
+
+// テスト
+console.log(processId(123));    // "ID: 123"
+console.log(processId("ABC"));  // "CODE: ABC"
+                </code></pre>
                 </section>
 
-                <!-- Homework -->
+                <!-- Task 1 Solution -->
                 <section>
-                    <h1>宿題・実践課題</h1>
+                    <h2><span class="task-number">課題1</span> 解答例</h2>
+                    <div class="solution">
+                        <pre><code class="typescript">
+function processId(id: number | string): string {
+    if (typeof id === "number") {
+        return `ID: ${id}`;
+    } else {
+        return `CODE: ${id}`;
+    }
+}
 
-                    <h2>基礎練習 (TypeScript Playground)</h2>
-                    <ol>
-                        <li><strong>Calculator関数:</strong> 四則演算を行う関数を作成（Union型を使用）</li>
-                        <li><strong>User Profile Builder:</strong> ユーザー情報を作成する関数（オプション引数使用）</li>
-                        <li><strong>Data Validator:</strong> unknownなデータを検証する型ガード関数</li>
-                    </ol>
-
-                    <h2>発展課題</h2>
-                    <ul>
-                        <li>既存のJavaScriptプロジェクトに.tsファイルを1つ追加してみる</li>
-                        <li>favorite VSCode extensions for TypeScript を調べる</li>
-                        <li>DefinitelyTyped (@types/node など) を調べる</li>
-                    </ul>
-
-                    <div class="warning">
-                        <strong>注意:</strong> 完璧を目指さず、まずは基本の型注釈から始めてください
+// typeof演算子を使って型を判定
+// これをtype guardと呼ぶ
+                    </code></pre>
                     </div>
                 </section>
 
-                <!-- Summary -->
+                <!-- Task 2 -->
                 <section>
-                    <h1>第1回まとめ</h1>
+                    <h2><span class="task-number">課題2</span> オプション値と配列</h2>
 
-                    <h2>今日学んだこと</h2>
+                    <p><strong>関数 createMessage を作成してください</strong></p>
                     <ul>
-                        <li>TypeScriptの定義とコンパイルプロセス</li>
-                        <li>基本型（プリミティブ、配列、オブジェクト）</li>
-                        <li>型推論の仕組みと活用方法</li>
-                        <li>Union型による柔軟な型定義</li>
-                        <li>関数の型定義（引数、戻り値、オーバーロード）</li>
-                        <li>void型とnever型の使い分け</li>
+                        <li>引数: name (string), tags? (string[])</li>
+                        <li>戻り値: string</li>
+                        <li>tagsがある場合は "Hello name [tag1, tag2]"、ない場合は "Hello name" を返す</li>
                     </ul>
 
-                    <ul>
-                        <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
-                        <li><strong>コマンドライン操作:</strong> プロジェクト設定と tsconfig.json</li>
-                        <li><strong>基本型:</strong> primitive types、arrays、objects</li>
-                        <li><strong>型推論:</strong> TypeScript の自動型判定システム</li>
-                        <li><strong>Union型:</strong> 複数の型を許可する方法</li>
-                        <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
-                        <li><strong>void と never:</strong> 特殊な戻り値型</li>
-                    </ul>
+                    <pre><code class="typescript">
+function createMessage(name: string, tags?: string[]): string {
+    // ここにコードを書いてください
+}
 
-                    <h2>実践での重要ポイント</h2>
-                    <ul>
-                        <li>型推論を活用しつつ、必要な箇所では明示的な型注釈を使用</li>
-                        <li>unknown > any を心がける</li>
-                        <li>Union型とtype guardで安全な型チェック</li>
-                        <li>never型でexhaustive checkingを実装</li>
-                    </ul>
+// テスト
+console.log(createMessage("太郎"));                    // "Hello 太郎"
+console.log(createMessage("花子", ["admin", "user"])); // "Hello 花子 [admin, user]"
+                </code></pre>
+                </section>
 
-                    <h2>次回予告</h2>
-                    <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
-                    <p>より複雑なデータ構造と再利用可能な型定義について学習します</p>
+                <!-- Task 2 Solution -->
+                <section>
+                    <h2><span class="task-number">課題2</span> 解答例</h2>
+                    <div class="solution">
+                        <pre><code class="typescript">
+function createMessage(name: string, tags?: string[]): string {
+    if (tags) {
+        return `Hello ${name} [${tags.join(", ")}]`;
+    } else {
+        return `Hello ${name}`;
+    }
+}
 
-                    <div class="note">
-                        TypeScript Playgroundで実際にコードを書いて型エラーを体験することが一番の学習方法です！
+// オプション引数はundefinedかもしれないので
+// 存在チェックが必要
+// tags?.join() でもOK
+                    </code></pre>
                     </div>
                 </section>
+
+                <!-- Task 3 -->
+                <section>
+                    <h2><span class="task-number">課題3</span> 型推論と配列</h2>
+
+                    <p><strong>関数 getValue を作成してください</strong></p>
+                    <ul>
+                        <li>引数: data (number[] | string[])</li>
+                        <li>戻り値: number | string</li>
+                        <li>配列の最初の要素を返す。空配列の場合は適切なデフォルト値を返す</li>
+                    </ul>
+
+                    <pre><code class="typescript">
+function getValue(data: number[] | string[]): number | string {
+    // ここにコードを書いてください
+}
+
+// テスト
+console.log(getValue([1, 2, 3]));      // 1
+console.log(getValue(["a", "b"]));     // "a"
+console.log(getValue([]));             // ? (どうなる？)
+                </code></pre>
+                </section>
+
+                <!-- Task 3 Solution -->
+                <section>
+                    <h2><span class="task-number">課題3</span> 解答例</h2>
+                    <div class="solution">
+                        <pre><code class="typescript">
+function getValue(data: number[] | string[]): number | string {
+    if (data.length === 0) {
+        // 空配列の場合のデフォルト値
+        return typeof data[0] === "number" ? 0 : "";
+    }
+    return data[0];
+}
+
+// より簡潔な解答:
+function getValue(data: number[] | string[]): number | string {
+    return data[0] ?? (typeof data === "object" && data.length === 0 ? 
+        (typeof data[0] === "number" ? 0 : "") : data[0]);
+}
+
+// 実際はこれでもOK:
+function getValue(data: number[] | string[]): number | string {
+    return data[0] ?? 0;
+}
+                    </code></pre>
+                    </div>
+                </section>
+
+            </section>
+
+            <!-- TypeScript Playground -->
+            <section>
+                <h1>TypeScript Playground</h1>
+
+                <div class="playground-demo">
+                    <a href="https://www.typescriptlang.org/play" class="playground-link" target="_blank">
+                        🚀 TypeScript Playground で試してみよう
+                    </a>
+                </div>
+
+                <h2>Playgroundでできること:</h2>
+                <ul>
+                    <li>ブラウザでTypeScriptを実行・テスト</li>
+                    <li>コンパイル結果をリアルタイム確認</li>
+                    <li>型エラーの詳細表示</li>
+                    <li>異なるターゲット（ES5, ES2020等）の比較</li>
+                    <li>型定義の探索とテスト</li>
+                </ul>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h1>第1回まとめ</h1>
+
+                <h2>今日学んだこと</h2>
+                <ul>
+                    <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
+                    <li><strong>コマンドライン操作:</strong> プロジェクト設定と tsconfig.json</li>
+                    <li><strong>基本型:</strong> primitive types、arrays、objects</li>
+                    <li><strong>型推論:</strong> TypeScript の自動型判定システム</li>
+                    <li><strong>Union型:</strong> 複数の型を許可する方法</li>
+                    <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
+                    <li><strong>void と never:</strong> 特殊な戻り値型</li>
+                </ul>
+            </section>
+
+            <!-- Homework -->
+            <section>
+                <h1>宿題・実践課題</h1>
+
+                <h2>基礎練習</h2>
+                <ul>
+                    <li><strong>User Profile Builder:</strong> ユーザー情報を作成する関数（オプション引数使用）</li>
+                </ul>
+                <div class="note">TODO: proper task + tests</div>
+            </section>
+
+            <!-- Tips -->
+            <section>
+                <h1>実践での重要ポイント</h1>
+                <ul>
+                    <li>型推論を活用しつつ、必要な箇所では明示的な型注釈を使用</li>
+                    <li>unknown > any を心がける</li>
+                    <li>Union型とtype guardで安全な型チェック</li>
+                    <li>never型でexhaustive checkingを実装</li>
+                </ul>
+            </section>
+
+            <!-- In next episode -->
+            <section>
+                <h1>次回予告</h1>
+                <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
+                <p>より複雑なデータ構造と再利用可能な型定義について学習します</p>
+
+                <div class="note">
+                    TypeScript Playgroundで実際にコードを書いて型エラーを体験することが一番の学習方法です！
+                </div>
+            </section>
         </div>
     </div>
 
