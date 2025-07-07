@@ -188,9 +188,11 @@
             text-decoration: none;
             font-weight: bold;
             transition: transform 0.3s;
+            text-decoration: underline;
         }
 
-        .playground-link:hover {
+        .reveal .playground-link:hover {
+            color: white;
             transform: translateY(-2px);
         }
     </style>
@@ -361,7 +363,7 @@ console.log(user.name.toUpperCase());
                 <section>
                     <h2>5. AIとコード</h2>
                     <ul>
-                        <li><strong>型 = ヒント:</strong> Copilot/ChatGPTが正確に意図を読み取れる</li>
+                        <li><strong>型 = ヒント:</strong> LLMが正確に意図を読み取れる</li>
                         <li><strong>非型言語では:</strong> 推測ベースで不安定な提案が多い</li>
                         <li><strong>型情報の活用:</strong> 設計レベルの支援も可能になる</li>
                     </ul>
@@ -751,6 +753,9 @@ let available = true;    // boolean
 // 配列推論
 let items = [1, 2, 3];   // number[]
 let mixed = [1, "text"]; // (number | string)[]</code></pre>
+                    <div class="note">
+                        <strong>ベストプラクティス:</strong> 明示的な型注釈は避けて推論に任せる
+                    </div>
                 </section>
 
                 <section>
@@ -773,9 +778,8 @@ export declare function processOrder(id: number): {
                 </section>
             </section>
 
-            <!-- Union型 vertical section -->
+            <!-- Union -->
             <section>
-                <!-- Title slide -->
                 <section>
                     <h1>Union型</h1>
                     <h3>複数の型を許可する柔軟性</h3>
@@ -860,17 +864,15 @@ makeRequest("/api/users", "PATCH");  // ❌ Error
 
 // 数値リテラルも可能
 type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;</code></pre>
-                    <div class="fragment">
-                        <div class="note">
-                            文字列定数の集合を型として表現
-                        </div>
+                    <div class="note">
+                        文字列定数の集合を型として表現
                     </div>
                 </section>
 
                 <!-- Discriminated Union -->
                 <section>
-                    <h2>判別可能なUnion</h2>
-                    <pre><code class="language-typescript">// 共通プロパティで判別
+                    <h2>判別可能なUnion「Discriminated Union」</h2>
+                    <pre><code class="language-typescript code-medium-small">// 共通プロパティで判別
 type ApiResponse = 
     | { success: true; data: any }
     | { success: false; error: string };
@@ -1098,12 +1100,12 @@ function divide(a: number, b: number) {
 }</code></pre>
 
                             <pre><code class="language-typescript code-small">// C
-function panic(): never {
+function panic() {
     throw new Error("システムエラー");
 }
 
 // D
-function getUserName(): string | null {
+function getUserName() {
     return null;
 }</code></pre>
                         </div>
@@ -1132,23 +1134,40 @@ function getUserName(): string | null {
                     <p>今日学んだ内容を実際に使ってみよう！</p>
                 </section>
 
+                <!-- TypeScript Playground -->
+                <section>
+                    <h1>TypeScript Playground</h1>
+
+                    <div class="playground-demo">
+                        <a href="https://www.typescriptlang.org/play" class="playground-link" target="_blank">
+                            https://www.typescriptlang.org/play
+                        </a>
+                    </div>
+
+                    <h2>Playgroundでできること:</h2>
+                    <ul>
+                        <li>ブラウザでTypeScriptを実行・テスト</li>
+                        <li>コンパイル結果をリアルタイム確認</li>
+                        <li>型エラーの詳細表示</li>
+                        <li>異なるターゲット（ES5, ES2020等）の比較</li>
+                        <li>型定義の探索とテスト</li>
+                    </ul>
+                </section>
+
+
                 <!-- Task 1 -->
                 <section>
                     <h2><span class="task-number">課題1</span> Union型とtype guard</h2>
 
-                    <p><strong>関数 processId を作成してください</strong></p>
+                    <p><strong>関数 <code>processId</code> を作成してください</strong></p>
                     <ul>
-                        <li>引数: id (number | string)</li>
-                        <li>戻り値: string</li>
-                        <li>numberの場合は "ID: 123"、stringの場合は "CODE: ABC" の形式で返す</li>
+                        <li>引数 <code>id</code> は <code>number</code> または <code>string</code> のいずれかです</li>
+                        <li><code>number</code> の場合は <code>"ID: 123"</code>、<code>string</code> の場合は
+                            <code>"CODE: ABC"</code> の形式で返す
+                        </li>
                     </ul>
 
-                    <pre><code class="typescript">
-function processId(id: number | string): string {
-    // ここにコードを書いてください
-}
-
-// テスト
+                    <pre><code class="typescript">// テスト
 console.log(processId(123));    // "ID: 123"
 console.log(processId("ABC"));  // "CODE: ABC"
                 </code></pre>
@@ -1157,135 +1176,103 @@ console.log(processId("ABC"));  // "CODE: ABC"
                 <!-- Task 1 Solution -->
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
-                    <div class="solution">
-                        <pre><code class="typescript">
-function processId(id: number | string): string {
+                    <p>型ガード　【type guard】を使うことができます</p>
+                    <pre><code class="typescript">function processId(id: number | string): string {
+    // typeof演算子を使って型を判定
     if (typeof id === "number") {
         return `ID: ${id}`;
     } else {
         return `CODE: ${id}`;
     }
-}
-
-// typeof演算子を使って型を判定
-// これをtype guardと呼ぶ
-                    </code></pre>
-                    </div>
+}</code></pre>
                 </section>
 
                 <!-- Task 2 -->
                 <section>
                     <h2><span class="task-number">課題2</span> オプション値と配列</h2>
 
-                    <p><strong>関数 createMessage を作成してください</strong></p>
+                    <p><strong>関数 <code>createMessage</code> を作成してください</strong></p>
                     <ul>
-                        <li>引数: name (string), tags? (string[])</li>
-                        <li>戻り値: string</li>
-                        <li>tagsがある場合は "Hello name [tag1, tag2]"、ない場合は "Hello name" を返す</li>
+                        <li>名前と省略可能なタグを受け取ります</li>
+                        <li>タグがある場合は <code>"Hello 名前 [tag1, tag2]"</code>、ない場合は <code>"Hello 名前"</code> を返します</li>
                     </ul>
 
-                    <pre><code class="typescript">
-function createMessage(name: string, tags?: string[]): string {
-    // ここにコードを書いてください
-}
-
-// テスト
-console.log(createMessage("太郎"));                    // "Hello 太郎"
-console.log(createMessage("花子", ["admin", "user"])); // "Hello 花子 [admin, user]"
+                    <pre><code class="typescript">// テスト
+console.log(createMessage("Takano"));                    // "Hello Takano"
+console.log(createMessage("Satoko", ["admin", "user"])); // "Hello Satoko [admin, user]"
                 </code></pre>
                 </section>
 
                 <!-- Task 2 Solution -->
                 <section>
                     <h2><span class="task-number">課題2</span> 解答例</h2>
-                    <div class="solution">
-                        <pre><code class="typescript">
-function createMessage(name: string, tags?: string[]): string {
-    if (tags) {
+                    <p>オプション引数は <code>undefined</code> かもしれないので存在チェックが必要</p>
+                    <pre><code class="typescript">function createMessage(name: string, tags?: string[]): string {
+    if (tags) { // tags?.join() でもOK
         return `Hello ${name} [${tags.join(", ")}]`;
     } else {
         return `Hello ${name}`;
     }
-}
-
-// オプション引数はundefinedかもしれないので
-// 存在チェックが必要
-// tags?.join() でもOK
-                    </code></pre>
-                    </div>
+}</code></pre>
                 </section>
 
                 <!-- Task 3 -->
                 <section>
-                    <h2><span class="task-number">課題3</span> 型推論と配列</h2>
+                    <h2><span class="task-number">課題3</span> 型推論</h2>
 
-                    <p><strong>関数 getValue を作成してください</strong></p>
+                    <p><strong>関数 <code>investigateFragment</code> を作成してください</strong></p>
                     <ul>
-                        <li>引数: data (number[] | string[])</li>
-                        <li>戻り値: number | string</li>
-                        <li>配列の最初の要素を返す。空配列の場合は適切なデフォルト値を返す</li>
+                        <li>引数: <code>fragments</code> は数値の配列または文字列の配列</li>
+                        <li>配列の最初の要素を返す。空配列の場合は <code>"nanodesu"</code> を返す</li>
+                        <li>型を判定する処理を書いてください</li>
                     </ul>
 
-                    <pre><code class="typescript">
-function getValue(data: number[] | string[]): number | string {
-    // ここにコードを書いてください
-}
-
-// テスト
-console.log(getValue([1, 2, 3]));      // 1
-console.log(getValue(["a", "b"]));     // "a"
-console.log(getValue([]));             // ? (どうなる？)
-                </code></pre>
+                    <pre><code class="typescript">// テスト
+console.log(investigateFragment([1983, 1984, 1985]));   // 1983
+console.log(investigateFragment(["rena", "mion"]));     // "rena"
+console.log(investigateFragment([]));                   // "nanodesu"
+    </code></pre>
                 </section>
 
                 <!-- Task 3 Solution -->
                 <section>
                     <h2><span class="task-number">課題3</span> 解答例</h2>
-                    <div class="solution">
-                        <pre><code class="typescript">
-function getValue(data: number[] | string[]): number | string {
-    if (data.length === 0) {
-        // 空配列の場合のデフォルト値
-        return typeof data[0] === "number" ? 0 : "";
+                    <p>空配列の場合の処理がポイント</p>
+                    <pre><code class="typescript code-medium-small">function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
+    // 空配列の場合の処理
+    if (fragments.length === 0) {
+        return "nanodesu";
     }
-    return data[0];
-}
-
-// より簡潔な解答:
-function getValue(data: number[] | string[]): number | string {
-    return data[0] ?? (typeof data === "object" && data.length === 0 ? 
-        (typeof data[0] === "number" ? 0 : "") : data[0]);
-}
-
-// 実際はこれでもOK:
-function getValue(data: number[] | string[]): number | string {
-    return data[0] ?? 0;
-}
-                    </code></pre>
-                    </div>
+    
+    // 型ガードで配列の型を判定
+    if (typeof fragments[0] === "number") {
+        return fragments[0]; // number配列の場合
+    } else {
+        return fragments[0]; // string配列の場合
+    }
+}</code></pre>
                 </section>
 
+                <!-- Task 3 Alternative Solutions -->
+                <section>
+                    <h2><span class="task-number">課題3</span> 別解</h2>
+                    <p>TypeScriptの型推論を活用した書き方</p>
+                    <pre><code class="typescript code-medium-small">// 別解1: 型推論を活用
+function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
+    if (fragments.length === 0) {
+        return "nanodesu";
+    }
+    
+    return fragments[0]; // TypeScriptが自動で型を推論
+}
+
+// 別解2: より簡潔な書き方
+function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
+    return fragments[0] ?? "nanodesu";
+}</code></pre>
+                </section>
             </section>
 
-            <!-- TypeScript Playground -->
-            <section>
-                <h1>TypeScript Playground</h1>
-
-                <div class="playground-demo">
-                    <a href="https://www.typescriptlang.org/play" class="playground-link" target="_blank">
-                        🚀 TypeScript Playground で試してみよう
-                    </a>
-                </div>
-
-                <h2>Playgroundでできること:</h2>
-                <ul>
-                    <li>ブラウザでTypeScriptを実行・テスト</li>
-                    <li>コンパイル結果をリアルタイム確認</li>
-                    <li>型エラーの詳細表示</li>
-                    <li>異なるターゲット（ES5, ES2020等）の比較</li>
-                    <li>型定義の探索とテスト</li>
-                </ul>
-            </section>
 
             <!-- Summary -->
             <section>
@@ -1305,35 +1292,28 @@ function getValue(data: number[] | string[]): number | string {
 
             <!-- Homework -->
             <section>
-                <h1>宿題・実践課題</h1>
+                <section>
+                    <h1>宿題・実践課題</h1>
 
-                <h2>基礎練習</h2>
-                <ul>
-                    <li><strong>User Profile Builder:</strong> ユーザー情報を作成する関数（オプション引数使用）</li>
-                </ul>
-                <div class="note">TODO: proper task + tests</div>
-            </section>
-
-            <!-- Tips -->
-            <section>
-                <h1>実践での重要ポイント</h1>
-                <ul>
-                    <li>型推論を活用しつつ、必要な箇所では明示的な型注釈を使用</li>
-                    <li>unknown > any を心がける</li>
-                    <li>Union型とtype guardで安全な型チェック</li>
-                    <li>never型でexhaustive checkingを実装</li>
-                </ul>
+                    <h3>斬魄刀コレクション管理システム</h3>
+                    <div class="note"><a href="homework/README.md" target="_blank">lesson1/homework/README.md</a></div>
+                </section>
+                <section>
+                    <h1>実践での重要ポイント</h1>
+                    <ul>
+                        <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
+                        <li>Union型は実際のデータ構造を反映する（"melee" | "kido" など）</li>
+                        <li>Optional型（?）で「あるかもしれない」データを表現</li>
+                        <li>Type guardでランタイムの型チェックと型の絞り込みを両立</li>
+                        <li>配列操作（filter, map, sort）とTypeScriptの組み合わせに慣れる</li>
+                    </ul>
+                </section>
             </section>
 
             <!-- In next episode -->
             <section>
                 <h1>次回予告</h1>
                 <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
-                <p>より複雑なデータ構造と再利用可能な型定義について学習します</p>
-
-                <div class="note">
-                    TypeScript Playgroundで実際にコードを書いて型エラーを体験することが一番の学習方法です！
-                </div>
             </section>
         </div>
     </div>
