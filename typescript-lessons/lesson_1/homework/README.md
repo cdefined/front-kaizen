@@ -1,13 +1,5 @@
 # 宿題: 斬魄刀コレクション管理システム
 
-## セットアップ
-
-```bash
-# プロジェクトディレクトリで実行
-tsc homework.ts
-node homework.js
-```
-
 ## 課題概要
 
 斬魄刀のデータを管理・分析するシステムを作成してください。
@@ -83,4 +75,4 @@ function getRankings(zanpakutos: Zanpakuto[], topN: number): string[];
 
 ### テスト
 
-`tsc homework.ts && node homework.js` でテストが実行され、すべての関数が正しく動作することを確認してください。
+`npm run lesson1` でテストが実行され、すべての関数が正しく動作することを確認してください。

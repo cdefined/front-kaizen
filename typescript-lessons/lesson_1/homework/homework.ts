@@ -1,20 +1,11 @@
-import { zanpakutoCollection } from "./data";
-
-interface Zanpakuto {
-  name: string;
-  owner: string;
-  type: "melee" | "kido" | "elemental" | "illusion";
-  bankai?: string;
-  shikaiAbility: string;
-  powerLevel: number;
-  isReleased: boolean;
-}
+import { type Zanpakuto, zanpakutoCollection } from "./data";
 
 // ここに関数を実装してください
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
   // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 2. filterByType
@@ -23,6 +14,7 @@ function filterByType(
   targetType: Zanpakuto["type"],
 ): Zanpakuto[] {
   // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 3. hasBankai (type guard)
@@ -30,11 +22,13 @@ function hasBankai(
   zanpakuto: Zanpakuto,
 ): zanpakuto is Zanpakuto & { bankai: string } {
   // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 4. getRankings
 function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
   // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // テスト

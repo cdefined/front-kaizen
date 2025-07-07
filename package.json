@@ -1,0 +1,19 @@
+{
+  "name": "front-kaizen",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "lesson1": "tsc && node dist/lesson_1/homework/homework.js",
+    "clean": "rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdefined/front-kaizen.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cdefined/front-kaizen/issues"
+  },
+  "homepage": "https://github.com/cdefined/front-kaizen#readme"
+}

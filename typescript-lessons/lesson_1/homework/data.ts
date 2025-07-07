@@ -1,4 +1,14 @@
-export const zanpakutoCollection = [
+export interface Zanpakuto {
+  name: string;
+  owner: string;
+  type: "melee" | "kido" | "elemental" | "illusion";
+  bankai?: string;
+  shikaiAbility: string;
+  powerLevel: number;
+  isReleased: boolean;
+}
+
+export const zanpakutoCollection: Zanpakuto[] = [
   {
     name: "Zangetsu",
     owner: "Kurosaki Ichigo",
