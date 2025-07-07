@@ -71,7 +71,7 @@ function getRankings(zanpakutos: Zanpakuto[], topN: number): string[];
 
 ### データ
 
-提供されている `zanpakutoCollection` 配列を使用してください（この配列は `data.ts` に定義されています）。
+提供されている `zanpakutoCollection` 配列を使用してください（この配列は [`data.ts`](/typescript-lessons/lesson_1/homework/data.ts) に定義されています）。
 
 ### テスト
 

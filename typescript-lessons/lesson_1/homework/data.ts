@@ -73,14 +73,6 @@ export const zanpakutoCollection: Zanpakuto[] = [
     isReleased: true,
   },
   {
-    name: "Kazeshini",
-    owner: "Hisagi Shuhei",
-    type: "melee",
-    shikaiAbility: "Dual kusarigama",
-    powerLevel: 6800,
-    isReleased: false,
-  },
-  {
     name: "Wabisuke",
     owner: "Kira Izuru",
     type: "kido",
@@ -96,14 +88,6 @@ export const zanpakutoCollection: Zanpakuto[] = [
     shikaiAbility: "Two-hit kill",
     powerLevel: 7800,
     isReleased: true,
-  },
-  {
-    name: "Raika",
-    owner: "Amagai Shusuke",
-    type: "elemental",
-    shikaiAbility: "Flame manipulation",
-    powerLevel: 7400,
-    isReleased: false,
   },
   {
     name: "Haineko",

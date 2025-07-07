@@ -66,8 +66,8 @@ console.assert(
   "hasBankai should return true for Zangetsu",
 );
 console.assert(
-  hasBankai(zanpakutoCollection[5]) === false,
-  "hasBankai should return false for Zabimaru",
+  hasBankai(zanpakutoCollection[9]) === false,
+  "hasBankai should return false for Haineko",
 );
 
 // getRankings テスト
