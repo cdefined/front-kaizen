@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta lang="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript 入門②</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <style>
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            color: #667eea;
+            text-transform: none;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .code-wrapper code {
+            font-size: 1.3em;
+        }
+
+        .reveal .code-wrapper .code-medium {
+            font-size: 1.19em;
+        }
+
+        .reveal .code-wrapper .code-medium-small {
+            font-size: 1.1em;
+        }
+
+        .reveal .code-wrapper .code-small,
+        .code-small {
+            font-size: 0.9em;
+        }
+
+        .code-small .code-wrapper {
+            width: 100%;
+        }
+
+        ul>li {
+            line-height: 2em;
+        }
+
+        .lifecycle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .lifecycle div {
+            background: rgba(255, 255, 255, 0.1);
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .lifecycle .arrow {
+            background: none;
+            font-size: 100px;
+            color: #667eea;
+            flex: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .js-side,
+        .ts-side {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .js-side h4 {
+            color: #f39c12;
+        }
+
+        .ts-side h4 {
+            color: #3498db;
+        }
+
+        .note {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 8px 0;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fragment.correct-answer.visible {
+            border-left: 4px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.3);
+        }
+
+        .reveal pre code {
+            max-height: 500px;
+            font-size: 0.7em;
+            line-height: 1.4;
+        }
+
+        .reveal code {
+            color: #ff79c6;
+        }
+
+        .reveal .code-comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .reveal .quiz .comparison .hljs {
+            max-height: 350px;
+            min-height: unset;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title -->
+            <section class="title-slide">
+                <h1>TypeScript 入門②</h1>
+                <h2>interface、type、enum、ジェネリクス、型の拡</h2>
+            </section>
+
+            <!-- Type aliases and interfaces -->
+            <section>
+                <section>
+                    <h1>type、interface</h1>
+                    <p>オブジェクト型を扱う方法</p>
+                </section>
+                <section>
+                    <h2>Type Aliases</h2>
+                    <p>型エイリアスは、型に別名をつけることができます</p>
+                    <pre><code data-trim data-line-numbers="|2|" class="language-typescript code-medium-small">// オブジェクト型にエイリアスを付ける
+type ClubMember = {
+    name: string;
+    age: number;
+    weapon?: string;
+    curse: boolean;
+};
+
+let rena: ClubMember = {
+    name: "竜宮レナ",
+    age: 16,
+    weapon: "鉈",
+    curse: true
+};</code></pre>
+                </section>
+                <section>
+                    <h2>Type Aliases</h2>
+                    <p>型エイリアスは、オブジェクト型だけでなく、あらゆる型に名前を付けることができます</p>
+                    <pre><code data-trim class="code-medium-small fragment">// プリミティブ型
+type CharacterName = string;
+type Age = number;</code></pre>
+
+                    <pre><code data-trim class="code-medium-small fragment">// ユニオン型
+type Weapon = "鉈" | "バット" | "注射器" | "包丁";
+
+// 関数型
+type CurseFunction = (target: string) => boolean;</code></pre>
+
+                    <pre><code data-trim class="code-medium-small fragment">// 配列型
+type CharacterList = string[];
+type SuspicionLevels = number[];
+
+// タプル型
+type Coordinate = [number, number];</code></pre>
+                </section>
+
+                <section>
+                    <h2>Type Aliases - 拡張</h2>
+                    <p>型エイリアスは交差型「<strong>&</strong>」を使って拡張できます</p>
+                    <div class="comparison">
+                        <pre><code data-line-numbers="|1-5|8|" class="code-medium language-typescript">// 基本の型
+type Person = {
+    name: string;
+    age: number;
+};
+
+// 交差型で拡張
+type ClubMember = Person & {
+    weapon?: string;
+    clubRole: string;
+};</code></pre>
+                        <pre><code data-line-numbers="|2-3|4-5|" class="code-medium language-typescript">let mion: ClubMember = {
+    name: "園崎魅音",    // Person より継承
+    age: 16,            // Person より継承
+    weapon: "エアガン",  // ClubMember 独自
+    clubRole: "部長"     // ClubMember 独自
+};</code></pre>
+
+                    </div>
+                    <div class="note">
+                        <strong>重要:</strong> 型エイリアスは作成後に変更できません
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック①</h4>
+                    <div class="quiz">
+                        <h3>以下のうち、type alias でのみ定義可能なものはどれ？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium">// A
+type Status = "active" | "inactive" | "pending";
+
+// B
+type Callback = (data: string) => void;</code></pre>
+
+                            <pre><code class="code-medium">// C
+type UserArray = User[];
+
+// D
+type UserTuple = [string, number, boolean];</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) ユニオン型のみ</div>
+                            <div class="quiz-option">B) 関数型のみ</div>
+                            <div class="quiz-option">C) 配列型のみ</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) すべて type
+                                でのみ定義可能</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> D) interface はオブジェクトの形状のみ定義可能。ユニオン型、関数型、配列型、タプル型などは type でのみ定義できます。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface</h2>
+                    <p>interfaceはオブジェクトの構造を定義します</p>
+                    <pre><code data-line-numbers="|2|" class="code-medium-small language-typescript">// 基本的なinterface
+interface Character {
+    name: string;
+    age: number;
+    isAlive: boolean;
+    weapon?: string; // オプショナルプロパティ
+}
+
+let keiichi: Character = {
+    name: "前原圭一",
+    age: 16,
+    isAlive: true
+};</code></pre>
+                </section>
+                <section>
+                    <h2>interface - 拡張</h2>
+                    <p>interfaceは <code>extends</code> キーワードで他のinterfaceを拡張できます</p>
+                    <div class="comparison">
+                        <pre><code data-line-numbers="|1-4|6,11|" class="code-medium-small language-typescript">interface Person {
+    name: string;
+    age: number;
+}
+
+interface ClubMember extends Person {
+    weapon?: string;
+    clubRole: string;
+}
+
+interface VillageElder extends Person {
+    position: string;
+    knowsSecret: boolean;
+}</code></pre>
+
+                        <pre><code data-line-numbers="|3-4,11-12|5-6,13-14|" class="code-small language-typescript">// 基本のinterface
+ let mion: ClubMember = {
+    name: "園崎魅音",        // Person より継承
+    age: 16,                // Person より継承
+    weapon: "エアガン",     // ClubMember 独自
+    clubRole: "部長"        // ClubMember 独自
+};
+
+// extendsで拡張
+let oryou: VillageElder = {
+    name: "園崎お魎",        // Person より継承
+    age: 78,                // Person より継承
+    position: "当主",       // VillageElder 独自
+    knowsSecret: true       // VillageElder 独自
+};</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface vs type - 新しいフィールドの追加</h2>
+                    <div class="comparison">
+                        <div>
+                            <h3><code>interface</code>: 宣言マージ可能</h3>
+                            <pre><code class="code-small language-typescript">interface ClubMember {
+    name: string;
+    age: number;
+}
+
+// 同じ名前で追加宣言可能
+interface ClubMember {
+    clubRole: string;
+}
+
+// 自動的にマージされる
+let mion: ClubMember = {
+    name: "園崎魅音",
+    age: 16,
+    clubRole: "部長"
+};</code></pre>
+                        </div>
+                        <div>
+                            <h3><code>type</code>: 宣言マージ不可</h3>
+                            <pre><code class="code-small language-typescript">type ClubMember = {
+    name: string;
+    age: number;
+}
+
+// エラー: 重複した識別子
+// type ClubMember = {
+//     weapon?: string;
+//     clubRole: string;
+// }
+
+// 代わりに交差型を使用
+type ExtendedClubMember = ClubMember & {
+    weapon?: string;
+    clubRole: string;
+};</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <strong>宣言マージ:</strong> interfaceは同じ名前で複数回宣言すると、自動的に1つのinterfaceにマージされます
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック②</h4>
+                    <div class="quiz">
+                        <h3>以下のコードはどうなる？</h3>
+                        <pre><code class="code-medium-small language-typescript">interface Stand {
+  name: string;
+  power: number;
+}
+
+interface Stand {
+  name: number;  // 型が違う！
+  user: string;
+}</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) 後の宣言が勝つ</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) コンパイルエラー
+                            </div>
+                            <div class="quiz-option">C) <code>name: string | number</code> になる</div>
+                            <div class="quiz-option">D) プロパティが削除される</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) 同じプロパティ名で異なる型はマージできません。宣言マージには制約があります。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface vs type - 使い分け</h2>
+                    <ul>
+                        <li><strong>型エイリアス</strong>は宣言マージに参加できないが、<strong>interface</strong>は可能</li>
+                        <li><strong>interface</strong>はオブジェクトの形状の宣言のみ、プリミティブ型の名前変更は不可</li>
+                        <li><strong>interface</strong>名はエラーメッセージで元の形で表示される</li>
+                        <li><strong>interface</strong>のextendsは、交差型よりもコンパイラーのパフォーマンスが良い場合が多い</li>
+                    </ul>
+                    <div class="note">
+                        <strong>基本的な判断基準</strong>：迷った場合は<strong>interface</strong>を使い、typeの特有機能が必要な時のみtypeを使用。好みで使い分けてもOK。
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック③</h4>
+                    <div class="quiz">
+                        <h3>ライブラリ用のStand定義、どっちがいい？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium language-typescript">interface Stand {
+  name: string;
+  power: number;
+}</code></pre>
+
+                            <pre><code class="code-medium language-typescript">type Stand = {
+  name: string;
+  power: number;
+}</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A)
+                                ユーザーが拡張できるからinterface</div>
+                            <div class="quiz-option">B) 固定したいからtype</div>
+                            <div class="quiz-option">C) パフォーマンスが良いからtype</div>
+                            <div class="quiz-option">D) 見た目がかっこいいからinterface</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> A) ライブラリならユーザーが新しいプロパティを追加できるinterfaceが適切。typeは拡張不可。
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Blank quiz slide -->
+            <section>
+                <h4>理解度チェック①</h4>
+                <div class="quiz">
+                    <h3>どの関数がnever型を返すべき？</h3>
+                    <pre><code class="code-medium">// A</code></pre>
+                    <div class="quiz-options">
+                        <div class="quiz-option">A) printHello</div>
+                        <div class="quiz-option">B) divide</div>
+                        <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) panic
+                        </div>
+                        <div class="quiz-option">D) getUserName</div>
+                    </div>
+                </div>
+                <div class="fragment" data-fragment-index="1">
+                    <div class="note">
+                        <strong>答え:</strong> C) panic - 常に例外を投げて絶対に戻らない
+                    </div>
+                </div>
+            </section>
+
+
+            <section>
+                <!-- Practice -->
+                <section>
+                    <h1>TypeScript 実践演習</h1>
+                    <h3>3つの課題 (各5-10分)</h3>
+                    <p>今日学んだ内容を実際に使ってみよう！</p>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題1</span> Union型とtype guard</h2>
+
+                    <p><strong>関数 <code>processId</code> を作成してください</strong></p>
+                    <ul>
+                        <li>引数 <code>id</code> は <code>number</code> または <code>string</code> のいずれかです</li>
+                        <li><code>number</code> の場合は <code>"ID: 123"</code>、<code>string</code> の場合は
+                            <code>"CODE: ABC"</code> の形式で返す
+                        </li>
+                    </ul>
+
+                    <pre><code class="typescript">// テスト
+console.log(processId(123));    // "ID: 123"
+console.log(processId("ABC"));  // "CODE: ABC"
+                </code></pre>
+                </section>
+
+                <!-- Task 1 Solution -->
+                <section>
+                    <h2><span class="task-number">課題1</span> 解答例</h2>
+                    <p>型ガード　【type guard】を使うことができます</p>
+                    <pre><code class="typescript">function processId(id: number | string): string {
+    // typeof演算子を使って型を判定
+    if (typeof id === "number") {
+        return `ID: ${id}`;
+    } else {
+        return `CODE: ${id}`;
+    }
+}</code></pre>
+                </section>
+            </section>
+
+
+            <!-- Summary -->
+            <section>
+                <h1>第2回まとめ</h1>
+
+                <h2>今日学んだこと</h2>
+                <ul>
+                    <li><strong>interface</strong></li>
+                </ul>
+            </section>
+
+            <!-- Homework -->
+            <section>
+                <section>
+                    <h1>宿題・実践課題</h1>
+
+                    <h3>斬魄刀登録システム</h3>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_2/homework"
+                            target="_blank">typescript-lessons/lesson_2/homework</a></div>
+                </section>
+                <section>
+                    <h1>実践での重要ポイント</h1>
+                    <ul>
+                        <li>???</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- In next episode -->
+            <section>
+                <h1>次回予告</h1>
+                <p><strong>React基礎:</strong> Reactとは、JSX、コンポーネント、Propsの使い方
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            width: 1800,
+            height: 900,
+            margin: 0.1,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight],
+            highlight: {
+                escapeHTML: true
+            }
+        });
+
+        // Quiz interaction
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                // Remove previous selections
+                this.parentNode.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.background = 'rgba(255,255,255,0.1)';
+                });
+
+                // Highlight selected option
+                this.style.background = 'rgba(102, 126, 234, 0.5)';
+            });
+        });
+    </script>
+</body>
+
+</html>
