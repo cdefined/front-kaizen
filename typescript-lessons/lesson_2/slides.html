@@ -199,7 +199,7 @@
 type ClubMember = {
     name: string;
     age: number;
-    weapon?: string;
+    weapon?: string; // オプショナルプロパティ
     curse: boolean;
 };
 
@@ -392,6 +392,43 @@ type ExtendedClubMember = ClubMember & {
                 <section>
                     <h4>理解度チェック②</h4>
                     <div class="quiz">
+                        <h3>エラーになるのはどれ？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium language-typescript">// A
+type Status = "loading" | "success" | "error";
+
+
+
+// B  
+type Handler = (event: Event) => void;
+
+</code></pre>
+                            <pre><code class="code-medium language-typescript">// C
+type Config = {
+  timeout: number;
+};
+
+type Config = {
+  retries: number;
+};</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) Status定義</div>
+                            <div class="quiz-option">B) Handler定義</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) Config重複
+                            </div>
+                            <div class="quiz-option">D) 全部正常</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> C) typeは同名で複数定義できない！interfaceと違ってマージされずエラーになる。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック③</h4>
+                    <div class="quiz">
                         <h3>以下のコードはどうなる？</h3>
                         <pre><code class="code-medium-small language-typescript">interface Stand {
   name: string;
@@ -425,61 +462,257 @@ interface Stand {
                         <li><strong>interface</strong>のextendsは、交差型よりもコンパイラーのパフォーマンスが良い場合が多い</li>
                     </ul>
                     <div class="note">
-                        <strong>基本的な判断基準</strong>：迷った場合は<strong>interface</strong>を使い、typeの特有機能が必要な時のみtypeを使用。好みで使い分けてもOK。
+                        どちらでも良いが、一貫性を保つことが重要。
                     </div>
                 </section>
                 <section>
-                    <h4>理解度チェック③</h4>
-                    <div class="quiz">
-                        <h3>ライブラリ用のStand定義、どっちがいい？</h3>
-                        <div class="comparison">
-                            <pre><code class="code-medium language-typescript">interface Stand {
-  name: string;
-  power: number;
-}</code></pre>
+                    <h2>type vs interface まとめ</h2>
+                    <table class="code-medium summary-table">
+                        <thead>
+                            <tr>
+                                <th>比較項目</th>
+                                <th><code>type</code></th>
+                                <th><code>interface</code></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>宣言マージ</td>
+                                <td><strong>✕</strong> 不可（エラー）</td>
+                                <td><strong>○</strong> 可能</td>
+                            </tr>
+                            <tr>
+                                <td>拡張方法</td>
+                                <td><code>&</code>（交差型）</td>
+                                <td><code>extends</code></td>
+                            </tr>
+                            <tr>
+                                <td>定義できる型</td>
+                                <td>プリミティブ・ユニオン・関数・条件型等</td>
+                                <td>オブジェクト構造のみ</td>
+                            </tr>
+                            <tr>
+                                <td>再定義</td>
+                                <td><strong>✕</strong> 同名で定義不可</td>
+                                <td><strong>○</strong> OK（マージ）</td>
+                            </tr>
+                            <tr>
+                                <td>複雑な型の表現</td>
+                                <td><strong>○</strong> 条件型・ユニオン型等に強い</td>
+                                <td><strong>✕</strong> 不向き</td>
+                            </tr>
+                            <tr>
+                                <td>使用推奨</td>
+                                <td>複雑・柔軟な型</td>
+                                <td>標準的なオブジェクト</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="note">
+                        <strong>基本的な判断基準</strong>：迷った場合は<strong>interface</strong>を使い、<strong>type</strong>の特有機能が必要な時のみ<strong>type</strong>を使用。
+                    </div>
+                </section>
 
-                            <pre><code class="code-medium language-typescript">type Stand = {
+                <section>
+                    <h4>理解度チェック④</h4>
+                    <div class="quiz">
+                        <h3>どの組み合わせが正しい？</h3>
+                        <pre><code class="code-medium language-typescript">// A - Stand能力のID
+"the-world" | "star-platinum" | "crazy-diamond";
+
+// B - Stand情報のオブジェクト
+{
   name: string;
+  user: string;
   power: number;
 }</code></pre>
-                        </div>
                         <div class="quiz-options">
-                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A)
-                                ユーザーが拡張できるからinterface</div>
-                            <div class="quiz-option">B) 固定したいからtype</div>
-                            <div class="quiz-option">C) パフォーマンスが良いからtype</div>
-                            <div class="quiz-option">D) 見た目がかっこいいからinterface</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A) 両方type
+                            </div>
+                            <div class="quiz-option">B) 両方interface</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) A=type,
+                                B=interface</div>
+                            <div class="quiz-option">D) A=interface, B=type</div>
                         </div>
                     </div>
                     <div class="fragment" data-fragment-index="1">
                         <div class="note">
-                            <strong>答え:</strong> A) ライブラリならユーザーが新しいプロパティを追加できるinterfaceが適切。typeは拡張不可。
+                            <strong>答え:</strong> A) と C) ユニオン型はtypeでしか作れない！オブジェクトはどちらでもOK。
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h4>理解度チェック⑤</h4>
+                    <div class="quiz">
+                        <h3>どの構文が正しい？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-small language-typescript">type Stand = {
+  name: string;
+  power: number;
+};
+
+interface Hamon {
+  power: number;
+}
+
+type StandUser1 = Stand & { // A
+  user: string;
+};</code></pre>
+
+                            <pre><code class="code-small language-typescript">type StandUser2 = Stand extends { // B
+  user: string;
+}
+
+interface HamonUser1 & Hamon { // C
+  user: string;
+}
+
+interface HamonUser2 extends Hamon { // D
+  user: string;
+}</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A)
+                                <code>StandUser1</code>
+                            </div>
+                            <div class="quiz-option">B) <code>StandUser2</code></div>
+                            <div class="quiz-option">C)
+                                <code>HamonUser1</code>
+                            </div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D)
+                                <code>HamonUser2</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> A) と D) interfaceは <code>extends</code>、typeは <code>&</code> で拡張できる
                         </div>
                     </div>
                 </section>
             </section>
 
-            <!-- Blank quiz slide -->
+            <!-- Enums -->
             <section>
-                <h4>理解度チェック①</h4>
-                <div class="quiz">
-                    <h3>どの関数がnever型を返すべき？</h3>
-                    <pre><code class="code-medium">// A</code></pre>
-                    <div class="quiz-options">
-                        <div class="quiz-option">A) printHello</div>
-                        <div class="quiz-option">B) divide</div>
-                        <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) panic
-                        </div>
-                        <div class="quiz-option">D) getUserName</div>
+                <section>
+                    <h1>enum</h1>
+                    <ul class="fragment">
+                        <li><strong>名前付き定数</strong>の集合を定義</li>
+                        <li>数値・文字列・異種混合の3タイプ</li>
+                        <li>コンパイル時に型チェック、実行時に実際の値に変換</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>数値enum</h2>
+                    <div class="comparison">
+                        <pre><code data-trim class="language-typescript code-medium">
+// 明示的な数値
+enum HttpStatus {
+    OK = 200,
+    NOT_FOUND = 404,
+    SERVER_ERROR = 500
+}
+
+let response = HttpStatus.OK;
+console.log(response);         // 200
+console.log(HttpStatus[200]);  // "OK"
+</code></pre>
+                        <pre><code data-trim class="language-typescript code-medium">
+// 自動割り当て
+enum StandType {
+    STAR_PLATINUM,    // 0
+    THE_WORLD,        // 1
+    CRAZY_DIAMOND,    // 2
+}
+
+let jotaro = StandType.STAR_PLATINUM;
+console.log(jotaro);        // 0
+console.log(StandType[0]);  // "STAR_PLATINUM"</code></pre>
                     </div>
-                </div>
-                <div class="fragment" data-fragment-index="1">
                     <div class="note">
-                        <strong>答え:</strong> C) panic - 常に例外を投げて絶対に戻らない
+                        数値enumは双方向マッピングを提供。数値 → 名前、名前 → 数値 の逆引きが可能
+                        <br>デフォルトでは0から始まる連番が割り当てられる。
                     </div>
-                </div>
+                </section>
+
+                <section>
+                    <h2>文字列enum</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+enum LogLevel {
+    ERROR = "error",
+    WARN = "warn",
+    INFO = "info"
+}
+
+function log(level: LogLevel, message: string) {
+    console.log(`[${level}] ${message}`);
+}
+
+log(LogLevel.ERROR, "something broke");</code></pre>
+                    <div class="note">
+                        文字列enumは人間にとって読みやすい値を提供。
+                        逆引きは不可能だが、デバッグ時に値が分かりやすい。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>計算されたenum</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+enum Permission {
+    READ = 1,      // 0001
+    WRITE = 2,     // 0010
+    EXECUTE = 4,   // 0100
+    ALL = READ | WRITE | EXECUTE  // 0001 | 0010 | 0100 = 0111 = 7
+}
+
+function hasPermission(user: number, perm: Permission) {
+    return (user & perm) === perm;
+}
+
+hasPermission(5, Permission.WRITE) // 5 = 0101 に WRITE(0010) は含まれない → false</code></pre>
+                    <div class="note">
+                        ビットフラグパターンでよく使用。
+                        計算された値は他のenum値や定数式から生成可能。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>const assertion</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+// enum
+enum Color { RED, GREEN, BLUE }
+
+// const assertion
+const Color2 = {
+    RED: 'red',
+    GREEN: 'green',
+    BLUE: 'blue'
+} as const;
+
+type ColorType = typeof Color2[keyof typeof Color2];
+    </code></pre>
+                    <div class="note">
+                        enumのように使えるが、型だけを提供する。実行時の処理がなく、型チェックがより厳密。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>まとめ</h2>
+                    <ul>
+                        <li><strong>定数管理</strong>: マジックナンバーを排除</li>
+                        <li><strong>型安全性</strong>: コンパイル時エラー検出</li>
+                        <li><strong>逆引き</strong>: 数値enumは双方向マッピング</li>
+                        <li><strong>代替案</strong>: const assertionも検討</li>
+                    </ul>
+                </section>
             </section>
 
+            <!-- null/undefined handling -->
+            <section>
+
+            </section>
 
             <section>
                 <!-- Practice -->
@@ -520,7 +753,6 @@ console.log(processId("ABC"));  // "CODE: ABC"
 }</code></pre>
                 </section>
             </section>
-
 
             <!-- Summary -->
             <section>
