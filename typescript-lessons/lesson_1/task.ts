@@ -1,15 +1,4 @@
 /**
- * ターミナルで以下のコマンドを実行してテスト：
- * tsc typescript-lessons/lesson_1/task.ts --outDir dist && node dist/task.js
- *
- * 変更を監視しながら自動コンパイル（プログラムは自動実行されません）:
- * tsc --watch typescript-lessons/lesson_1/task.ts --outDir dist
- *
- * ブラウザでも以下でTSを実行できます：
- * https://www.typescriptlang.org/play
- */
-
-/**
  * 課題1 Union型とtype guard
  * 関数 processId を作成してください
  *
@@ -48,14 +37,14 @@
 // );
 
 /**
- * 課題3 型推論と怪奇現象
+ * 課題3 型推論
  * 関数 investigateFragment を作成してください
  *
  * 引数: fragments は数値の配列または文字列の配列
  * 配列の最初の要素を返す。空配列の場合は "nanodesu" を返す
  * 型を判定する処理を書いてください
  *
- * Playground: https://www.typescriptlang.org/play/?strictFunctionTypes=false&q=66#code/PQKhCgAIUwmqMGQyDMlDR6oCuNBrUYCwZBUBocU1A-50EMYqGQItTAHU0gEsA7ANwFMBnAF2oHMBDVxgMQBOXDgFtGtVpEBJDIB15QAhGgdQZAZgyB5BkAGDIFUGQCIMpUpECo+hQBckAGZDR41s0iB7BgqASBUB2DIFlEwOhKgPwZA+gy3A4aaB1bTdXNz13J0AAc0BcJSdAQMjAAl8pQBX4wE0GQCAGQC8vMMAWDUAIFVtIACJaLloAewATFgBXAukUvRQpQBIlQCztZMBohkAzxUAwFylAD7MtVU0daGBwYGBIQDGGQE6GQAmGcABjUtpmUoAbRgA6ddKOAAo6JjZOHn4LMQl9gG0ARgBOAA5EABpIB8eAFjePgFYAXQAlICANyQCbvJ6IJYrNabHZ7Q4MFjsbi8QTCS6sG4FATiLgFN4FETUFYFIGg8GTXH4gow1Ybba7A5HFGndEXKw3ClgiFFEoVap0+lw7ZcZjMRgCbFQGjIk5o86Yrl3KE-J7fSGPAGAyAAXgNWtesoKfC41E25RMrIVZwxliuque6q+Lp1hPAoJFjK24sl0v2sptqLtnMdNOKhMKJLJQP1hojBJesoA5GaLYwrXLjiGOcrw3jI0SY7RyYCU8mvcsGfC-VKZZBs2zFfasdzdQa9YVimVKswasnG6bzZbrfLc0qHdjrkCPV6gA
+ * Playground: https://www.typescriptlang.org/play/?strictFunctionTypes=false&q=66#code/PQKhCgAIUwmqMGQyDMlDR6oCuNBrUVGgi1MA6mkAlgHYBuApgM4AuhA5gIbXkBiATg3QLbnHWSAkhkA68oAQjQOoMgMwZA8gyADBkCqDIBEGbNkiBUfTwAuSADMO3XtUqRA9gx5AJAqA7BkCyiYHQlQH4MgfQZjgcNNA6to3rNlbYuAAc0C4ShaAgZGABL4CgCvxgJoMgEAMgF5ePoAsGoAQKsaQAETEDMQA9gAmVACuaYJRKigCgCRKgFnakYDRDIBnioBgLgKAH2YK0vJK0MDgwMCQgGMMgJ0MgBMM4ADG2cSU2QA25AB0s9l0ABQkFDT0TKx6PHyrANoAjACcAByIADSQZ+cALDd3AKwAugCU7wDckH23F4gJlMZvMlit1mQqLRGMx2Jx9tQjmk2LwGGkbmkuIQpmkPt9fv1kai0kDpnNFss1hsodtYXsDEc8T8-hksnlCiTSSDFgxKJRyGxEVAiJCtjDdvCGScAU8Lo9-uc3u9IABeNUK67CtIsBiEea5LTUsU7OH6A7Sy6yh5WpXo8DfLnkha8-mC1bCo3Qk3081EzLo9JYnEfVXqv1oq7CgDkOr15ANIs2Xrpkt9KP9GKDxFx7yjkYdkzJoJdAqFkETNPFpoRjOVapV6UyOXylCKkfL2t1+sNouTErNiMOHztDqAA
  */
 // テスト
 // console.log(investigateFragment([1983, 1984, 1985])); // 1983
