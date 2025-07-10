@@ -711,7 +711,212 @@ type ColorType = typeof Color2[keyof typeof Color2];
 
             <!-- null/undefined handling -->
             <section>
+                <section>
+                    <h2>null と undefined</h2>
+                    <ul>
+                        <li><strong>null:</strong> 意図的に「値がない」ことを示す</li>
+                        <li><strong>undefined:</strong> 変数が初期化されていない、またはプロパティが存在しない</li>
+                        <li>どちらもプリミティブ型だが、意味が異なる</li>
+                    </ul>
+                    <aside class="note">
+                        JavaScriptの歴史的な理由で両方存在する。混乱の元凶。
+                    </aside>
+                </section>
 
+                <section>
+                    <h3>undefined が現れる場面</h3>
+                    <pre><code data-trim class="language-typescript">
+let userName: string; // 未初期化
+console.log(userName); // undefined
+
+function processUser(name?: string) {
+  console.log(name); // 引数を渡さなければ undefined
+}
+
+const user = { name: "dio" };
+console.log(user.age); // 存在しないプロパティは undefined
+        </code></pre>
+                    <aside class="note">
+                        <code>undefined</code>は「まだ設定されていない」状態を表す。
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>null が現れる場面</h3>
+                    <pre><code data-trim class="language-typescript code-medium">
+// APIレスポンス
+interface UserProfile {
+  name: string;
+  avatar: string | null; // 意図的にnullを許可
+}</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium">
+// データベースクエリ
+const findUser = (id: number): User | null => {
+  // ユーザーが見つからない場合はnullを返す
+  return users.find(u => u.id === id) || null;
+};
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium">
+// 初期化時の明示的な空状態
+let selectedStand: Stand | null = null;
+        </code></pre>
+                    <div class="note">
+                        <code>null</code>は「意図的に空である」ことを明示する。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>strictNullChecks モード</h2>
+                    <pre><code data-trim class="language-json">
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true
+  }
+}
+        </code></pre>
+                    <ul>
+                        <li><code>null</code>/<code>undefined</code>を型に明示的に含めないとエラー</li>
+                        <li>実行時エラーを防ぐために必須</li>
+                        <li>既存プロジェクトでは段階的に有効化</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>strictNullChecks の効果</h3>
+                    <ui>
+                        <li>
+                            <code>strictNullChecks: false</code>
+                            <pre><code data-trim class="language-typescript">
+let standName: string = null; // OK（危険）
+</code></pre>
+                        </li>
+                        <li>
+                            <code>strictNullChecks: true</code>
+                            <pre><code data-trim class="language-typescript">
+let standName: string = null; // ✕ エラー
+
+// 正しい書き方
+let standName: string | null = null; // ✓ OK
+let standUser: string | undefined; // ✓ OK
+        </code></pre>
+                        </li>
+                    </ui>
+                    <aside class="note">
+                        型安全性が格段に向上する
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Optional Chaining【?.】</h2>
+                    <p>安全なプロパティアクセス</p>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+interface Stand {
+  name: string;
+  user?: {
+    name: string;
+    age?: number;
+  };
+}
+
+const theWorld: Stand = { name: "The World" };
+</code></pre>
+                    <div class="comparison">
+                        <pre><code data-trim class="language-typescript code-medium-small">
+// 従来の書き方
+const userName = theWorld.user && theWorld.user.name;
+const userAge = theWorld.user && theWorld.user.age; 
+</code></pre>
+                        <pre><code data-trim class="language-typescript code-medium-small">
+// Optional chaining
+const userName = theWorld.user?.name; 
+const userAge = theWorld.user?.age;   
+</code></pre>
+                    </div>
+                    <aside class="note">
+                        チェーンの途中でnull/undefinedに遭遇したら即座にundefinedを返す。
+                    </aside>
+                </section>
+                <section>
+                    <h2>Nullish Coalescing Operator【??】</h2>
+                    <p><code>null</code>/<code>undefined</code>のときのみデフォルト値を設定</p>
+                    <pre><code data-trim class="code-medium-small language-typescript">
+// 従来の方法（問題あり）
+const displayName = user.name || "dio"; // 空文字でもdioになる
+
+// Nullish coalescing（正確）
+const displayName2 = user.name ?? "dio"; // null/undefinedのときのみdio
+
+// 実用例
+const config = {
+  timeout: userSettings.timeout ?? 5000,
+  retries: userSettings.retries ?? 3,
+  endpoint: userSettings.endpoint ?? "https://api.example.com"
+};
+        </code></pre>
+                    <aside class="note">
+                        <code>||</code>演算子と違って、<code>0</code>や空文字などのfalsyな値は通す。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>型ガードによる安全なnullチェック</h2>
+                    <pre><code data-trim class="code-medium-small language-typescript">
+function processStand(stand: Stand | null) {
+  if (stand === null) { // 型ガード
+    console.log("standが見つかりません");
+    return;
+  }
+  
+  // この時点でstandはStand型として扱われる
+  console.log(`stand名: ${stand.name}`);
+  
+  // ネストした型ガード
+  if (stand.user) {
+    console.log(`user名: ${stand.user.name}`);
+  }
+}
+        </code></pre>
+                    <aside class="note">
+                        TypeScriptの型システムがnullチェック後の型を自動的に絞り込む。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Non-null Assertion Operator【!】</h2>
+                    <p>「絶対null/undefinedじゃない」と断言</p>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+function getStandPower(stand?: Stand) {
+  // 危険：standがundefinedの可能性
+  return stand!.name.toUpperCase();
+}
+
+// より安全な書き方
+function getStandPowerSafe(stand?: Stand) {
+  if (!stand) {
+    throw new Error("standが必要です");
+  }
+  return stand.name.toUpperCase();
+}
+        </code></pre>
+                    <aside class="note">
+                        危険。nullチェックを省略する代わりに、自分で責任を持つ必要あり。
+                    </aside>
+                </section>
+                <section>
+                    <h2>まとめ</h2>
+                    <ul>
+                        <li><code>null</code>：意図的な空値、<code>undefined</code>：未初期化</li>
+                        <li><code>strictNullChecks</code>は必須設定</li>
+                        <li><code>?.</code>で安全なアクセス、<code>??</code>でデフォルト値</li>
+                        <li>型ガードで適切なnullチェック</li>
+                        <li><code>!</code>は最終手段、多用禁止</li>
+                    </ul>
+                    <aside class="note">
+                        null/undefinedは多くのバグの原因。型システムを活用して安全に扱おう。
+                    </aside>
+                </section>
             </section>
 
             <section>
