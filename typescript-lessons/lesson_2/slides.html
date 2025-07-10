@@ -128,6 +128,10 @@
             border-radius: 8px;
         }
 
+        .quiz-options.small {
+            font-size: 0.8em;
+        }
+
         .quiz-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -911,11 +915,130 @@ function getStandPowerSafe(stand?: Stand) {
                         <li><code>strictNullChecks</code>は必須設定</li>
                         <li><code>?.</code>で安全なアクセス、<code>??</code>でデフォルト値</li>
                         <li>型ガードで適切なnullチェック</li>
-                        <li><code>!</code>は最終手段、多用禁止</li>
+                        <li><code>!</code>の使用は可能な限り避けること</li>
                     </ul>
                     <aside class="note">
                         null/undefinedは多くのバグの原因。型システムを活用して安全に扱おう。
                     </aside>
+                </section>
+            </section>
+
+            <!-- Type Assertions -->
+            <section>
+                <section>
+                    <h2>Type Assertions（型アサーション）</h2>
+                    <p>「この値は絶対この型だ」とTypeScriptに伝える</p>
+                    <pre><code data-trim class="language-typescript">
+// 2つの書き方
+const userInput = document.getElementById("name") as HTMLInputElement;
+const userInput2 = &lt;HTMLInputElement&gt;document.getElementById("name");
+
+// APIレスポンスの型アサーション
+const apiResponse = await fetch("/api/user");
+const userData = await apiResponse.json() as User;
+        </code></pre>
+                    <aside class="note">
+                        コンパイラが型を推論できない場合に使用。JSXでは&lt;&gt;構文は使えない。
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Type Assertions vs 型ガード</h3>
+                    <div>危険：型アサーションは実行時チェックなし</div>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 危険：型アサーションは実行時チェックなし
+const maybeUser = getData() as User;
+console.log(maybeUser.name); // 実行時エラーの可能性
+</code></pre>
+                    <span>安全：型ガードは実行時チェックあり</span>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 安全：型ガードは実行時チェックあり
+function isUser(obj: any): obj is User {
+  return obj && typeof obj.name === "string";
+}
+
+const data = getData();
+if (isUser(data)) {
+  console.log(data.name); // 安全
+}
+        </code></pre>
+                    <aside class="note">
+                        型アサーションは「信頼」、型ガードは「検証」。
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>const assertions</h3>
+                    <p>値を変更不可能な定数として扱う</p>
+                    <pre><code data-trim class="language-typescript code-medium">
+// 通常の配列
+const stands = ["za warudo", "killer queen"]; // string[]
+
+// const assertion
+const standsConst = ["za warudo", "killer queen"] as const;
+// readonly ["za warudo", "killer queen"]
+
+// オブジェクトの場合
+const config = {
+  timeout: 5000,
+  retries: 3
+} as const;
+// { readonly timeout: 5000; readonly retries: 3 }
+        </code></pre>
+                    <aside class="note">
+                        型を正確に推論させたい場合に有効。特にunion型の作成時に便利。
+                    </aside>
+                </section>
+                <section>
+                    <h2>Type Assertions 使用時の注意点</h2>
+                    <ul>
+                        <li>実行時の型チェックは行われない</li>
+                        <li>「型の嘘」を可能にしてしまう</li>
+                        <li>unknown → 具体的な型への変換で使用</li>
+                        <li>デバッグが困難になる可能性</li>
+                    </ul>
+                    <pre><code data-trim class="language-typescript">
+// 危険な例
+const badCast = "jotaro" as any as number;
+console.log(badCast * 2); // 実行時エラー
+
+// 適切な例
+const jsonData = JSON.parse(response) as User;
+        </code></pre>
+                    <aside class="note">
+                        型アサーションは最後の手段。できるだけ型ガードや適切な型定義を使おう。
+                    </aside>
+                </section>
+                <section>
+                    <h4>理解度チェック⑥</h4>
+                    <div class="quiz">
+                        <h3>以下のコードの出力は？</h3>
+                        <pre><code class="code-small language-typescript">const user = {
+  name: "jotaro",
+  avatar: null as string | null,
+  profile: undefined as { age: number } | undefined
+};
+
+const result1 = user.avatar || "default.jpg";
+const result2 = user.avatar ?? "default.jpg";  
+const result3 = user.profile?.age ?? 17;
+const result4 = user.notExist?.toString();
+
+console.log(result1, result2, result3, result4);</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) "default.jpg", null, 17, undefined</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
+                                "default.jpg", "default.jpg", 17, undefined</div>
+                            <div class="quiz-option">C) null, "default.jpg", undefined, エラー</div>
+                            <div class="quiz-option">D) "default.jpg", "default.jpg", undefined, undefined</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) || は falsy な null で fallback、?? は null/undefined で fallback、?.
+                            は安全にアクセスして undefined を返します。
+                        </div>
+                    </div>
                 </section>
             </section>
 
