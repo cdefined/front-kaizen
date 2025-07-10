@@ -4,6 +4,7 @@
 
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/typescript-lessons/lesson_1/slides.html)
 - [プレゼンテーションのコード例](/typescript-lessons/lesson_1/slides_examples.ts)
+- [プレゼンテーションの演習課題](/typescript-lessons/lesson_1/task.md)
 - [宿題・実践課題](/typescript-lessons/lesson_1/homework/README.md)
 
 ## コードレビューと提出
