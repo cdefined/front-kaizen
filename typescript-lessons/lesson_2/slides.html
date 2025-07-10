@@ -722,9 +722,9 @@ type ColorType = typeof Color2[keyof typeof Color2];
                         <li><strong>undefined:</strong> 変数が初期化されていない、またはプロパティが存在しない</li>
                         <li>どちらもプリミティブ型だが、意味が異なる</li>
                     </ul>
-                    <aside class="note">
+                    <div class="note">
                         JavaScriptの歴史的な理由で両方存在する。混乱の元凶。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -740,9 +740,9 @@ function processUser(name?: string) {
 const user = { name: "dio" };
 console.log(user.age); // 存在しないプロパティは undefined
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         <code>undefined</code>は「まだ設定されていない」状態を表す。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -807,9 +807,9 @@ let standUser: string | undefined; // ✓ OK
         </code></pre>
                         </li>
                     </ui>
-                    <aside class="note">
+                    <div class="note">
                         型安全性が格段に向上する
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -838,9 +838,9 @@ const userName = theWorld.user?.name;
 const userAge = theWorld.user?.age;   
 </code></pre>
                     </div>
-                    <aside class="note">
+                    <div class="note">
                         チェーンの途中でnull/undefinedに遭遇したら即座にundefinedを返す。
-                    </aside>
+                    </div>
                 </section>
                 <section>
                     <h2>Nullish Coalescing Operator【??】</h2>
@@ -859,9 +859,9 @@ const config = {
   endpoint: userSettings.endpoint ?? "https://api.example.com"
 };
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         <code>||</code>演算子と違って、<code>0</code>や空文字などのfalsyな値は通す。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -882,9 +882,9 @@ function processStand(stand: Stand | null) {
   }
 }
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         TypeScriptの型システムがnullチェック後の型を自動的に絞り込む。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -904,9 +904,9 @@ function getStandPowerSafe(stand?: Stand) {
   return stand.name.toUpperCase();
 }
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         危険。nullチェックを省略する代わりに、自分で責任を持つ必要あり。
-                    </aside>
+                    </div>
                 </section>
                 <section>
                     <h2>まとめ</h2>
@@ -917,9 +917,9 @@ function getStandPowerSafe(stand?: Stand) {
                         <li>型ガードで適切なnullチェック</li>
                         <li><code>!</code>の使用は可能な限り避けること</li>
                     </ul>
-                    <aside class="note">
+                    <div class="note">
                         null/undefinedは多くのバグの原因。型システムを活用して安全に扱おう。
-                    </aside>
+                    </div>
                 </section>
             </section>
 
@@ -937,9 +937,9 @@ const userInput2 = &lt;HTMLInputElement&gt;document.getElementById("name");
 const apiResponse = await fetch("/api/user");
 const userData = await apiResponse.json() as User;
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         コンパイラが型を推論できない場合に使用。JSXでは&lt;&gt;構文は使えない。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -962,9 +962,9 @@ if (isUser(data)) {
   console.log(data.name); // 安全
 }
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         型アサーションは「信頼」、型ガードは「検証」。
-                    </aside>
+                    </div>
                 </section>
 
                 <section>
@@ -985,9 +985,9 @@ const config = {
 } as const;
 // { readonly timeout: 5000; readonly retries: 3 }
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         型を正確に推論させたい場合に有効。特にunion型の作成時に便利。
-                    </aside>
+                    </div>
                 </section>
                 <section>
                     <h2>Type Assertions 使用時の注意点</h2>
@@ -1005,9 +1005,9 @@ console.log(badCast * 2); // 実行時エラー
 // 適切な例
 const jsonData = JSON.parse(response) as User;
         </code></pre>
-                    <aside class="note">
+                    <div class="note">
                         型アサーションは最後の手段。できるだけ型ガードや適切な型定義を使おう。
-                    </aside>
+                    </div>
                 </section>
                 <section>
                     <h4>理解度チェック⑥</h4>
@@ -1042,6 +1042,181 @@ console.log(result1, result2, result3, result4);</code></pre>
                 </section>
             </section>
 
+            <!-- Classes & Access Modifiers -->
+            <section>
+                <section>
+                    <h2>クラス & アクセス修飾子</h2>
+                    <p>オブジェクト指向の基本構造</p>
+                </section>
+
+                <section>
+                    <h3>基本的なクラス定義</h3>
+                    <pre><code data-line-numbers="|1|2-3|4,8|4-6|" data-trim class="language-typescript code-medium-small">
+class Stand {
+    name: string;         // クラスプロパティ
+
+    constructor(name: string, public power: number) { // public引数はプロパティの自動宣言＋初期化
+        this.name = name;   // コンストラクタでプロパティを初期化
+    }
+
+    attack(): string {     // クラスメソッド
+        return `${this.name}で攻撃！`;
+    }
+}
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+const starPlatinum = new Stand("スタープラチナ", 100);
+console.log(starPlatinum.attack()); // "スタープラチナで攻撃！"
+    </code></pre>
+                    <div class="note">
+                        クラスはオブジェクトの設計図。プロパティとメソッドを定義できる。
+                    </div>
+                    <div class="note">
+                        <code>constructor(public prop: type)</code>は <code>this.prop = prop</code> の省略形。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>アクセス修飾子</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class Character {
+    public name: string;        // どこからでもアクセス可能
+    private hp: number;         // クラス内のみ
+    protected level: number;    // 継承先でも使用可能
+    
+    constructor(name: string, hp: number, level: number) {
+        this.name = name;
+        this.hp = hp;
+        this.level = level;
+    }
+    
+    private heal(): void {
+        this.hp += 20;
+    }
+}
+    </code></pre>
+                    <div class="note">
+                        デフォルトは<code>public</code>。<code>private</code>は外部からアクセス不可、<code>protected</code>は継承先でのみ使用可能。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>継承とオーバーライド</h3>
+                    <pre><code data-trim data-line-numbers="|1|" class="language-typescript code-small">
+class Villain extends Character {
+    private evilPlan: string;
+    
+    constructor(name: string, hp: number, level: number, plan: string) {
+        super(name, hp, level); // 親クラスのコンストラクタを呼び出し
+        this.evilPlan = plan;
+    }
+    
+    public getStatus(): string {
+        return `${super.getStatus()}, 計画: ${this.evilPlan}`;
+    }
+    
+    protected useSpecialAbility(): void {
+        console.log(`${this.name}が特殊能力を使用！レベル${this.level}の力で！`);
+    }
+}</code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const dio = new Villain("ディオ", 200, 50, "世界征服");
+    </code></pre>
+                    <div class="note">
+                        <code>extends</code>: 継承、<code>super()</code>: 親クラスのコンストラクタ/メソッド呼び出し、メソッドオーバーライド可能
+                    </div>
+                </section>
+
+                <section>
+                    <h3>readonly & static</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class ClubMember {
+    readonly membershipId: string;
+    static clubName: string = "雛見沢分校";
+    static memberCount: number = 0;
+    
+    constructor(public name: string, membershipId: string) {
+        this.membershipId = membershipId;
+        ClubMember.memberCount++;
+    }
+    
+    static getClubInfo(): string {
+        return `${ClubMember.clubName}: ${ClubMember.memberCount}人`;
+    }
+}
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const keiichi = new ClubMember("前原圭一", "001");
+const rena = new ClubMember("竜宮レナ", "002");
+console.log(ClubMember.getClubInfo()); // "雛見沢分校: 2人"
+    </code></pre>
+                    <div class="note">
+                        <code>readonly</code>: 初期化後変更不可、<code>static</code>: クラス自体に属する（インスタンス不要）
+                    </div>
+                </section>
+
+                <!-- Modules & Namespaces -->
+                <section>
+                    <h2>モジュール</h2>
+                    <p>コードの整理と再利用</p>
+                </section>
+
+                <section>
+                    <h3>エクスポート</h3>
+                    <p><code>export</code> でモジュール外部に公開。</p>
+                    <pre><code data-trim data-line-numbers="|2,6,12|" class="language-typescript code-medium-small">
+// stands.ts
+export class Stand {
+    constructor(public name: string, public power: number) {}
+}
+
+export const STAND_TYPES = {
+    CLOSE_RANGE,
+    LONG_RANGE
+} as const;
+
+// デフォルトエクスポート
+export default class StandUser {
+    constructor(public name: string, public stand: Stand) {}
+}
+    </code></pre>
+                    <div class="note">
+                        <code>default export</code> は1つまで、<code>named export</code>
+                        は複数可能
+                    </div>
+                </section>
+
+                <section>
+                    <h3>インポート</h3>
+                    <p><code>import</code> でモジュールを読み込み。</p>
+                    <pre><code data-trim data-line-numbers="|2,4,6|8-9|" class="language-typescript code-medium-small">
+// main.ts
+import StandUser, { Stand, STAND_TYPES } from './stands';
+
+import { Stand as StandClass } from './stands';
+
+import * as StandModule from './stands';
+
+const jotaro = new StandUser("承太郎", new Stand("スタープラチナ", 100));
+const dio = new StandModule.default("DIO", new StandModule.Stand("ザ・ワールド", 95));
+    </code></pre>
+                    <div class="note">
+                        <code>* as</code> で全てを名前空間オブジェクトとして取得。<br>
+                        <code>default export</code> は <code>ModuleName.default</code> でアクセス
+                    </div>
+                </section>
+
+                <section>
+                    <h3>まとめ</h3>
+                    <ul>
+                        <li><strong>クラス</strong>: オブジェクト指向の基本構造</li>
+                        <li><strong>アクセス修飾子</strong>: public, private, protected</li>
+                        <li><strong>継承</strong>: extends, super, オーバーライド</li>
+                        <li><strong>モジュール</strong>: import/export でコード分割</li>
+                    </ul>
+                </section>
+            </section>
+
             <section>
                 <!-- Practice -->
                 <section>
@@ -1061,7 +1236,7 @@ console.log(result1, result2, result3, result4);</code></pre>
                         </li>
                     </ul>
 
-                    <pre><code class="typescript">// テスト
+                    <pre><code class="language-typescript">// テスト
 console.log(processId(123));    // "ID: 123"
 console.log(processId("ABC"));  // "CODE: ABC"
                 </code></pre>
@@ -1071,7 +1246,7 @@ console.log(processId("ABC"));  // "CODE: ABC"
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
                     <p>型ガード　【type guard】を使うことができます</p>
-                    <pre><code class="typescript">function processId(id: number | string): string {
+                    <pre><code class="language-typescript">function processId(id: number | string): string {
     // typeof演算子を使って型を判定
     if (typeof id === "number") {
         return `ID: ${id}`;
