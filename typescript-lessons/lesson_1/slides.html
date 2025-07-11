@@ -205,6 +205,12 @@
             <section class="title-slide">
                 <h1>TypeScript 入門</h1>
                 <h2>基礎編</h2>
+                <aside class="notes">
+                    日本語がまだむずかしいので、まちがいがあったらごめんなさい。<br>
+                    くわしい ことは スライドを ご覧(らん)ください。 どうぞよろしくお願いします。
+
+                    <br>今日は TypeScript の基礎編（きそへん）勉強（べんきょう）します
+                </aside>
             </section>
 
             <!-- Slide Group: What is TypeScript -->
@@ -226,6 +232,11 @@
                     <div class="note">
                         TypeScript 7 は、パフォーマンス向上のために Go で書き直される予定です。
                     </div>
+                    <aside class="notes">
+                        TypeScript は JavaScript に 型（かた）を 追加（ついか）したものです<br>
+                        JavaScript の 上位互換（じょういごかん）です<br>
+                        Microsoft が 作（つく）りました
+                    </aside>
                 </section>
 
 
@@ -251,6 +262,15 @@
                     <div class="note">
                         <strong>重要:</strong> TypeScriptは実行時に存在しない。型情報はコンパイル時のみで使用される。
                     </div>
+                    <aside class="notes">
+                        実行（じっこう）する前（まえ）に JavaScript に 変換（へんかん）します<br>
+                        ライフサイクルは簡単（かんたん）です<br>
+
+                        まず、TypeScript ファイルを書（か）きます。<br>
+                        そして、tsc でコンパイルします。<br>
+                        すると、JavaScript ファイルができます。<br>
+                        最後（さいご）に、JavaScript を実行（じっこう）します。
+                    </aside>
                 </section>
 
                 <!-- TS → JS Code Example -->
@@ -280,6 +300,10 @@
                             </pre>
                         </div>
                     </div>
+                    <aside class="notes">
+                        左(ひだり)TypeScriptコードです。右(みぎ)は Tsc コンパイラ出力(しゅつりょく)です。
+                        同（おな）じ コードです。
+                    </aside>
                 </section>
 
                 <!-- Turing Complete + Doom -->
@@ -292,6 +316,10 @@
                     <div class="note">
                         このプロジェクトでは3.5兆行の型定義と177TBのデータを処理し、1フレームの描画に12日間かかりました。
                     </div>
+                    <aside class="notes">
+                        ところで TypeScriptの型システムはチューリング完全(かんぜん）です。
+                        とても強いです。
+                    </aside>
                 </section>
 
             </section>
@@ -329,6 +357,11 @@ console.log(user.name.toUpperCase());
                             </div>
                         </div>
                     </div>
+                    <aside class="notes">
+                        TypeScript を使（つか）うと、実行（じっこう）する前（まえ）にエラーを見つけられます<br>
+                        左（ひだり）は 実行時（じっこうじ）エラーです<br>
+                        右（みぎ）は コンパイル時にエラーになります
+                    </aside>
                 </section>
 
                 <section>
@@ -338,6 +371,9 @@ console.log(user.name.toUpperCase());
                         <li><strong>安全なリファクタ:</strong> 型が変更の影響を可視化</li>
                         <li><strong>IDE支援:</strong> 補完、警告、ジャンプ機能など</li>
                     </ul>
+                    <aside class="notes">チームで 開発（かいはつ）する時（とき）に 便利（べんり）です<br>
+                        型（かた）が 仕様書（しようしょ）に なります<br>
+                        IDE が 手伝（てつだ）ってくれます</aside>
                 </section>
 
                 <section>
@@ -347,6 +383,10 @@ console.log(user.name.toUpperCase());
                         <li><strong>自動生成:</strong> 型とコメントからAPI仕様を生成</li>
                         <li><strong>型ベースの検証:</strong> zodなどでランタイムにも活用可</li>
                     </ul>
+                    <aside class="notes">
+                        型（かた）が ドキュメントに なります<br>
+                        コードと 仕様（しよう）が 同（おな）じです
+                    </aside>
                 </section>
 
                 <!-- DX -->
@@ -357,6 +397,11 @@ console.log(user.name.toUpperCase());
                         <li>コードレビューが効率化される</li>
                         <li>バックエンドと契約駆動開発しやすい</li>
                     </ul>
+                    <aside class="notes">
+                        バックエンドと約束（やくそく）を決めて 開発しやすいです。<br>
+                        コードレビューが 速（はや）く なります<br>
+                        開発（かいはつ）が 楽（らく）に なります
+                    </aside>
                 </section>
 
                 <!-- AI -->
@@ -367,6 +412,10 @@ console.log(user.name.toUpperCase());
                         <li><strong>非型言語では:</strong> 推測ベースで不安定な提案が多い</li>
                         <li><strong>型情報の活用:</strong> 設計レベルの支援も可能になる</li>
                     </ul>
+                    <aside class="notes">
+                        AI が TypeScript を 理解（りかい)し やすいです<br>
+                        より 良い提案（ていあん）を してくれます
+                    </aside>
                 </section>
             </section>
 
@@ -384,6 +433,7 @@ console.log(user.name.toUpperCase());
                         <li>npm でインストール (グローバル or ローカル)</li>
                         <li>最近のエディターには組み込みサポート</li>
                     </ul>
+                    <aside class="notes">npm でインストールするのが一般的(いっぱんてき) です</aside>
                 </section>
 
                 <section>
@@ -393,6 +443,10 @@ npm install -g typescript
 
 # ローカル (プロジェクト推奨)
 npm install --save-dev typescript</code></pre>
+                    <aside class="notes">
+                        グローバルと ローカル両方（りょうほう）があります。<br>
+                        この コマンドを 使（つか）います。ローカルが おすすめです。
+                    </aside>
                 </section>
 
                 <section>
@@ -405,6 +459,12 @@ npm install --save-dev typescript</code></pre>
 
 # 監視モード (変更時に自動再コンパイル)
 >>> tsc --watch</code></pre>
+                    <aside class="notes">
+                        「tsc」は TypeScript のコンパイラです。<br>
+                        このコマンドで、TSファイルをJSファイルに へんか できます。<br>
+                        「--noEmit」は、エラーがあるか だけを チェックします。 <br>
+                        監視（かんし）モードも あります。
+                    </aside>
                 </section>
 
                 <section>
@@ -417,6 +477,10 @@ npm install --save-dev typescript</code></pre>
                     <div class="note">
                         <strong>Tip:</strong> <code>tsc --init</code> で基本的なtsconfig.jsonを自動生成できる
                     </div>
+                    <aside class="notes">
+                        「ts　config」は設定（せってい）ファイルです。<br>
+                        コンパイル方法（ほうほう）を 決（き）めます。
+                    </aside>
                 </section>
 
                 <section>
@@ -433,6 +497,9 @@ npm install --save-dev typescript</code></pre>
   "include": ["src/**/*"],          // コンパイル対象に含めるファイル
   "exclude": ["node_modules"]       // コンパイルから除外するファイルやフォルダ
 }</code></pre>
+                    <aside class="notes">
+                        重要（じゅうよう）な 設定（せってい）を 見（み）ます
+                    </aside>
                 </section>
 
                 <section>
@@ -455,6 +522,10 @@ declare module "some-js-library" {
                     <div class="note">
                         <strong>実例:</strong> <code>npm install @types/node</code> でNode.jsのAPI型定義を取得
                     </div>
+                    <aside class="notes">
+                        D.ts ファイルは「型（かた）だけ」の ファイルです。
+                        JavaScript ライブラリに 型の せつめいを つけるときに 使います。
+                    </aside>
                 </section>
             </section>
 
@@ -465,6 +536,9 @@ declare module "some-js-library" {
                     <h1>基本の型</h1>
                     <h3>TypeScriptの型システムの基礎</h3>
                     <p>プリミティブ型、配列、オブジェクト、<code>any</code>、<code>unknown</code></p>
+                    <aside class="notes">
+                        TypeScript の 基本（きほん）の 型（かた）を 学（まな）びます
+                    </aside>
                 </section>
 
                 <!-- Primitives -->
@@ -484,6 +558,12 @@ let loopCount: bigint = 100000000000000000000n;
                     <div class="note">
                         文字列、数値、真偽値、<code>null</code>、<code>undefined</code>、<code>symbol</code>、<code>bigint</code>
                     </div>
+                    <aside class="notes">
+                        「コロン」は変数の型を 決めるときに つかいます。
+                        文字列（もじれつ）は string です<br>
+                        数値（すうち）は number です<br>
+                        真偽値（しんぎち）は boolean です<br>
+                    </aside>
                 </section>
 
                 <!-- Arrays -->
@@ -504,6 +584,9 @@ let legends: readonly string[] = ["雛見沢症候群", "綿流しの儀式", "�
                     <div class="note">
                         <code>Type[]</code> vs <code>Array&lt;Type&gt;</code> - どちらでもOK、チーム規約で統一
                     </div>
+                    <aside class="notes">
+                        配列(はいれつ)の型には、書き方が二つあります
+                    </aside>
                 </section>
 
                 <section>
@@ -518,6 +601,10 @@ let board: string[][] = [
   ["O", " ", " "]
 ];
 </code></pre>
+                    <aside class="notes">
+                        複数（ふくすう）の 型（かた）を 混（ま）ぜること が できます<br>
+                        多次元（たじげん）配列(はいれつ)も 使(つか)えます
+                    </aside>
                 </section>
 
                 <!-- Objects -->
@@ -535,6 +622,9 @@ let suspicionLevels: { [character: string]: number } = {
     "竜宮レナ": 5,
     "園崎魅音": 2
 };</code></pre>
+                    <aside class="notes">
+                        オブジェクトの中にある プロパティの名前と 型を決めます。
+                    </aside>
                 </section>
                 <section>
                     <h2>オブジェクト型</h2>
@@ -552,6 +642,7 @@ let village: {
         population: 2000
     }
 };</code></pre>
+                    <aside class="notes">ネストした オブジェクトも できます</aside>
                 </section>
                 <section>
                     <h2>オプショナルプロパティ</h2>
@@ -573,6 +664,10 @@ console.log(character.weapon?.toUpperCase()); // 安全なアクセス方法：�
     name: "前原圭一",
     weapon: undefined  // 明示的にundefinedを設定する必要がある
 };</code></pre>
+                    <aside class="notes">
+                        必要ないプロパティは「?」で省略（しょうりゃく）できます。<br>
+                        undefined と 違（ちが）います
+                    </aside>
                 </section>
 
                 <!-- any type -->
@@ -595,6 +690,11 @@ let result = mysteryData + 5; // resultの型もany
                     <div class="note">
                         <code>any</code>はTypeScriptの型安全性を完全に無効化する
                     </div>
+                    <aside class="notes">
+                        any は「なんでも OK」になる型です<br>
+                        でも 危険（きけん）です<br>
+                        型チェックが なくなります
+                    </aside>
                 </section>
 
                 <!-- Baka any -->
@@ -607,6 +707,10 @@ let result = mysteryData + 5; // resultの型もany
                         <li>リファクタリングが困難</li>
                         <li>TypeScriptの恩恵を失う</li>
                     </ul>
+                    <aside class="notes">
+                        any は 使わない方（ほう）が 良（よ）いです<br>
+                        TypeScript の 利点（りてん）が なくなります
+                    </aside>
                 </section>
 
                 <!-- unknown type -->
@@ -629,6 +733,10 @@ if (typeof secret === "number") {
                     <div class="note">
                         <code>unknown</code>は使用前に型チェックを強制する
                     </div>
+                    <aside class="notes">
+                        unknown は 安全（あんぜん）です<br>
+                        使（つか）う前（まえ）に チェックが 必要（ひつよう）です
+                    </aside>
                 </section>
 
                 <!-- Quiz -->
@@ -654,6 +762,11 @@ mysteryB.toUpperCase(); // B</code></pre>
                             <strong>答え:</strong> B) <code>unknown</code>は型ガードが必要。<code>any</code>は何でもOK（危険）
                         </div>
                     </div>
+                    <aside class="notes">
+                        問題（もんだい）を 解（と）いて みましょう。<br>
+                        どちらがエラーになる<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
 
                 <!-- Quiz -->
@@ -681,6 +794,11 @@ console.log(suspicionLevels.length); // D</code></pre>
                             <strong>答え:</strong> B) <code>string[]</code>に<code>number</code>は追加できない
                         </div>
                     </div>
+                    <aside class="notes">
+                        問題（もんだい）を 解（と）いて みましょう。<br>
+                        次のコードで型(かた）エラーになるのは？<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
 
                 <!-- Quiz: objects -->
@@ -711,6 +829,11 @@ villager = null; // D</code></pre>
                             <strong>答え:</strong> A) のみ。存在する<code>string</code>型プロパティへの代入
                         </div>
                     </div>
+                    <aside class="notes">
+                        問題（もんだい）を 解（と）いて みましょう。<br>
+                        どの代入（だいにゅう）が可能（かのう）？<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
 
                 <!-- Quiz -->
@@ -738,6 +861,11 @@ let copy = [...gameArcs] // D
                             <strong>答え:</strong> C) <code>ReadonlyArray</code>は変更操作が禁止
                         </div>
                     </div>
+                    <aside class="notes">
+                        問題（もんだい）を 解（と）いて みましょう。<br>
+                        どの操作（そうさ）がエラーになる<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
             </section>
 
@@ -756,6 +884,13 @@ let mixed = [1, "text"]; // (number | string)[]</code></pre>
                     <div class="note">
                         <strong>ベストプラクティス:</strong> 明示的な型注釈は避けて推論に任せる
                     </div>
+                    <aside class="notes">
+                        typescript は、自動（じどう）で型を考えて くれます。
+                        だから、ぜんぶ 書かなくても だいじょうぶです。<br>
+
+                        TypeScript が 自動（じどう）で 型（かた）を 決（き）めます<br>
+                        型（かた）を 書（か）かなくても 良（よ）いです
+                    </aside>
                 </section>
 
                 <section>
@@ -775,6 +910,9 @@ export declare function processOrder(id: number): {
                     <div class="note">
                         <strong>Tip:</strong> 関数の戻り値は基本的に型推論に任せる。パラメータや複雑な型だけ明示する。
                     </div>
+                    <aside class="notes">
+                        スライドは、自動（じどう）で できた 型の定義（ていぎ）の例です。 TypeScript が型を考えて くれました。
+                    </aside>
                 </section>
             </section>
 
@@ -787,6 +925,11 @@ export declare function processOrder(id: number): {
                         <p>「AまたはB」の型を表現</p>
                         <p><code>|</code> (pipe) 演算子で結合</p>
                     </div>
+                    <aside class="notes">
+                        「A または B」という意味（いみ）です<br>
+                        いくつ かの型 を 使えるように できます。<br>
+                        |(pipe) マークを 使（つか）います
+                    </aside>
                 </section>
 
                 <!-- Basic Union -->
@@ -805,6 +948,10 @@ value = null;     // ❌ Error</code></pre>
                     <div class="note">
                         型安全性を保ちながら柔軟性を確保
                     </div>
+                    <aside class="notes">
+                        スライドの最初（さいしょ）の例で 数値（すうち）または 文字列（もじれつ）です<br>
+                        両方（りょうほう）とも 使（つか）えます
+                    </aside>
                 </section>
 
                 <!-- Type Guards -->
@@ -825,6 +972,11 @@ formatId("abc_456");  // "ID: ABC_456"</code></pre>
                     <div class="note">
                         <strong>型ガード:</strong> 実行時チェックでTypeScriptが型を理解
                     </div>
+                    <aside class="notes">
+                        ユニオン型では、型が　いくつか　あるので、使う前に　どれか　をチェックすることが大切（たいせつ）です。<br>
+                        typeof で 型（かた）を チェックします<br>
+                        型（かた）が 分かったら 安全（あんぜん）に 使（つか）えます
+                    </aside>
                 </section>
 
                 <!-- Null Union -->
@@ -846,6 +998,9 @@ function processUser(user: User | null) {
                     <div class="note">
                         <code>strictNullChecks</code>が有効なら必須の考慮
                     </div>
+                    <aside class="notes">
+                        ユニオン型を使うと、null も許可（きょか）できます。チェックが 必要（ひつよう）です
+                    </aside>
                 </section>
 
                 <!-- Literal Union -->
@@ -867,6 +1022,10 @@ type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;</code></pre>
                     <div class="note">
                         文字列定数の集合を型として表現
                     </div>
+                    <aside class="notes">
+                        決（き）まった 文字列（もじれつ）だけ 許可（きょか）します<br>
+                        enum のような 使（つか）い方（かた）です
+                    </aside>
                 </section>
 
                 <!-- Discriminated Union -->
@@ -887,6 +1046,10 @@ function handleResponse(response: ApiResponse) {
                     <div class="note">
                         <strong>判別プロパティ:</strong> <code>success</code>で型を特定
                     </div>
+                    <aside class="notes">
+                        共通（きょうつう）の プロパティで 判別（はんべつ）します<br>
+                        より 安全（あんぜん）に 使（つか）えます
+                    </aside>
                 </section>
 
                 <!-- Quiz -->
@@ -915,6 +1078,11 @@ result = null;      // D</code></pre>
                             <strong>答え:</strong> B, D - 定義された文字列リテラル以外はエラー
                         </div>
                     </div>
+                    <aside class="notes">
+                        Union 型の問題（もんだい）を 解（と）いて みましょう。<br>
+                        どの代入（だいにゅう）がエラーになる？<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
             </section>
 
@@ -937,6 +1105,10 @@ function processData(
 ): string[] {
     return data.map(callback);
 }</code></pre>
+                    <aside class="notes">
+                        関数（かんすう) の引数（ひきすう）と 戻り値（もどりち） に、型をつけること ができます<br>
+                        アロー関数や コールバックにも 型が書けます
+                    </aside>
                 </section>
                 <section>
                     <h2>関数の型定義</h2>
@@ -956,6 +1128,10 @@ function createUser(name: string, age: number = 18) {
 function sum(...numbers: number[]): number {
     return numbers.reduce((total, num) => total + num, 0);
 }</code></pre>
+                    <aside class="notes">
+                        オプション引数（ひきすう）と デフォルト値（ち）です<br>
+                        Rest 引数（ひきすう）も 使（つか）えます
+                    </aside>
                 </section>
                 <section>
                     <h2>関数オーバーロード</h2>
@@ -971,6 +1147,9 @@ function convert(input: string | number): string | number {
                     <div class="note">
                         オーバーロードは関数の異なるシグネチャを定義することで、同じ関数名で異なる引数を受け取ることができる
                     </div>
+                    <aside class="notes">
+                        同（おな）じ 関数名（かんすうめい）で 違（ちが）う 引数（ひきすう）を 受（う）け取（と）ります
+                    </aside>
                 </section>
             </section>
 
@@ -983,6 +1162,9 @@ function convert(input: string | number): string | number {
                         <p><strong>void:</strong> 戻り値なし（undefined）</p>
                         <p><strong>never:</strong> 絶対に戻らない</p>
                     </div>
+                    <aside class="notes">
+                        特別（とくべつ）な 戻り値（もどりち）の 型（かた）です
+                    </aside>
                 </section>
 
                 <!-- Void -->
@@ -1008,6 +1190,9 @@ function processData(): void {
                     <div class="note">
                         <strong>用途:</strong> 副作用のある関数（ログ出力、DOM操作など）
                     </div>
+                    <aside class="notes">
+                        戻り値（もどりち）がない ときに使う void 型です。たとえば console.log など。
+                    </aside>
                 </section>
 
                 <!-- Never -->
@@ -1030,6 +1215,9 @@ function processValue(value: unknown): string { // 関数が途中で例外を�
                     <div class="note">
                         <strong>用途:</strong> エラーハンドリング、到達不可能コードの表現
                     </div>
+                    <aside class="notes">
+                        絶対（ぜったい）に戻（もど）らないときに使う never 型です。エラーや無限（むげん）ループなど。
+                    </aside>
                 </section>
 
                 <!-- Exhaustive Checking -->
@@ -1053,6 +1241,10 @@ function getColorHex(color: Color): string {
                     <div class="note">
                         <strong>メリット:</strong> Union型に新しい値を追加した時、処理漏れを防げる
                     </div>
+                    <aside class="notes">
+                        Never の使い方 を 紹介(しょうかい)します<br>
+                        すべての 場合（ばあい）を 処理（しょり）したか チェックします
+                    </aside>
                 </section>
 
                 <!-- void vs never -->
@@ -1078,6 +1270,11 @@ function getColorHex(color: Color): string {
                             </ul>
                         </div>
                     </div>
+                    <aside class="notes">
+                        void と never の 違（ちが）いです<br>
+                        void は「終（お）わるけど何も返（かえ）さない」、<br>
+                        never は「ぜったいに終（お）わらない」関数（かんすう）の型です。
+                    </aside>
                 </section>
 
                 <!-- Quiz -->
@@ -1122,6 +1319,11 @@ function getUserName() {
                             <strong>答え:</strong> C) panic - 常に例外を投げて絶対に戻らない
                         </div>
                     </div>
+                    <aside class="notes">
+                        問題（もんだい）を 解（と）いて みましょう。<br>
+                        どの関数（かんすう）がnever型を返（かえ）すべき<br>
+                        答（こた）えを 考（かんが）えてください。
+                    </aside>
                 </section>
             </section>
 
@@ -1135,6 +1337,12 @@ function getUserName() {
                     <div class="note"><a
                             href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
                     </div>
+                    <aside class="notes">
+                        練習（れんしゅう）問題（もんだい）を 解（と）きます<br>
+                        このファイルを　開（ひら）いてください<br>
+                        Playground を使（つか）うか、ローカル実行（じっこう）してください<br>
+                        このファイルに、問題の説明（もんだいのせつめい）と Playground のリンクがありま
+                    </aside>
                 </section>
 
                 <!-- TypeScript Playground -->
@@ -1155,6 +1363,9 @@ function getUserName() {
                         <li>異なるターゲット（ES5, ES2020等）の比較</li>
                         <li>型定義の探索とテスト</li>
                     </ul>
+                    <aside class="notes">
+                        ブラウザで TypeScript を 試（ため）せます
+                    </aside>
                 </section>
 
 
@@ -1227,7 +1438,7 @@ console.log(createMessage("Satoko", ["admin", "user"])); // "Hello Satoko [admin
                     <ul>
                         <li>引数: <code>fragments</code> は数値の配列または文字列の配列</li>
                         <li>配列の最初の要素を返す。空配列の場合は <code>"nanodesu"</code> を返す</li>
-                        <li>型を判定する処理を書いてください</li>
+                        <li>戻り値の型注釈は書かない - TypeScriptに推論させる</li>
                     </ul>
 
                     <pre><code class="typescript">// テスト
@@ -1235,91 +1446,105 @@ console.log(investigateFragment([1983, 1984, 1985]));   // 1983
 console.log(investigateFragment(["rena", "mion"]));     // "rena"
 console.log(investigateFragment([]));                   // "nanodesu"
     </code></pre>
+                    <div class="note"><strong>考えてみよう:</strong> TypeScript はこの関数の戻り値をどんな型だと推論するでしょうか？</div>
                 </section>
 
                 <!-- Task 3 Solution -->
                 <section>
                     <h2><span class="task-number">課題3</span> 解答例</h2>
-                    <p>空配列の場合の処理がポイント</p>
-                    <pre><code class="typescript code-medium-small">function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
-    // 空配列の場合の処理
-    if (fragments.length === 0) {
-        return "nanodesu";
-    }
-    
-    // 型ガードで配列の型を判定
-    if (typeof fragments[0] === "number") {
-        return fragments[0]; // number配列の場合
-    } else {
-        return fragments[0]; // string配列の場合
-    }
-}</code></pre>
-                </section>
-
-                <!-- Task 3 Alternative Solutions -->
-                <section>
-                    <h2><span class="task-number">課題3</span> 別解</h2>
-                    <p>TypeScriptの型推論を活用した書き方</p>
-                    <pre><code class="typescript code-medium-small">// 別解1: 型推論を活用
-function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
-    if (fragments.length === 0) {
-        return "nanodesu";
-    }
-    
-    return fragments[0]; // TypeScriptが自動で型を推論
+                    <p>戻り値の型注釈を書かずに、TypeScriptに推論させる</p>
+                    <pre><code class="typescript code-medium-small">// 推奨解答
+function investigateFragment(fragments: number[] | string[]) {
+  if (fragments.length === 0) {
+    return "nanodesu";
+  }
+  return fragments[0];
 }
 
-// 別解2: より簡潔な書き方
-function investigateFragment(fragments: number[] | string[]): number | string | "nanodesu" {
-    return fragments[0] ?? "nanodesu";
+// TypeScriptが推論する型: number | string</code></pre>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題3</span> 型推論の仕組み</h2>
+                    <p>TypeScriptがどのように型を推論するか</p>
+                    <pre><code class="typescript code-medium-small">function investigateFragment(fragments: number[] | string[]) {
+    if (fragments.length === 0) {
+        return "nanodesu";  // string type
+    }
+    return fragments[0];    // number | string
+    //     ↑
+    //     配列の最初の要素
+    //     fragments: number[] | string[]
+    //     なので fragments[0]: number | string
+    //     
+    // 結果: number | string
 }</code></pre>
                 </section>
-            </section>
-
-
-            <!-- Summary -->
-            <section>
-                <h1>第1回まとめ</h1>
-
-                <h2>今日学んだこと</h2>
-                <ul>
-                    <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
-                    <li><strong>コマンドライン操作:</strong> プロジェクト設定と tsconfig.json</li>
-                    <li><strong>基本型:</strong> primitive types、arrays、objects</li>
-                    <li><strong>型推論:</strong> TypeScript の自動型判定システム</li>
-                    <li><strong>Union型:</strong> 複数の型を許可する方法</li>
-                    <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
-                    <li><strong>void と never:</strong> 特殊な戻り値型</li>
-                </ul>
-            </section>
-
-            <!-- Homework -->
-            <section>
                 <section>
-                    <h1>宿題・実践課題</h1>
+                    <h2><span class="task-number">課題3</span> 推論結果の確認</h2>
+                    <p>実際に型推論が動作することを確認</p>
+                    <pre><code class="typescript code-medium-small">// 推論された型を確認
+const result1 = investigateFragment([1, 2, 3]);      // number | string
+const result2 = investigateFragment(["a", "b"]);     // number | string
+const result3 = investigateFragment([]);             // number | string
 
-                    <h3>斬魄刀コレクション管理システム</h3>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/homework"
-                            target="_blank">typescript-lessons/lesson_1/homework</a></div>
+// 型ガードで型を絞り込む
+if (typeof result1 === "number") {
+    console.log(result1.toFixed(2)); // ここではnumber型として扱われる
+} else {
+    console.log(result1.toUpperCase()); // string型として扱われる
+}</code></pre>
                 </section>
+
+                <!-- Summary -->
                 <section>
-                    <h1>実践での重要ポイント</h1>
+                    <h1>第1回まとめ</h1>
+
+                    <h2>今日学んだこと</h2>
                     <ul>
-                        <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
-                        <li>Union型は実際のデータ構造を反映する（"melee" | "kido" など）</li>
-                        <li>Optional型（?）で「あるかもしれない」データを表現</li>
-                        <li>Type guardでランタイムの型チェックと型の絞り込みを両立</li>
-                        <li>配列操作（filter, map, sort）とTypeScriptの組み合わせに慣れる</li>
+                        <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
+                        <li><strong>コマンドライン操作:</strong> プロジェクト設定と tsconfig.json</li>
+                        <li><strong>基本型:</strong> primitive types、arrays、objects</li>
+                        <li><strong>型推論:</strong> TypeScript の自動型判定システム</li>
+                        <li><strong>Union型:</strong> 複数の型を許可する方法</li>
+                        <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
+                        <li><strong>void と never:</strong> 特殊な戻り値型</li>
                     </ul>
                 </section>
-            </section>
 
-            <!-- In next episode -->
-            <section>
-                <h1>次回予告</h1>
-                <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
-            </section>
+                <!-- Homework -->
+                <section>
+                    <section>
+                        <h1>宿題・実践課題</h1>
+
+                        <h3>斬魄刀コレクション管理システム</h3>
+                        <div class="note"><a
+                                href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/homework"
+                                target="_blank">typescript-lessons/lesson_1/homework</a></div>
+                    </section>
+                    <section>
+                        <h1>実践での重要ポイント</h1>
+                        <ul>
+                            <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
+                            <li>Union型は実際のデータ構造を反映する（"melee" | "kido" など）</li>
+                            <li>Optional型（?）で「あるかもしれない」データを表現</li>
+                            <li>Type guardでランタイムの型チェックと型の絞り込みを両立</li>
+                            <li>配列操作（filter, map, sort）とTypeScriptの組み合わせに慣れる</li>
+                        </ul>
+                        <aside class="notes">
+                            今日（きょう）学（まな）んだことを 復習（ふくしゅう）します
+                        </aside>
+                    </section>
+                </section>
+
+                <!-- In next episode -->
+                <section>
+                    <h1>次回予告</h1>
+                    <p><strong>TypeScript入門②:</strong> interface、type aliases、enum、generics、utility types</p>
+                    <aside class="notes">
+                        次回（じかい）は もっと 高度（こうど）な 内容（ないよう）です
+                    </aside>
+                </section>
         </div>
     </div>
 
@@ -1327,6 +1552,7 @@ function investigateFragment(fragments: number[] | string[]): number | string | 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
 
     <script>
         Reveal.initialize({
@@ -1338,7 +1564,7 @@ function investigateFragment(fragments: number[] | string[]): number | string | 
             transition: 'slide',
             transitionSpeed: 'fast',
             backgroundTransition: 'fade',
-            plugins: [RevealHighlight],
+            plugins: [RevealHighlight, RevealNotes],
             highlight: {
                 escapeHTML: true
             }
