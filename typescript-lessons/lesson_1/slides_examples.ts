@@ -188,14 +188,3 @@ function investigateFragment(fragments: number[] | string[]) {
 function investigateFragment1(fragments: number[] | string[]) {
   return fragments[0] ?? "nanodesu";
 }
-
-const result1 = investigateFragment([1983, 1984, 1985]); // number | string
-const result2 = investigateFragment(["rena", "mion"]); // number | string
-const result3 = investigateFragment([]); // number | string
-
-// 型ガードで型を絞り込む
-if (typeof result1 === "number") {
-  console.log(result1.toFixed(2)); // ここではnumber型として扱われる
-} else {
-  console.log(result1.toUpperCase()); // string型として扱われる
-}

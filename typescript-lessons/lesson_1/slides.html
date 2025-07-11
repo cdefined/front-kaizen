@@ -1451,7 +1451,7 @@ console.log(createMessage("Satoko", ["admin", "user"])); // "Hello Satoko [admin
                     <h2><span class="task-number">課題2</span> 解答例</h2>
                     <p>オプション引数は <code>undefined</code> かもしれないので存在チェックが必要</p>
                     <pre><code class="typescript">function createMessage(name: string, tags?: string[]): string {
-    if (tags) { // tags?.join() でもOK
+    if (tags) { 
         return `Hello ${name} [${tags.join(", ")}]`;
     } else {
         return `Hello ${name}`;
