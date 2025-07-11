@@ -24,6 +24,11 @@
             text-transform: none;
         }
 
+        .reveal .pale {
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
         .reveal .slides section {
             text-align: left;
         }
@@ -84,6 +89,14 @@
             background: none;
             font-size: 100px;
             color: #667eea;
+            flex: 0;
+        }
+
+        .down-arrow {
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            font-size: 50px;
             flex: 0;
         }
 
@@ -365,6 +378,7 @@ console.log(user.name.toUpperCase());
                 </section>
 
                 <section>
+                    <h1 class="pale">なぜTypeScript？</h1>
                     <h2>2. チーム開発に強い</h2>
                     <ul>
                         <li><strong>共通理解:</strong> 型定義がAPIの仕様書になる</li>
@@ -377,6 +391,7 @@ console.log(user.name.toUpperCase());
                 </section>
 
                 <section>
+                    <h1 class="pale">なぜTypeScript？</h1>
                     <h2>3. ドキュメントと型の一体化</h2>
                     <ul>
                         <li><strong>ドリフト防止:</strong> コードと仕様が常に一致</li>
@@ -391,6 +406,7 @@ console.log(user.name.toUpperCase());
 
                 <!-- DX -->
                 <section>
+                    <h1 class="pale">なぜTypeScript？</h1>
                     <h2>4. なめらかな開発体験</h2>
                     <ul>
                         <li>初期設計から型を定義すると堅牢なコードに導かれる</li>
@@ -406,6 +422,7 @@ console.log(user.name.toUpperCase());
 
                 <!-- AI -->
                 <section>
+                    <h1 class="pale">なぜTypeScript？</h1>
                     <h2>5. AIとコード</h2>
                     <ul>
                         <li><strong>型 = ヒント:</strong> LLMが正確に意図を読み取れる</li>
@@ -425,6 +442,9 @@ console.log(user.name.toUpperCase());
                 <section>
                     <h1>TypeScriptのセットアップ</h1>
                     <p>導入方法、コンパイル方法、<code>tsconfig.json</code>の設定、<code>.d.ts</code>ファイル</p>
+                    <aside class="notes">
+                        TS は どうやって つかう？
+                    </aside>
                 </section>
 
                 <section>
@@ -585,7 +605,8 @@ let legends: readonly string[] = ["雛見沢症候群", "綿流しの儀式", "�
                         <code>Type[]</code> vs <code>Array&lt;Type&gt;</code> - どちらでもOK、チーム規約で統一
                     </div>
                     <aside class="notes">
-                        配列(はいれつ)の型には、書き方が二つあります
+                        配列(はいれつ)の型には、書き方が二つあります<br>
+                        読み取り専用（よみとりせんよう）の配列は、readonly をつけます。
                     </aside>
                 </section>
 
@@ -734,6 +755,7 @@ if (typeof secret === "number") {
                         <code>unknown</code>は使用前に型チェックを強制する
                     </div>
                     <aside class="notes">
+                        any の代（か）わりに、unknown を使うほうが良いです。<br>
                         unknown は 安全（あんぜん）です<br>
                         使（つか）う前（まえ）に チェックが 必要（ひつよう）です
                     </aside>
@@ -885,11 +907,8 @@ let mixed = [1, "text"]; // (number | string)[]</code></pre>
                         <strong>ベストプラクティス:</strong> 明示的な型注釈は避けて推論に任せる
                     </div>
                     <aside class="notes">
-                        typescript は、自動（じどう）で型を考えて くれます。
-                        だから、ぜんぶ 書かなくても だいじょうぶです。<br>
-
-                        TypeScript が 自動（じどう）で 型（かた）を 決（き）めます<br>
-                        型（かた）を 書（か）かなくても 良（よ）いです
+                        typescript は、自動（じどう）で型を考えて くれます。<br>
+                        だから、ぜんぶ 書かなくても だいじょうぶです。
                     </aside>
                 </section>
 
@@ -899,9 +918,9 @@ let mixed = [1, "text"]; // (number | string)[]</code></pre>
 export function processOrder(id: number) {
     const order = { id, status: "pending", total: 0 };
     return order;
-}
-
-// 生成されるd.ts
+}</code></pre>
+                    <div class="down-arrow">⬇</div>
+                    <pre><code class="language-typescript code-medium-small">// 生成されるd.ts
 export declare function processOrder(id: number): {
     id: number;
     status: string;
@@ -1023,8 +1042,9 @@ type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;</code></pre>
                         文字列定数の集合を型として表現
                     </div>
                     <aside class="notes">
-                        決（き）まった 文字列（もじれつ）だけ 許可（きょか）します<br>
-                        enum のような 使（つか）い方（かた）です
+                        「リテラル型」は決（き）まった 文字列（もじれつ）や数値（すうち）だけを使える型です。<br>
+                        これで、決（き）まった選択肢（せんたくし）だけを型（かた）であらわします。<br>
+                        enum のような 使（つか）い方（かた）です<br>
                     </aside>
                 </section>
 
@@ -1047,8 +1067,11 @@ function handleResponse(response: ApiResponse) {
                         <strong>判別プロパティ:</strong> <code>success</code>で型を特定
                     </div>
                     <aside class="notes">
-                        共通（きょうつう）の プロパティで 判別（はんべつ）します<br>
-                        より 安全（あんぜん）に 使（つか）えます
+                        「判別可能（はんべつかのう）なUnion」は、共通（きょうつう）のプロパティを見て、どの型か判断（はんだん）します。<br>
+                        (共通（きょうつう）の プロパティで 判別（はんべつ）します)<br>
+                        ここではsuccess が true なら data があり、false なら error があると分かります。<br>
+                        こうすると、TypeScript が安全（あんぜん）に使えるように助けてくれます。
+                        (より 安全（あんぜん）に 使（つか）えます)<br>
                     </aside>
                 </section>
 
@@ -1364,7 +1387,7 @@ function getUserName() {
                         <li>型定義の探索とテスト</li>
                     </ul>
                     <aside class="notes">
-                        ブラウザで TypeScript を 試（ため）せます
+                        playground は ブラウザで TS を 試（ため）せる サイトです。
                     </aside>
                 </section>
 
@@ -1385,6 +1408,9 @@ function getUserName() {
 console.log(processId(123));    // "ID: 123"
 console.log(processId("ABC"));  // "CODE: ABC"
                 </code></pre>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
+                    </div>
                 </section>
 
                 <!-- Task 1 Solution -->
@@ -1415,6 +1441,9 @@ console.log(processId("ABC"));  // "CODE: ABC"
 console.log(createMessage("Takano"));                    // "Hello Takano"
 console.log(createMessage("Satoko", ["admin", "user"])); // "Hello Satoko [admin, user]"
                 </code></pre>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
+                    </div>
                 </section>
 
                 <!-- Task 2 Solution -->
@@ -1447,6 +1476,9 @@ console.log(investigateFragment(["rena", "mion"]));     // "rena"
 console.log(investigateFragment([]));                   // "nanodesu"
     </code></pre>
                     <div class="note"><strong>考えてみよう:</strong> TypeScript はこの関数の戻り値をどんな型だと推論するでしょうか？</div>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
+                    </div>
                 </section>
 
                 <!-- Task 3 Solution -->
@@ -1480,22 +1512,9 @@ function investigateFragment(fragments: number[] | string[]) {
     // 結果: number | string
 }</code></pre>
                 </section>
-                <section>
-                    <h2><span class="task-number">課題3</span> 推論結果の確認</h2>
-                    <p>実際に型推論が動作することを確認</p>
-                    <pre><code class="typescript code-medium-small">// 推論された型を確認
-const result1 = investigateFragment([1, 2, 3]);      // number | string
-const result2 = investigateFragment(["a", "b"]);     // number | string
-const result3 = investigateFragment([]);             // number | string
+            </section>
 
-// 型ガードで型を絞り込む
-if (typeof result1 === "number") {
-    console.log(result1.toFixed(2)); // ここではnumber型として扱われる
-} else {
-    console.log(result1.toUpperCase()); // string型として扱われる
-}</code></pre>
-                </section>
-
+            <section>
                 <!-- Summary -->
                 <section>
                     <h1>第1回まとめ</h1>
@@ -1510,31 +1529,29 @@ if (typeof result1 === "number") {
                         <li><strong>関数の型:</strong> 引数、戻り値、オプション、オーバーロード</li>
                         <li><strong>void と never:</strong> 特殊な戻り値型</li>
                     </ul>
+                    <aside class="notes">
+                        きょうのレッスンで 出てきたことを、まとめて見てみましょう。
+                    </aside>
                 </section>
 
                 <!-- Homework -->
                 <section>
-                    <section>
-                        <h1>宿題・実践課題</h1>
+                    <h1>宿題・実践課題</h1>
 
-                        <h3>斬魄刀コレクション管理システム</h3>
-                        <div class="note"><a
-                                href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/homework"
-                                target="_blank">typescript-lessons/lesson_1/homework</a></div>
-                    </section>
-                    <section>
-                        <h1>実践での重要ポイント</h1>
-                        <ul>
-                            <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
-                            <li>Union型は実際のデータ構造を反映する（"melee" | "kido" など）</li>
-                            <li>Optional型（?）で「あるかもしれない」データを表現</li>
-                            <li>Type guardでランタイムの型チェックと型の絞り込みを両立</li>
-                            <li>配列操作（filter, map, sort）とTypeScriptの組み合わせに慣れる</li>
-                        </ul>
-                        <aside class="notes">
-                            今日（きょう）学（まな）んだことを 復習（ふくしゅう）します
-                        </aside>
-                    </section>
+                    <h3>斬魄刀コレクション管理システム</h3>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/homework"
+                            target="_blank">typescript-lessons/lesson_1/homework</a></div>
+                    <br>
+                    <h3>実践での重要ポイント</h3>
+                    <ul>
+                        <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
+                        <li>Union型は実際のデータ構造を反映する（"melee" | "kido" など）</li>
+                        <li>Optional型（?）で「あるかもしれない」データを表現</li>
+                        <li>Type guardでランタイムの型チェックと型の絞り込みを両立</li>
+                        <li>配列操作（filter, map, sort）とTypeScriptの組み合わせに慣れる</li>
+                    </ul>
+                    <aside class="notes">今回の宿題（しゅくだい）です。やってみてください。</aside>
                 </section>
 
                 <!-- In next episode -->
@@ -1545,6 +1562,7 @@ if (typeof result1 === "number") {
                         次回（じかい）は もっと 高度（こうど）な 内容（ないよう）です
                     </aside>
                 </section>
+            </section>
         </div>
     </div>
 
