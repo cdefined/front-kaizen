@@ -129,7 +129,7 @@
         }
 
         .quiz-options.small {
-            font-size: 0.8em;
+            font-size: 0.65em;
         }
 
         .quiz-options {
@@ -1014,29 +1014,33 @@ const jsonData = JSON.parse(response) as User;
                     <div class="quiz">
                         <h3>以下のコードの出力は？</h3>
                         <pre><code class="code-small language-typescript">const user = {
-  name: "jotaro",
-  avatar: null as string | null,
-  profile: undefined as { age: number } | undefined
+  score: 0,
+  avatar: "",  // 空の文字列 - ユーザーがアバターを削除した
+  backup: null as string | null // 最初はnull、あとで文字列（URLなど）を入れるための型指定
 };
 
-const result1 = user.avatar || "default.jpg";
-const result2 = user.avatar ?? "default.jpg";  
-const result3 = user.profile?.age ?? 17;
-const result4 = user.notExist?.toString();
-
-console.log(result1, result2, result3, result4);</code></pre>
+const result1 = user.score || 100;
+const result2 = user.score ?? 100;
+const result3 = user.avatar || "default.jpg";
+const result4 = user.avatar ?? "default.jpg";
+const result5 = user.backup || "fallback.jpg";
+const result6 = user.backup ?? "fallback.jpg";
+console.log(result1, result2, result3, result4, result5, result6);
+</code></pre>
                         <div class="quiz-options small">
-                            <div class="quiz-option">A) "default.jpg", null, 17, undefined</div>
-                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
-                                "default.jpg", "default.jpg", 17, undefined</div>
-                            <div class="quiz-option">C) null, "default.jpg", undefined, エラー</div>
-                            <div class="quiz-option">D) "default.jpg", "default.jpg", undefined, undefined</div>
+                            <div class="quiz-option">A) 100, 0, "default.jpg", "", "fallback.jpg", "fallback.jpg"</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) 100, 0,
+                                "default.jpg", "", "fallback.jpg", "fallback.jpg"</div>
+                            <div class="quiz-option">C) 0, 0, "", "", null, null</div>
+                            <div class="quiz-option">D) 100, 100, "default.jpg", "default.jpg", "fallback.jpg",
+                                "fallback.jpg"</div>
                         </div>
                     </div>
                     <div class="fragment" data-fragment-index="1">
                         <div class="note">
-                            <strong>答え:</strong> B) || は falsy な null で fallback、?? は null/undefined で fallback、?.
-                            は安全にアクセスして undefined を返します。
+                            <strong>答え:</strong> B) <code>||</code> は falsy値 (0, "") で fallback するが、<code>??</code> は
+                            null/undefined のみ。
+                            <br>avatarが空文字の場合: <code>||</code> は "default.jpg"、<code>??</code> は "" を保持
                         </div>
                     </div>
                 </section>
@@ -1050,6 +1054,117 @@ console.log(result1, result2, result3, result4);</code></pre>
                 </section>
 
                 <section>
+                    <h2>プロトタイプ継承とは？</h2>
+                    <p>JavaScriptの<strong>オブジェクト指向</strong>の基本メカニズム</p>
+                    <ul>
+                        <li class="fragment">オブジェクトが他のオブジェクトから<em>直接</em>継承する</li>
+                        <li class="fragment">クラスベースの言語とは<strong>異なる</strong>アプローチ</li>
+                        <li class="fragment">全てのオブジェクトは<code>prototype</code>チェーンを持つ</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>プロトタイプチェーン</h2>
+                    <pre><code data-trim class="language-javascript code-medium">
+const animal = {
+  speak: function() {
+    return "何か音を出す";
+  }
+};
+
+const dog = Object.create(animal);
+dog.bark = function() {
+  return "わんわん！";
+};
+
+console.log(dog.speak()); // "何か音を出す" ← animalから継承
+console.log(dog.bark());  // "わんわん！" ← 自分のメソッド
+  </code></pre>
+                </section>
+
+                <section>
+                    <h2>他の言語との比較</h2>
+                    <div class="comparison">
+                        <div>
+                            <h3>PHP/Ruby (クラスベース)</h3>
+                            <pre><code data-trim class="language-php code-medium-small">
+class Animal {
+  public function speak() {
+    return "音を出す";
+  }
+}
+
+class Dog extends Animal {
+  public function bark() {
+    return "わんわん";
+  }
+}
+      </code></pre>
+                            <p><small>設計図(クラス) → インスタンス</small></p>
+                        </div>
+                        <div>
+                            <h3>JavaScript (プロトタイプベース)</h3>
+                            <pre><code data-trim class="language-javascript code-medium-small">
+function Animal() {}
+Animal.prototype.speak = function() {
+  return "音を出す";
+};
+
+
+function Dog() {}
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.bark = function() {
+  return "わんわん";
+};
+      </code></pre>
+                            <p><small>オブジェクト → オブジェクト</small></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ES6のclassは「syntactic sugar」</h2>
+                    <div class="fragment">
+                        <h3>実際には同じ</h3>
+                        <div class="comparison">
+                            <pre><code data-trim class="language-javascript code-medium">
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+  
+  bark() {
+    return "わんわん";
+  }
+}
+</code></pre>
+                            <pre><code data-trim class="language-javascript code-medium">
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  return "わんわん";
+};
+    </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>なぜ理解が重要？</h2>
+                    <ul>
+                        <li class="fragment"><code>this</code>の動作を理解するため</li>
+                        <li class="fragment">継承の仕組みを把握するため</li>
+                        <li class="fragment">デバッグ時に内部動作を追跡できる</li>
+                        <li class="fragment">TypeScriptの型システムとの関係</li>
+                    </ul>
+                    <div class="fragment note">
+                        <code>class</code>はプロトタイプの「見た目をよくしたもの」
+                    </div>
+                </section>
+
+                <section>
                     <h3>基本的なクラス定義</h3>
                     <pre><code data-line-numbers="|1|2-3|4,8|4-6|" data-trim class="language-typescript code-medium-small">
 class Stand {
@@ -1060,19 +1175,17 @@ class Stand {
     }
 
     attack(): string {     // クラスメソッド
-        return `${this.name}で攻撃！`;
+        return `${this.name}で攻撃！パワー: ${this.power}`;
     }
 }
 </code></pre>
                     <pre><code data-trim class="language-typescript code-medium-small">
 const starPlatinum = new Stand("スタープラチナ", 100);
-console.log(starPlatinum.attack()); // "スタープラチナで攻撃！"
+console.log(starPlatinum.attack()); // "スタープラチナで攻撃！パワー: 100"
+console.log(starPlatinum.power);    // 100 (public引数で自動生成)
     </code></pre>
                     <div class="note">
-                        クラスはオブジェクトの設計図。プロパティとメソッドを定義できる。
-                    </div>
-                    <div class="note">
-                        <code>constructor(public prop: type)</code>は <code>this.prop = prop</code> の省略形。
+                        <code>constructor(public prop: type)</code>は <code>this.prop = prop</code> + プロパティ宣言の省略形
                     </div>
                 </section>
 
@@ -1102,7 +1215,7 @@ class Character {
 
                 <section>
                     <h3>継承とオーバーライド</h3>
-                    <pre><code data-trim data-line-numbers="|1|" class="language-typescript code-small">
+                    <pre><code data-trim data-line-numbers="|1|4-6|8-10|12-14|" class="language-typescript code-small">
 class Villain extends Character {
     private evilPlan: string;
     
@@ -1111,7 +1224,7 @@ class Villain extends Character {
         this.evilPlan = plan;
     }
     
-    public getStatus(): string {
+    public getStatus(): string { // メソッドオーバーライド
         return `${super.getStatus()}, 計画: ${this.evilPlan}`;
     }
     
@@ -1121,9 +1234,11 @@ class Villain extends Character {
 }</code></pre>
                     <pre><code data-trim class="language-typescript code-small">
 const dio = new Villain("ディオ", 200, 50, "世界征服");
+console.log(dio.getStatus()); // "ディオ: HP 200, Lv.50, 計画: 世界征服"
+// dio.useSpecialAbility();   // ✕ エラー: protected
     </code></pre>
                     <div class="note">
-                        <code>extends</code>: 継承、<code>super()</code>: 親クラスのコンストラクタ/メソッド呼び出し、メソッドオーバーライド可能
+                        <code>super()</code>: 親のコンストラクタ/メソッド呼び出し、<code>protected</code>は継承先でのみ使用可能
                     </div>
                 </section>
 
@@ -1132,30 +1247,108 @@ const dio = new Villain("ディオ", 200, 50, "世界征服");
                     <pre><code data-trim class="language-typescript code-small">
 class ClubMember {
     readonly membershipId: string;
-    static clubName: string = "雛見沢分校";
-    static memberCount: number = 0;
+    private static memberCount: number = 0;
+    static readonly clubName: string = "雛見沢分校";
     
     constructor(public name: string, membershipId: string) {
         this.membershipId = membershipId;
-        ClubMember.memberCount++;
+        ClubMember.memberCount++; // private staticもクラス内からアクセス可能
     }
     
     static getClubInfo(): string {
-        return `${ClubMember.clubName}: ${ClubMember.memberCount}人`;
+        return `${ClubMember.clubName}: ${ClubMember.memberCount}人`; // staticプロパティはクラス名でアクセス
     }
 }
 </code></pre>
                     <pre><code data-trim class="language-typescript code-small">
 const keiichi = new ClubMember("前原圭一", "001");
 const rena = new ClubMember("竜宮レナ", "002");
-console.log(ClubMember.getClubInfo()); // "雛見沢分校: 2人"
+console.log(ClubMember.getClubInfo());  // "雛見沢分校: 2人"
+// keiichi.membershipId = "003";        // ✕ エラー: readonly
+// console.log(ClubMember.memberCount); // ✕ エラー: private static
     </code></pre>
                     <div class="note">
-                        <code>readonly</code>: 初期化後変更不可、<code>static</code>: クラス自体に属する（インスタンス不要）
+                        <code>readonly</code>: 初期化後変更不可、<code>static</code>:
+                        クラス自体に属する（インスタンス不要）、<br><code>private static</code>: クラス内でのみアクセス可能
                     </div>
                 </section>
+                <section>
+                    <h3>getter/setter</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class Pokemon {
+    private _hp: number;
+    
+    constructor(public name: string, private _maxHp: number) {
+        this._hp = _maxHp;
+    }
+    
+    get hp(): number { return this._hp; }
+    
+    set hp(value: number) {
+        this._hp = Math.max(0, Math.min(value, this._maxHp));
+    }
+    
+    get healthPercentage(): number {
+        return Math.round((this._hp / this._maxHp) * 100);
+    }
+}
+    </code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const pikachu = new Pokemon("ピカチュウ", 100);
+pikachu.hp = 150;        // setter (maxHpに制限される)
+console.log(pikachu.hp); // 100
+console.log(pikachu.healthPercentage); // 100 (read-only)
+    </code></pre>
+                    <div class="note">
+                        <code>get</code>: プロパティアクセス時の処理、<code>set</code>: 代入時の検証・変換
+                    </div>
+                </section>
+                <section>
+                    <h3>抽象クラス</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+abstract class Weapon {
+    constructor(public name: string, public damage: number) {}
+    
+    abstract attack(): string; // 子クラスで実装必須
+    
+    public getInfo(): string { // 共通の実装
+        return `${this.name} (威力: ${this.damage})`;
+    }
+}
 
-                <!-- Modules & Namespaces -->
+class Sword extends Weapon {
+    attack(): string {
+        return `${this.name}で斬りつけた！${this.damage}のダメージ！`;
+    }
+}
+    </code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+// const weapon = new Weapon("", 0); // ✕ エラー: 抽象クラスはインスタンス化不可
+const sword = new Sword("エクスカリバー", 50);
+console.log(sword.attack()); // "エクスカリバーで斬りつけた！50のダメージ！"
+    </code></pre>
+                    <div class="note">
+                        <code>abstract</code>: インスタンス化不可、子クラスでの実装強制。共通処理と個別実装を分離
+                    </div>
+                </section>
+                <section>
+                    <h3>まとめ</h3>
+                    <ul>
+                        <li><strong>クラス</strong>: オブジェクト指向の基本構造</li>
+                        <li><strong>アクセス修飾子</strong>: public, private, protected</li>
+                        <li><strong>継承</strong>: extends, super, オーバーライド</li>
+                        <li><strong>getter/setter</strong>: プロパティアクセスの制御</li>
+                        <li><strong>static</strong>: インスタンス不要のクラス機能</li>
+                        <li><strong>abstract</strong>: 継承強制の抽象クラス</li>
+                    </ul>
+                    <div class="note">
+                        TypeScriptの<code>class</code>は本質的にJavaScriptのプロトタイプベース継承の糖衣構文
+                    </div>
+                </section>
+            </section>
+
+            <!-- Modules & Namespaces -->
+            <section>
                 <section>
                     <h2>モジュール</h2>
                     <p>コードの整理と再利用</p>
@@ -1209,10 +1402,23 @@ const dio = new StandModule.default("DIO", new StandModule.Stand("ザ・ワー�
                 <section>
                     <h3>まとめ</h3>
                     <ul>
-                        <li><strong>クラス</strong>: オブジェクト指向の基本構造</li>
-                        <li><strong>アクセス修飾子</strong>: public, private, protected</li>
-                        <li><strong>継承</strong>: extends, super, オーバーライド</li>
-                        <li><strong>モジュール</strong>: import/export でコード分割</li>
+                        <li><strong>export/import</strong>: ファイル間でコード共有</li>
+                        <li><strong>default export</strong>: 1つまで、named export: 複数可</li>
+                        <li><strong>import { } from</strong>: 必要なものだけ取得</li>
+                        <li><strong>import * as</strong>: 全部まとめて名前空間で</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Generics -->
+            <section>
+                <section>
+                    <h1>ジェネリクス</h1>
+                </section>
+                <section>
+                    <h3>まとめ</h3>
+                    <ul>
+
                     </ul>
                 </section>
             </section>
