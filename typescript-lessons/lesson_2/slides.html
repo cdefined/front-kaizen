@@ -1350,7 +1350,7 @@ console.log(sword.attack()); // "エクスカリバーで斬りつけた！50の
             <!-- Modules & Namespaces -->
             <section>
                 <section>
-                    <h2>モジュール</h2>
+                    <h1>モジュール</h1>
                     <p>コードの整理と再利用</p>
                 </section>
 
@@ -1416,10 +1416,134 @@ const dio = new StandModule.default("DIO", new StandModule.Stand("ザ・ワー�
                     <h1>ジェネリクス</h1>
                 </section>
                 <section>
-                    <h3>まとめ</h3>
+                    <h2>generics とは</h2>
+                    <p>型を「後で決める」仕組み</p>
                     <ul>
-
+                        <li>関数やクラスを書く時点では型を決めない</li>
+                        <li>使う時に具体的な型を指定</li>
+                        <li>型安全性を保ちながら再利用可能なコードが書ける</li>
                     </ul>
+                    <div class="note">
+                        generics は「汎用的な」という意味。一つのコードで複数の型に対応できる仕組み。
+                    </div>
+                </section>
+                <section>
+                    <h3>なぜ必要？</h3>
+                    <pre><code class="language-typescript code-medium" data-line-numbers="1-4|6-13|">// ジェネリクスなしだと...
+function getFirstStand(stands: Stand[]): Stand { return stands[0]; }
+function getFirstFragment(fragments: Fragment[]): Fragment { return fragments[0]; }
+// 型ごとに同じ関数を作る必要がある
+
+// ジェネリクスがあると
+function getFirst&lt;T&gt;(items: T[]): T {
+  return items[0];
+}
+
+// 一つの関数で全てに対応
+const firstStand = getFirst(stands); // Stand型
+const firstFragment = getFirst(fragments); // Fragment型</code></pre>
+                    <div class="note">
+                        同じ処理でも型が違うと別々の関数が必要になる。ジェネリクスで一つの関数で済む。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>基本的な使い方</h3>
+                    <pre><code class="language-typescript code-medium">// 関数のジェネリクス
+function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}
+
+// 使い方
+const result1 = identity&lt;string&gt;("za warudo"); // 明示的に型指定
+const result2 = identity("muda muda"); // 型推論で自動判定</code></pre>
+                    <pre><code class="language-typescript code-medium">// 複数の型パラメータ
+function createPair&lt;T, U&gt;(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+const jotaro = createPair("jotaro", 17); // [string, number]</code></pre>
+                    <div class="note">
+                        <code>&lt;T&gt;</code> が型パラメータ。関数呼び出し時に具体的な型が決まる。<br>型推論があるので明示的に書かなくても OK。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>配列操作の例</h3>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// ジェネリクスを使った汎用的な関数
+function findByName&lt;T extends { name: string }&gt;(items: T[], name: string): T | undefined {
+  return items.find(item => item.name === name);
+}
+
+const stands: Stand[] = [
+  { name: "star platinum", user: "jotaro", power: 95 },
+  { name: "the world", user: "dio", power: 90 }
+];
+
+const weapons: Weapon[] = [
+  { name: "arrow", damage: 50, type: "ranged" },
+  { name: "requiem arrow", damage: 100, type: "ranged" }
+];
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 型安全に使える
+const starPlatinum = findByName(stands, "star platinum"); // Stand | undefined
+const arrow = findByName(weapons, "arrow"); // Weapon | undefined</code></pre>
+                    <div class="note">
+                        <code>extends</code>で型に制約を加えることができる。<code>name</code>プロパティを持つ型のみ受け入れる。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>実用的な例：APIレスポンス</h3>
+                    <pre><code class="language-typescript code-small">interface ApiResponse&lt;T&gt; {
+  data: T;
+  status: "success" | "error";
+}
+
+// 汎用的なAPI関数
+async function fetchData&lt;T&gt;(url: string): Promise&lt;ApiResponse&lt;T&gt;&gt; {
+  const response = await fetch(url);
+  return response.json();
+}</code></pre>
+
+                    <pre><code class="language-typescript code-small">// 使用時に型が決まる
+const standsResponse = await fetchData&lt;Stand[]&gt;("/api/stands");
+const userResponse = await fetchData&lt;User&gt;("/api/user");
+
+// 型安全にアクセス
+if (standsResponse.status === "success") {
+  standsResponse.data.forEach(stand => {
+    console.log(stand.name); // Stand型として扱われる
+  });
+}</code></pre>
+                    <div class="note">
+                        APIレスポンスの共通構造をジェネリクスで定義。<code>data</code>の型だけ変えて再利用できる。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ジェネリクスの利点</h2>
+                    <ul>
+                        <li><strong>再利用性</strong>: 一つのコードで複数の型に対応</li>
+                        <li><strong>型安全性</strong>: <code>any</code>を使わずに型チェックを維持</li>
+                        <li><strong>補完機能</strong>: エディタの型情報に基づく支援</li>
+                        <li><strong>保守性</strong>: 型変更時の影響範囲が明確</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>使うべき場面</h2>
+                    <ul>
+                        <li>配列操作、データ変換の汎用関数</li>
+                        <li>APIレスポンスの型定義</li>
+                        <li>複数の型で同じ処理をしたい時</li>
+                        <li>ライブラリやユーティリティ関数の作成</li>
+                    </ul>
+                    <div class="note">
+                        型の「形」が同じで処理も同じなら、ジェネリクスを検討する。型安全性を保ちながらコードの重複を避けられる。
+                    </div>
                 </section>
             </section>
 
