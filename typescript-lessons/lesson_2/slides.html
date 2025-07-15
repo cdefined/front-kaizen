@@ -89,6 +89,14 @@
             margin: 20px 0;
         }
 
+        .task-number {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
         .js-side,
         .ts-side {
             background: rgba(255, 255, 255, 0.05);
@@ -1347,7 +1355,7 @@ console.log(sword.attack()); // "エクスカリバーで斬りつけた！50の
                 </section>
             </section>
 
-            <!-- Modules & Namespaces -->
+            <!-- Modules -->
             <section>
                 <section>
                     <h1>モジュール</h1>
@@ -1645,57 +1653,295 @@ console.log(typeof result1, typeof result2, typeof result3);
             </section>
 
             <section>
-                <!-- Practice -->
+                <!-- Index Signatures & Mapped Types Section -->
+                <section>
+                    <h2>Index Signatures & Mapped Types</h2>
+                    <p>動的なオブジェクト構造を扱う方法</p>
+                </section>
+
+                <section>
+                    <h3>Index Signatures【インデックスシグネチャ】</h3>
+                    <pre><code class="language-typescript code-medium-small">// プロパティ名が事前に分からない場合
+interface StringDictionary {
+    [key: string]: string;
+}
+
+interface NumberDictionary {
+    [key: string]: number;
+    length: number; // ok, lengthはnumber型
+    // name: string; // error, インデックスシグネチャと競合
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// 複数のインデックスシグネチャ
+interface MixedDictionary {
+    [key: string]: any;
+    [key: number]: string; // 数値キーは文字列キーに割り当て可能である必要がある
+}</code></pre>
+                    <div class="note">
+                        オブジェクトのプロパティ名が動的に決まる場合に使用する。APIレスポンスや設定オブジェクトでよく使われる。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Mapped Types【マップ型】</h3>
+                    <pre><code class="language-typescript">// 既存の型を変換する
+type Readonly&lt;T&gt; = {
+    readonly [P in keyof T]: T[P];
+}
+
+type Partial&lt;T&gt; = {
+    [P in keyof T]?: T[P];
+}
+
+// 使用例
+interface Stand {
+    name: string;
+    power: number;
+}
+
+type ReadonlyStand = Readonly&lt;Stand&gt;;
+// { readonly name: string; readonly power: number; }
+
+type PartialStand = Partial&lt;Stand&gt;;
+// { name?: string; power?: number; }</code></pre>
+                    <div class="note">
+                        既存の型のすべてのプロパティに対して一括で変換を適用できる。TypeScriptの組み込みUtility Typesの基盤となる技術。
+                    </div>
+                </section>
+                <section>
+                    <h3>まとめ </h3>
+                    <div class="comparison">
+                        <div>
+                            <h4>存在する理由</h4>
+                            <ul>
+                                <li>動的なオブジェクト構造</li>
+                                <li>APIレスポンスの型定義</li>
+                                <li>ライブラリの内部実装</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>なぜ避けるべきか</h4>
+                            <ul>
+                                <li>型安全性の喪失</li>
+                                <li>IDE支援の低下</li>
+                                <li>バグの発見が困難</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comparison">
+                        <pre><code class="language-typescript code-medium-small">
+// 非推奨: 型安全なし
+interface Config {
+    [key: string]: any;
+}
+
+</code></pre>
+
+                        <pre><code class="language-typescript code-medium-small">// 推奨: 型明示で安全
+interface Config {
+    apiUrl: string;
+    timeout: number;
+    retries?: number;
+}
+</code></pre>
+                    </div>
+                    <div class="note">
+                        <p><strong>現実的な判断：</strong> 必要な時もあるが、まず具体的な型定義を検討する</p>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <!-- Conditional Types Section -->
+                <section>
+                    <h2>Conditional Types【条件型】</h2>
+                    <p>型レベルでの条件分岐</p>
+                </section>
+
+                <section>
+                    <h3>基本的なConditional Types</h3>
+                    <pre><code class="language-typescript code-medium">// T extends U ? X : Y
+type TypeName&lt;T&gt; = 
+    T extends string ? "string" :
+    T extends number ? "number" :
+    T extends boolean ? "boolean" :
+    T extends undefined ? "undefined" :
+    T extends Function ? "function" :
+    "object";
+
+type T1 = TypeName&lt;string&gt;;    // "string"
+type T2 = TypeName&lt;number&gt;;    // "number"
+type T3 = TypeName&lt;() =&gt; void&gt;; // "function"</code></pre>
+                    <div class="note">
+                        型に対して条件分岐を行う。三項演算子の型版と考えるとわかりやすい。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Distributive Conditional Types【分配条件型】</h3>
+                    <pre><code class="language-typescript">// 条件型はunion型に対して分配される
+type ToArray&lt;T&gt; = T extends any ? T[] : never;
+
+type StrArrOrNumArr = ToArray&lt;string | number&gt;;
+// string[] | number[] (not (string | number)[])
+
+// タプルを使って分配を防ぐ
+type ToArrayNonDistributive&lt;T&gt; = [T] extends [any] ? T[] : never;
+
+type StrOrNumArr = ToArrayNonDistributive&lt;string | number&gt;;
+// (string | number)[]</code></pre>
+                    <div class="note">
+                        Union型に対して条件型を適用すると、各型に対して個別に適用される。この挙動を理解することが重要。
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <!-- Utility Types Section -->
+                <section>
+                    <h2>Utility Types【ユーティリティ型】</h2>
+                    <p>TypeScriptが提供する便利な型変換ツール</p>
+                </section>
+
+                <section>
+                    <h3>よく使われるUtility Types</h3>
+                    <pre><code class="language-typescript">interface Character {
+    id: number;
+    name: string;
+    village: string;
+    isAlive: boolean;
+}
+
+// Pick&lt;T, K&gt; - 特定のプロパティを選択
+type CharacterSummary = Pick&lt;Character, "id" | "name"&gt;;
+// { id: number; name: string; }
+
+// Omit&lt;T, K&gt; - 特定のプロパティを除外
+type CharacterWithoutId = Omit&lt;Character, "id"&gt;;
+// { name: string; village: string; isAlive: boolean; }
+
+// Partial&lt;T&gt; - すべてのプロパティを省略可能にする
+type PartialCharacter = Partial&lt;Character&gt;;
+// { id?: number; name?: string; village?: string; isAlive?: boolean; }
+
+// Required&lt;T&gt; - すべてのプロパティを必須にする
+type RequiredCharacter = Required&lt;PartialCharacter&gt;;</code></pre>
+                    <div class="note">
+                        既存の型から新しい型を作成する際に使用する。オブジェクトの一部だけを使いたい場合や、省略可能にしたい場合に便利。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>その他のUtility Types</h3>
+                    <pre><code class="language-typescript">// Record&lt;K, T&gt; - キーKと値Tを持つオブジェクト型を作成
+type VillageStatus = Record&lt;'hinamizawa' | 'tokyo' | 'okinomiya', boolean&gt;;
+// { hinamizawa: boolean; tokyo: boolean; okinomiya: boolean; }
+
+// Exclude&lt;T, U&gt; - union型から特定の型を除外
+type T1 = Exclude&lt;'rena' | 'mion' | 'rika', 'rena'&gt;;  // 'mion' | 'rika'
+
+// Extract&lt;T, U&gt; - union型から特定の型を抽出
+type T2 = Extract&lt;'rena' | 'mion' | 'rika', 'rena' | 'satoko'&gt;;  // 'rena'
+
+// NonNullable&lt;T&gt; - nullとundefinedを除外
+type T3 = NonNullable&lt;string | number | undefined&gt;;  // string | number
+
+// ReturnType&lt;T&gt; - 関数の戻り値の型を取得
+type T4 = ReturnType&lt;() =&gt; string&gt;;  // string
+type T5 = ReturnType&lt;(x: number) =&gt; number&gt;;  // number</code></pre>
+                    <div class="note">
+                        複雑な型操作を簡潔に記述できる。特にRecordとExclude/Extractはunion型の操作でよく使われる。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice -->
+            <section>
                 <section>
                     <h1>TypeScript 実践演習</h1>
-                    <h3>3つの課題 (各5-10分)</h3>
+                    <h3>2つの課題 (各5-15分)</h3>
                     <p>今日学んだ内容を実際に使ってみよう！</p>
                 </section>
 
                 <section>
-                    <h2><span class="task-number">課題1</span> Union型とtype guard</h2>
+                    <h2><span class="task-number">課題1</span> Conditional Typesで型の変換</h2>
 
-                    <p><strong>関数 <code>processId</code> を作成してください</strong></p>
+                    <p><strong>条件型 <code>ApiResponse&lt;T&gt;</code> を作成してください</strong></p>
                     <ul>
-                        <li>引数 <code>id</code> は <code>number</code> または <code>string</code> のいずれかです</li>
-                        <li><code>number</code> の場合は <code>"ID: 123"</code>、<code>string</code> の場合は
-                            <code>"CODE: ABC"</code> の形式で返す
+                        <li><code>T</code> が <code>string</code> の場合は <code>{ data: string; status: "success" }</code>
                         </li>
+                        <li><code>T</code> が <code>number</code> の場合は <code>{ count: number; status: "success" }</code>
+                        </li>
+                        <li>それ以外の場合は <code>{ error: string; status: "error" }</code></li>
                     </ul>
 
                     <pre><code class="language-typescript">// テスト
-console.log(processId(123));    // "ID: 123"
-console.log(processId("ABC"));  // "CODE: ABC"
-                </code></pre>
+type StringResponse = ApiResponse&lt;string&gt;;
+// { data: string; status: "success" }
+
+type NumberResponse = ApiResponse&lt;number&gt;;  
+// { count: number; status: "success" }
+
+type ErrorResponse = ApiResponse&lt;boolean&gt;;
+// { error: string; status: "error" }</code></pre>
                 </section>
 
-                <!-- Task 1 Solution -->
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
-                    <p>型ガード　【type guard】を使うことができます</p>
-                    <pre><code class="language-typescript">function processId(id: number | string): string {
-    // typeof演算子を使って型を判定
-    if (typeof id === "number") {
-        return `ID: ${id}`;
-    } else {
-        return `CODE: ${id}`;
-    }
+                    <p>条件型で型を判定し、適切な形に変換する</p>
+                    <pre><code class="language-typescript">type ApiResponse&lt;T&gt; = 
+    T extends string ? { data: string; status: "success" } :
+    T extends number ? { count: number; status: "success" } :
+    { error: string; status: "error" };
+
+// extends は「型Tがstringに代入可能か？」をチェック</code></pre>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題2</span> Utility Typesでユーザー型変換</h2>
+
+                    <p><strong>以下の <code>User</code> から新しい型を作成してください</strong></p>
+                    <pre><code class="language-typescript">interface User {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+    isActive: boolean;
 }</code></pre>
+
+                    <ul>
+                        <li><code>PublicUser</code>: <code>password</code> を除いた型</li>
+                        <li><code>UserUpdate</code>: <code>id</code> を除き、全て省略可能な型</li>
+                        <li><code>UserSummary</code>: <code>id</code> と <code>name</code> のみの型</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題2</span> 解答例</h2>
+                    <p>Utility Typesを組み合わせて必要な型を作成</p>
+                    <pre><code class="language-typescript">// password を除いた型
+type PublicUser = Omit&lt;User, "password"&gt;;
+
+// id を除き、全て省略可能
+type UserUpdate = Partial&lt;Omit&lt;User, "id"&gt;&gt;;
+
+// 指定されたプロパティのみ
+type UserSummary = Pick&lt;User, "id" | "name"&gt;;</code></pre>
                 </section>
             </section>
 
-            <!-- Summary -->
             <section>
-                <h1>第2回まとめ</h1>
+                <!-- Summary -->
+                <section>
+                    <h1>第2回まとめ</h1>
 
-                <h2>今日学んだこと</h2>
-                <ul>
-                    <li><strong>interface</strong></li>
-                </ul>
-            </section>
+                    <h2>今日学んだこと</h2>
+                    <ul>
+                        <li><strong>interface</strong></li>
+                    </ul>
+                </section>
 
-            <!-- Homework -->
-            <section>
+                <!-- Homework -->
                 <section>
                     <h1>宿題・実践課題</h1>
 
@@ -1703,20 +1949,19 @@ console.log(processId("ABC"));  // "CODE: ABC"
                     <div class="note"><a
                             href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_2/homework"
                             target="_blank">typescript-lessons/lesson_2/homework</a></div>
-                </section>
-                <section>
-                    <h1>実践での重要ポイント</h1>
+                    <br>
+                    <h3>実践での重要ポイント</h3>
                     <ul>
                         <li>???</li>
                     </ul>
                 </section>
-            </section>
 
-            <!-- In next episode -->
-            <section>
-                <h1>次回予告</h1>
-                <p><strong>React基礎:</strong> Reactとは、JSX、コンポーネント、Propsの使い方
-                </p>
+                <!-- In next episode -->
+                <section>
+                    <h1>次回予告</h1>
+                    <p><strong>React基礎①:</strong> Reactとは、JSX、コンポーネント、Propsの使い方
+                    </p>
+                </section>
             </section>
         </div>
     </div>
