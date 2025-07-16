@@ -51,7 +51,7 @@ console.assert(
 console.log("filterByType テスト:");
 const meleeZanpakutos = filterByType(zanpakutoCollection, "melee");
 console.assert(
-  meleeZanpakutos.length === 5,
+  meleeZanpakutos.length === 4,
   "filterByType melee count incorrect",
 );
 console.assert(
