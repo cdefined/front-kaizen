@@ -1867,7 +1867,7 @@ const config: Record&lt;string, string&gt; = {
                 </section>
 
                 <section>
-                    <h2><span class="task-number">課題1</span> Utility Typesでユーザー型変換</h2>
+                    <h2><span class="task-number">課題1</span> ユーティリティ型でユーザー型変換</h2>
 
                     <p><strong>以下の <code>User</code> から新しい型を作成してください</strong></p>
                     <pre><code class="language-typescript">interface User {
@@ -1887,7 +1887,7 @@ const config: Record&lt;string, string&gt; = {
 
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
-                    <p>Utility Typesを組み合わせて必要な型を作成</p>
+                    <p>ユーティリティ型を組み合わせて必要な型を作成</p>
                     <pre><code class="language-typescript">// password を除いた型
 type PublicUser = Omit&lt;User, "password"&gt;;
 
@@ -1897,6 +1897,44 @@ type UserUpdate = Partial&lt;Omit&lt;User, "id"&gt;&gt;;
 // 指定されたプロパティのみ
 type UserSummary = Pick&lt;User, "id" | "name"&gt;;</code></pre>
                 </section>
+                <section>
+                    <h2><span class="task-number">課題2</span> ジェネリクスでデータ変換</h2>
+
+                    <p><strong>以下の関数をジェネリクスを使って型安全に書き直してください</strong></p>
+                    <pre><code class="language-typescript code-medium-small">// 現在の実装（型が不十分）
+function transformArray(items: any[], transformer: (item: any) => any): any[] {
+    return items.map(transformer);
+}
+
+// 使用例
+const numbers = [1, 2, 3];
+const strings = transformArray(numbers, (n) => n.toString());
+const lengths = transformArray(["hello", "world"], (s) => s.length);</code></pre>
+
+                    <ul>
+                        <li>入力の配列の型を保持する</li>
+                        <li>変換関数の入力・出力型を正しく推論する</li>
+                        <li>戻り値の型を正確に推論する</li>
+                    </ul>
+                    <div class="note fragment"><strong>ヒント:</strong> 2つの型パラメータが必要です <code>&lt;T, U&gt;</code></div>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題2</span> 解答例</h2>
+                    <p>ジェネリクスで入力と出力の型を関連付ける</p>
+                    <pre><code class="language-typescript">function transformArray&lt;T, U&gt;(items: T[], transformer: (item: T) => U): U[] {
+    return items.map(transformer);
+}
+
+// 使用例 - 型推論が正しく動作
+const numbers = [1, 2, 3];
+const strings = transformArray(numbers, (n) => n.toString()); // string[]
+const lengths = transformArray(["hello", "world"], (s) => s.length); // number[]
+
+// TypeScriptが型エラーを検出
+// transformArray(numbers, (n) => n.charAt(0)); // Error: charAt は number にない</code></pre>
+                    <div class="note">2つの型パラメータ <code>&lt;T, U&gt;</code> を使って入力と出力の型を関連付けている</div>
+                </section>
             </section>
 
             <section>
@@ -1904,9 +1942,16 @@ type UserSummary = Pick&lt;User, "id" | "name"&gt;;</code></pre>
                 <section>
                     <h1>第2回まとめ</h1>
 
-                    <h2>今日学んだこと</h2>
                     <ul>
-                        <li><strong>interface</strong></li>
+                        <li><strong>型システム：</strong>型エイリアス、インターフェース、列挙型</li>
+                        <li><strong>型アサーション：</strong>型アサーションとconstアサーション</li>
+                        <li><strong>null/undefinedの扱い：</strong>安全チェック</li>
+                        <li><strong>クラス：</strong>アクセス修飾子とプロトタイプ継承の基礎</li>
+                        <li><strong>モジュール：</strong>基本的なimport/export</li>
+                        <li><strong>ジェネリクス：</strong>再利用可能な型の作成</li>
+                        <li><strong>インデックスシグネチャ：</strong>動的なキーの型付け</li>
+                        <li><strong>条件型：</strong>基本的な条件型の使用例</li>
+                        <li><strong>ユーティリティ型：</strong>Partial、Pick、Omit、Recordなどの活用</li>
                     </ul>
                 </section>
 
