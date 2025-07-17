@@ -1,0 +1,41 @@
+## 課題 1：ユーティリティ型でユーザー型変換
+
+[Playground のリンク](https://www.typescriptlang.org/play/?strictFunctionTypes=false&q=66#code/PTAEiaowZDNBGQsf8GcMgfhkGMMhihkFcM7DR6ocwZmBtDEtoJCag28YBQFAlgHYAuApgE4BmAhgMaOgCqAzi1ABvCqHGhqAEwBcoWgFcAtgCMWAbjETa7JYzn96zOgHNNE0IyXtqAGwNHT5iQAd2-fgHcA9s1mhDY1ozLXFqfgBBTnpqADd9UBVvb1tGdlpNAF8qEFAAFQB5ABECuUBTuUBoOUA7BmxAJIZALO1ASv9AdQZAMwZAeQZAAwZAVQZAEQYKXPoATxceAAUFFVtqTgEhAF5QAbBh0b5BZl4XKXYmUEXl0FWeOeYAZWVrZiH9pcOUQE6GQAmGQApXQHGGJEB+hgpOb1pDI6MQynOSnW6iCzSOQwAA0oXkugSACJAM0MgAuGVCAb4YHp8kIB6hiRcIsVhs9lASMM7GYzAA1gABIFuHYAOiBhPhbg8Pj8cgpjE4zEY9BgACYAMzsyGRaJxBJGBSMCiZTSHCZTGZgqqPJ4-P4AlyTaazDZyNVGsGLYSSfywhF6XnorE4-GEyzWOy8ynU+mM9gstkwyTSmLxOTynjK3X-FKMZnuDb0AAUBvVxpYzOk+3mi1tSLNGo2AQAFt4FLYpKAi+x4takQBKTS-aOpOMeFhJlPmjbMnR6LOLVEYlDY3EEwN5w0FoT8EtlitVmu9xj1xt6mOthOJgCEiaRnK8vikSMktFAnanzDr4-zaeYxdL5fk3nolerPH33KPDZyYFOWx2exas84hRgCCgbP+uwJH+2xQeCdrIhgGCALMMgDDDE8rokh65LTNMtBCkwDL8Ey7Csvwx6Rk2-DrvG7aJuBLCQUwPaIv25JIWhGHjjBAE8DOD4Vuwti2N4ngISuoE0W2zBJjuSLSMedCgAxmywUwV7kjxcH8XOT4vguPAKd+hynBcShXDcQE6lRL4qWZFmghs9lUjclrWtCgZLg6Q4ji6oCUWuLa0TJ9FOZcLkZhW2Y5txYXmS5966QZtbflRUmbnZ4XXCxfbReSjrDs6Y6aXFFmJY+yVLhJaVBdJsm7lhtiKaemXxdcGlIqZWU3Dpj60M+r41o1ElAA)
+
+以下の User から新しい型を作成してください
+
+- `PublicUser`: `password` を除いた型
+- `UserUpdate`: `id` を除き、全て省略可能な型
+- `UserSummary`: `id` と `name` のみの型
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+}
+```
+
+## 課題 2：ジェネリクスでデータ変換
+
+[Playground のリンク](https://www.typescriptlang.org/play/?strictFunctionTypes=false&q=66#code/PTAEiaowZDNAmQsf8B0MhyhkLMMgrhkPUMhOhkOYMhxhkB+GQfoZBITUG3jAKApFED-nQCnVA7BkHztQUYjAIf8Gj1QGQZBYOUEFlQGBKgSH+KAMwCuAOwDGAFwCWAeymg5AJwCGUgM5il6gLYBBdVoCeARgAUCuQFNDOgFyht5gNoBdADRqtuvpG9uqutg6Gru4AlKAAvAB8blLm0VEp3qAA3hSgeaDq9nIS6qp2jjoAdIaaAA7WGtp6BoYh0QDcFAC+VDQAKgDyACIDroBQcoAYUYBJDADi9lIhCjI6OIAfZoCyDIAvboDqDIBmDIDyDIAGDICqDIAiDL1ggGMMWIATDBQyKjpyoFIShgBGITrxoB6WfjA-ABmLydB66Z5PdQKKQAc2+cX8TSCJjMmnM1leHy+fkxsUSL0qciUAGUNDDYdZoh17o9ngAbeawuQACwRSMCLVMFmsHgARCz7PT6Uo+X4+QB3Az0gAmfN8oGsOnxSSqjLhrJptN0SkZlU0Oh0ITkSvJcJ0HgADF54nFEXzLGLQHysZ91N8ALSqs3w0DggBuX2UUj5NPBOl19n1huNpuh5r+Nrt9pgTpdbzdnu98d9AaDKlDYMekejRvUJrk5lq9iUYlAUIpFuttvtDbhacKOgk9MhLKU3ZloE+9Z93kLVHDJYNZZN6uZbKtSbtoAArOK276vaA56zvnn3cHx5O9dPYzuF5Yl4i186N1nt0zd36VIGDwWOnltRGTzHyw0qzWdbnk2V7Oq6IQdvYXY9vWfYDkO9gvBmIRjlqNCcIAFcaAGtR1w3OwJCAA6mgDWDIA1QwEIAvQyANcMUyABAqgDxDIA2gy7JwUyAF0egCxUXsRxnKI4bPJ23ZyJYPyNJyRjcuivL-LAwIKgAHvESQKQAVLAH75BpNDgeo3hfvxUGCTAIkBM04lohi-KaGm7zyn4CkEnJlTnupeRachOleHpBQGT2QLGciXLmbyGgSPYfhiJo9JGvJimgApAD8zrmFBfKgK4Lqih+NAbt4QA)
+
+以下の関数をジェネリクスを使って型安全に書き直してください
+
+- 入力の配列の型を保持する
+- 変換関数の入力・出力型を正しく推論する
+- 戻り値の型を正確に推論する
+
+```ts
+// 現在の実装（型が不十分）
+function transformArray(items: any[], transformer: (item: any) => any): any[] {
+  return items.map(transformer);
+}
+
+// 使用例
+const numbers = [1, 2, 3];
+const strings = transformArray(numbers, (n) => n.toString());
+const lengths = transformArray(["hello", "world"], (s) => s.length);
+```

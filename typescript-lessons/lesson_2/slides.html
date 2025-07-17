@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta lang="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript 入門②</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <style>
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            color: #667eea;
+            text-transform: none;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .code-wrapper code {
+            font-size: 1.3em;
+        }
+
+        .reveal .code-wrapper .code-medium {
+            font-size: 1.19em;
+        }
+
+        .reveal .code-wrapper .code-medium-small {
+            font-size: 1.1em;
+        }
+
+        .reveal .code-wrapper .code-small,
+        .code-small {
+            font-size: 0.9em;
+        }
+
+        .code-small .code-wrapper {
+            width: 100%;
+        }
+
+        ul>li {
+            line-height: 2em;
+        }
+
+        .lifecycle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .lifecycle div {
+            background: rgba(255, 255, 255, 0.1);
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .lifecycle .arrow {
+            background: none;
+            font-size: 100px;
+            color: #667eea;
+            flex: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .task-number {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .js-side,
+        .ts-side {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .js-side h4 {
+            color: #f39c12;
+        }
+
+        .ts-side h4 {
+            color: #3498db;
+        }
+
+        .note {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quiz-options.small {
+            font-size: 0.65em;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 8px 0;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fragment.correct-answer.visible {
+            border-left: 4px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.3);
+        }
+
+        .reveal pre code {
+            max-height: 500px;
+            font-size: 0.7em;
+            line-height: 1.4;
+        }
+
+        .reveal code {
+            color: #ff79c6;
+        }
+
+        .reveal .code-comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .reveal .quiz .comparison .hljs {
+            max-height: 350px;
+            min-height: unset;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title -->
+            <section class="title-slide">
+                <h1>TypeScript 入門②</h1>
+                <h2>interface、type、enum、ジェネリクス、型の拡</h2>
+            </section>
+
+            <!-- Type aliases and interfaces -->
+            <section>
+                <section>
+                    <h1>type、interface</h1>
+                    <p>オブジェクト型を扱う方法</p>
+                </section>
+                <section>
+                    <h2>Type Aliases</h2>
+                    <p>型エイリアスは、型に別名をつけることができます</p>
+                    <pre><code data-trim data-line-numbers="|2|" class="language-typescript code-medium-small">// オブジェクト型にエイリアスを付ける
+type ClubMember = {
+    name: string;
+    age: number;
+    weapon?: string; // オプショナルプロパティ
+    curse: boolean;
+};
+
+let rena: ClubMember = {
+    name: "竜宮レナ",
+    age: 16,
+    weapon: "鉈",
+    curse: true
+};</code></pre>
+                </section>
+                <section>
+                    <h2>Type Aliases</h2>
+                    <p>型エイリアスは、オブジェクト型だけでなく、あらゆる型に名前を付けることができます</p>
+                    <pre><code data-trim class="code-medium-small fragment">// プリミティブ型
+type CharacterName = string;
+type Age = number;</code></pre>
+
+                    <pre><code data-trim class="code-medium-small fragment">// ユニオン型
+type Weapon = "鉈" | "バット" | "注射器" | "包丁";
+
+// 関数型
+type CurseFunction = (target: string) => boolean;</code></pre>
+
+                    <pre><code data-trim class="code-medium-small fragment">// 配列型
+type CharacterList = string[];
+type SuspicionLevels = number[];
+
+// タプル型
+type Coordinate = [number, number];</code></pre>
+                </section>
+
+                <section>
+                    <h2>Type Aliases - 拡張</h2>
+                    <p>型エイリアスは交差型「<strong>&</strong>」を使って拡張できます</p>
+                    <div class="comparison">
+                        <pre><code data-line-numbers="|1-5|8|" class="code-medium language-typescript">// 基本の型
+type Person = {
+    name: string;
+    age: number;
+};
+
+// 交差型で拡張
+type ClubMember = Person & {
+    weapon?: string;
+    clubRole: string;
+};</code></pre>
+                        <pre><code data-line-numbers="|2-3|4-5|" class="code-medium language-typescript">let mion: ClubMember = {
+    name: "園崎魅音",    // Person より継承
+    age: 16,            // Person より継承
+    weapon: "エアガン",  // ClubMember 独自
+    clubRole: "部長"     // ClubMember 独自
+};</code></pre>
+
+                    </div>
+                    <div class="note">
+                        <strong>重要:</strong> 型エイリアスは作成後に変更できません
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック①</h4>
+                    <div class="quiz">
+                        <h3>以下のうち、type alias でのみ定義可能なものはどれ？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium">// A
+type Status = "active" | "inactive" | "pending";
+
+// B
+type Callback = (data: string) => void;</code></pre>
+
+                            <pre><code class="code-medium">// C
+type UserArray = User[];
+
+// D
+type UserTuple = [string, number, boolean];</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) ユニオン型のみ</div>
+                            <div class="quiz-option">B) 関数型のみ</div>
+                            <div class="quiz-option">C) 配列型のみ</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) すべて type
+                                でのみ定義可能</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> D) interface はオブジェクトの形状のみ定義可能。ユニオン型、関数型、配列型、タプル型などは type でのみ定義できます。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface</h2>
+                    <p>interfaceはオブジェクトの構造を定義します</p>
+                    <pre><code data-line-numbers="|2|" class="code-medium-small language-typescript">// 基本的なinterface
+interface Character {
+    name: string;
+    age: number;
+    isAlive: boolean;
+    weapon?: string; // オプショナルプロパティ
+}
+
+let keiichi: Character = {
+    name: "前原圭一",
+    age: 16,
+    isAlive: true
+};</code></pre>
+                </section>
+                <section>
+                    <h2>interface - 拡張</h2>
+                    <p>interfaceは <code>extends</code> キーワードで他のinterfaceを拡張できます</p>
+                    <div class="comparison">
+                        <pre><code data-line-numbers="|1-4|6,11|" class="code-medium-small language-typescript">interface Person {
+    name: string;
+    age: number;
+}
+
+interface ClubMember extends Person {
+    weapon?: string;
+    clubRole: string;
+}
+
+interface VillageElder extends Person {
+    position: string;
+    knowsSecret: boolean;
+}</code></pre>
+
+                        <pre><code data-line-numbers="|3-4,11-12|5-6,13-14|" class="code-small language-typescript">// 基本のinterface
+ let mion: ClubMember = {
+    name: "園崎魅音",        // Person より継承
+    age: 16,                // Person より継承
+    weapon: "エアガン",     // ClubMember 独自
+    clubRole: "部長"        // ClubMember 独自
+};
+
+// extendsで拡張
+let oryou: VillageElder = {
+    name: "園崎お魎",        // Person より継承
+    age: 78,                // Person より継承
+    position: "当主",       // VillageElder 独自
+    knowsSecret: true       // VillageElder 独自
+};</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface vs type - 新しいフィールドの追加</h2>
+                    <div class="comparison">
+                        <div>
+                            <h3><code>interface</code>: 宣言マージ可能</h3>
+                            <pre><code class="code-small language-typescript">interface ClubMember {
+    name: string;
+    age: number;
+}
+
+// 同じ名前で追加宣言可能
+interface ClubMember {
+    clubRole: string;
+}
+
+// 自動的にマージされる
+let mion: ClubMember = {
+    name: "園崎魅音",
+    age: 16,
+    clubRole: "部長"
+};</code></pre>
+                        </div>
+                        <div>
+                            <h3><code>type</code>: 宣言マージ不可</h3>
+                            <pre><code class="code-small language-typescript">type ClubMember = {
+    name: string;
+    age: number;
+}
+
+// エラー: 重複した識別子
+// type ClubMember = {
+//     weapon?: string;
+//     clubRole: string;
+// }
+
+// 代わりに交差型を使用
+type ExtendedClubMember = ClubMember & {
+    weapon?: string;
+    clubRole: string;
+};</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <strong>宣言マージ:</strong> interfaceは同じ名前で複数回宣言すると、自動的に1つのinterfaceにマージされます
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック②</h4>
+                    <div class="quiz">
+                        <h3>エラーになるのはどれ？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium language-typescript">// A
+type Status = "loading" | "success" | "error";
+
+
+
+// B  
+type Handler = (event: Event) => void;
+
+</code></pre>
+                            <pre><code class="code-medium language-typescript">// C
+type Config = {
+  timeout: number;
+};
+
+type Config = {
+  retries: number;
+};</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) Status定義</div>
+                            <div class="quiz-option">B) Handler定義</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) Config重複
+                            </div>
+                            <div class="quiz-option">D) 全部正常</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> C) typeは同名で複数定義できない！interfaceと違ってマージされずエラーになる。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック③</h4>
+                    <div class="quiz">
+                        <h3>以下のコードはどうなる？</h3>
+                        <pre><code class="code-medium-small language-typescript">interface Stand {
+  name: string;
+  power: number;
+}
+
+interface Stand {
+  name: number;  // 型が違う！
+  user: string;
+}</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) 後の宣言が勝つ</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) コンパイルエラー
+                            </div>
+                            <div class="quiz-option">C) <code>name: string | number</code> になる</div>
+                            <div class="quiz-option">D) プロパティが削除される</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) 同じプロパティ名で異なる型はマージできません。宣言マージには制約があります。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>interface vs type - 使い分け</h2>
+                    <ul>
+                        <li><strong>型エイリアス</strong>は宣言マージに参加できないが、<strong>interface</strong>は可能</li>
+                        <li><strong>interface</strong>はオブジェクトの形状の宣言のみ、プリミティブ型の名前変更は不可</li>
+                        <li><strong>interface</strong>名はエラーメッセージで元の形で表示される</li>
+                        <li><strong>interface</strong>のextendsは、交差型よりもコンパイラーのパフォーマンスが良い場合が多い</li>
+                    </ul>
+                    <div class="note">
+                        どちらでも良いが、一貫性を保つことが重要。
+                    </div>
+                </section>
+                <section>
+                    <h2>type vs interface まとめ</h2>
+                    <table class="code-medium summary-table">
+                        <thead>
+                            <tr>
+                                <th>比較項目</th>
+                                <th><code>type</code></th>
+                                <th><code>interface</code></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>宣言マージ</td>
+                                <td><strong>✕</strong> 不可（エラー）</td>
+                                <td><strong>○</strong> 可能</td>
+                            </tr>
+                            <tr>
+                                <td>拡張方法</td>
+                                <td><code>&</code>（交差型）</td>
+                                <td><code>extends</code></td>
+                            </tr>
+                            <tr>
+                                <td>定義できる型</td>
+                                <td>プリミティブ・ユニオン・関数・条件型等</td>
+                                <td>オブジェクト構造のみ</td>
+                            </tr>
+                            <tr>
+                                <td>再定義</td>
+                                <td><strong>✕</strong> 同名で定義不可</td>
+                                <td><strong>○</strong> OK（マージ）</td>
+                            </tr>
+                            <tr>
+                                <td>複雑な型の表現</td>
+                                <td><strong>○</strong> 条件型・ユニオン型等に強い</td>
+                                <td><strong>✕</strong> 不向き</td>
+                            </tr>
+                            <tr>
+                                <td>使用推奨</td>
+                                <td>複雑・柔軟な型</td>
+                                <td>標準的なオブジェクト</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="note">
+                        <strong>基本的な判断基準</strong>：迷った場合は<strong>interface</strong>を使い、<strong>type</strong>の特有機能が必要な時のみ<strong>type</strong>を使用。
+                    </div>
+                </section>
+
+                <section>
+                    <h4>理解度チェック④</h4>
+                    <div class="quiz">
+                        <h3>どの組み合わせが正しい？</h3>
+                        <pre><code class="code-medium language-typescript">// A - Stand能力のID
+"the-world" | "star-platinum" | "crazy-diamond";
+
+// B - Stand情報のオブジェクト
+{
+  name: string;
+  user: string;
+  power: number;
+}</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A) 両方type
+                            </div>
+                            <div class="quiz-option">B) 両方interface</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C) A=type,
+                                B=interface</div>
+                            <div class="quiz-option">D) A=interface, B=type</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> A) と C) ユニオン型はtypeでしか作れない！オブジェクトはどちらでもOK。
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h4>理解度チェック⑤</h4>
+                    <div class="quiz">
+                        <h3>どの構文が正しい？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-small language-typescript">type Stand = {
+  name: string;
+  power: number;
+};
+
+interface Hamon {
+  power: number;
+}
+
+type StandUser1 = Stand & { // A
+  user: string;
+};</code></pre>
+
+                            <pre><code class="code-small language-typescript">type StandUser2 = Stand extends { // B
+  user: string;
+}
+
+interface HamonUser1 & Hamon { // C
+  user: string;
+}
+
+interface HamonUser2 extends Hamon { // D
+  user: string;
+}</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">A)
+                                <code>StandUser1</code>
+                            </div>
+                            <div class="quiz-option">B) <code>StandUser2</code></div>
+                            <div class="quiz-option">C)
+                                <code>HamonUser1</code>
+                            </div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D)
+                                <code>HamonUser2</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> A) と D) interfaceは <code>extends</code>、typeは <code>&</code> で拡張できる
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Enums -->
+            <section>
+                <section>
+                    <h1>enum</h1>
+                    <ul class="fragment">
+                        <li><strong>名前付き定数</strong>の集合を定義</li>
+                        <li>数値・文字列・異種混合の3タイプ</li>
+                        <li>コンパイル時に型チェック、実行時に実際の値に変換</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>数値enum</h2>
+                    <div class="comparison">
+                        <pre><code data-trim class="language-typescript code-medium">
+// 明示的な数値
+enum HttpStatus {
+    OK = 200,
+    NOT_FOUND = 404,
+    SERVER_ERROR = 500
+}
+
+let response = HttpStatus.OK;
+console.log(response);         // 200
+console.log(HttpStatus[200]);  // "OK"
+</code></pre>
+                        <pre><code data-trim class="language-typescript code-medium">
+// 自動割り当て
+enum StandType {
+    STAR_PLATINUM,    // 0
+    THE_WORLD,        // 1
+    CRAZY_DIAMOND,    // 2
+}
+
+let jotaro = StandType.STAR_PLATINUM;
+console.log(jotaro);        // 0
+console.log(StandType[0]);  // "STAR_PLATINUM"</code></pre>
+                    </div>
+                    <div class="note">
+                        数値enumは双方向マッピングを提供。数値 → 名前、名前 → 数値 の逆引きが可能
+                        <br>デフォルトでは0から始まる連番が割り当てられる。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>文字列enum</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+enum LogLevel {
+    ERROR = "error",
+    WARN = "warn",
+    INFO = "info"
+}
+
+function log(level: LogLevel, message: string) {
+    console.log(`[${level}] ${message}`);
+}
+
+log(LogLevel.ERROR, "something broke");</code></pre>
+                    <div class="note">
+                        文字列enumは人間にとって読みやすい値を提供。
+                        逆引きは不可能だが、デバッグ時に値が分かりやすい。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>計算されたenum</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+enum Permission {
+    READ = 1,      // 0001
+    WRITE = 2,     // 0010
+    EXECUTE = 4,   // 0100
+    ALL = READ | WRITE | EXECUTE  // 0001 | 0010 | 0100 = 0111 = 7
+}
+
+function hasPermission(user: number, perm: Permission) {
+    return (user & perm) === perm;
+}
+
+hasPermission(5, Permission.WRITE) // 5 = 0101 に WRITE(0010) は含まれない → false</code></pre>
+                    <div class="note">
+                        ビットフラグパターンでよく使用。
+                        計算された値は他のenum値や定数式から生成可能。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>const assertion</h2>
+                    <pre><code data-trim class="language-typescript code-medium">
+// enum
+enum Color { RED, GREEN, BLUE }
+
+// const assertion
+const Color2 = {
+    RED: 'red',
+    GREEN: 'green',
+    BLUE: 'blue'
+} as const;
+
+type ColorType = typeof Color2[keyof typeof Color2];
+    </code></pre>
+                    <div class="note">
+                        enumのように使えるが、型だけを提供する。実行時の処理がなく、型チェックがより厳密。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>まとめ</h2>
+                    <ul>
+                        <li><strong>定数管理</strong>: マジックナンバーを排除</li>
+                        <li><strong>型安全性</strong>: コンパイル時エラー検出</li>
+                        <li><strong>逆引き</strong>: 数値enumは双方向マッピング</li>
+                        <li><strong>代替案</strong>: const assertionも検討</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- null/undefined handling -->
+            <section>
+                <section>
+                    <h2>null と undefined</h2>
+                    <ul>
+                        <li><strong>null:</strong> 意図的に「値がない」ことを示す</li>
+                        <li><strong>undefined:</strong> 変数が初期化されていない、またはプロパティが存在しない</li>
+                        <li>どちらもプリミティブ型だが、意味が異なる</li>
+                    </ul>
+                    <div class="note">
+                        JavaScriptの歴史的な理由で両方存在する。混乱の元凶。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>undefined が現れる場面</h3>
+                    <pre><code data-trim class="language-typescript">
+let userName: string; // 未初期化
+console.log(userName); // undefined
+
+function processUser(name?: string) {
+  console.log(name); // 引数を渡さなければ undefined
+}
+
+const user = { name: "dio" };
+console.log(user.age); // 存在しないプロパティは undefined
+        </code></pre>
+                    <div class="note">
+                        <code>undefined</code>は「まだ設定されていない」状態を表す。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>null が現れる場面</h3>
+                    <pre><code data-trim class="language-typescript code-medium">
+// APIレスポンス
+interface UserProfile {
+  name: string;
+  avatar: string | null; // 意図的にnullを許可
+}</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium">
+// データベースクエリ
+const findUser = (id: number): User | null => {
+  // ユーザーが見つからない場合はnullを返す
+  return users.find(u => u.id === id) || null;
+};
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium">
+// 初期化時の明示的な空状態
+let selectedStand: Stand | null = null;
+        </code></pre>
+                    <div class="note">
+                        <code>null</code>は「意図的に空である」ことを明示する。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>strictNullChecks モード</h2>
+                    <pre><code data-trim class="language-json">
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true
+  }
+}
+        </code></pre>
+                    <ul>
+                        <li><code>null</code>/<code>undefined</code>を型に明示的に含めないとエラー</li>
+                        <li>実行時エラーを防ぐために必須</li>
+                        <li>既存プロジェクトでは段階的に有効化</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>strictNullChecks の効果</h3>
+                    <ui>
+                        <li>
+                            <code>strictNullChecks: false</code>
+                            <pre><code data-trim class="language-typescript">
+let standName: string = null; // OK（危険）
+</code></pre>
+                        </li>
+                        <li>
+                            <code>strictNullChecks: true</code>
+                            <pre><code data-trim class="language-typescript">
+let standName: string = null; // ✕ エラー
+
+// 正しい書き方
+let standName: string | null = null; // ✓ OK
+let standUser: string | undefined; // ✓ OK
+        </code></pre>
+                        </li>
+                    </ui>
+                    <div class="note">
+                        型安全性が格段に向上する
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Optional Chaining【?.】</h2>
+                    <p>安全なプロパティアクセス</p>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+interface Stand {
+  name: string;
+  user?: {
+    name: string;
+    age?: number;
+  };
+}
+
+const theWorld: Stand = { name: "The World" };
+</code></pre>
+                    <div class="comparison">
+                        <pre><code data-trim class="language-typescript code-medium-small">
+// 従来の書き方
+const userName = theWorld.user && theWorld.user.name;
+const userAge = theWorld.user && theWorld.user.age; 
+</code></pre>
+                        <pre><code data-trim class="language-typescript code-medium-small">
+// Optional chaining
+const userName = theWorld.user?.name; 
+const userAge = theWorld.user?.age;   
+</code></pre>
+                    </div>
+                    <div class="note">
+                        チェーンの途中でnull/undefinedに遭遇したら即座にundefinedを返す。
+                    </div>
+                </section>
+                <section>
+                    <h2>Nullish Coalescing Operator【??】</h2>
+                    <p><code>null</code>/<code>undefined</code>のときのみデフォルト値を設定</p>
+                    <pre><code data-trim class="code-medium-small language-typescript">
+// 従来の方法（問題あり）
+const displayName = user.name || "dio"; // 空文字でもdioになる
+
+// Nullish coalescing（正確）
+const displayName2 = user.name ?? "dio"; // null/undefinedのときのみdio
+
+// 実用例
+const config = {
+  timeout: userSettings.timeout ?? 5000,
+  retries: userSettings.retries ?? 3,
+  endpoint: userSettings.endpoint ?? "https://api.example.com"
+};
+        </code></pre>
+                    <div class="note">
+                        <code>||</code>演算子と違って、<code>0</code>や空文字などのfalsyな値は通す。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>型ガードによる安全なnullチェック</h2>
+                    <pre><code data-trim class="code-medium-small language-typescript">
+function processStand(stand: Stand | null) {
+  if (stand === null) { // 型ガード
+    console.log("standが見つかりません");
+    return;
+  }
+  
+  // この時点でstandはStand型として扱われる
+  console.log(`stand名: ${stand.name}`);
+  
+  // ネストした型ガード
+  if (stand.user) {
+    console.log(`user名: ${stand.user.name}`);
+  }
+}
+        </code></pre>
+                    <div class="note">
+                        TypeScriptの型システムがnullチェック後の型を自動的に絞り込む。
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Non-null Assertion Operator【!】</h2>
+                    <p>「絶対null/undefinedじゃない」と断言</p>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+function getStandPower(stand?: Stand) {
+  // 危険：standがundefinedの可能性
+  return stand!.name.toUpperCase();
+}
+
+// より安全な書き方
+function getStandPowerSafe(stand?: Stand) {
+  if (!stand) {
+    throw new Error("standが必要です");
+  }
+  return stand.name.toUpperCase();
+}
+        </code></pre>
+                    <div class="note">
+                        危険。nullチェックを省略する代わりに、自分で責任を持つ必要あり。
+                    </div>
+                </section>
+                <section>
+                    <h2>まとめ</h2>
+                    <ul>
+                        <li><code>null</code>：意図的な空値、<code>undefined</code>：未初期化</li>
+                        <li><code>strictNullChecks</code>は必須設定</li>
+                        <li><code>?.</code>で安全なアクセス、<code>??</code>でデフォルト値</li>
+                        <li>型ガードで適切なnullチェック</li>
+                        <li><code>!</code>の使用は可能な限り避けること</li>
+                    </ul>
+                    <div class="note">
+                        null/undefinedは多くのバグの原因。型システムを活用して安全に扱おう。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Type Assertions -->
+            <section>
+                <section>
+                    <h2>Type Assertions（型アサーション）</h2>
+                    <p>「この値は絶対この型だ」とTypeScriptに伝える</p>
+                    <pre><code data-trim class="language-typescript">
+// 2つの書き方
+const userInput = document.getElementById("name") as HTMLInputElement;
+const userInput2 = &lt;HTMLInputElement&gt;document.getElementById("name");
+
+// APIレスポンスの型アサーション
+const apiResponse = await fetch("/api/user");
+const userData = await apiResponse.json() as User;
+        </code></pre>
+                    <div class="note">
+                        コンパイラが型を推論できない場合に使用。JSXでは&lt;&gt;構文は使えない。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Type Assertions vs 型ガード</h3>
+                    <div>危険：型アサーションは実行時チェックなし</div>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 危険：型アサーションは実行時チェックなし
+const maybeUser = getData() as User;
+console.log(maybeUser.name); // 実行時エラーの可能性
+</code></pre>
+                    <span>安全：型ガードは実行時チェックあり</span>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 安全：型ガードは実行時チェックあり
+function isUser(obj: any): obj is User {
+  return obj && typeof obj.name === "string";
+}
+
+const data = getData();
+if (isUser(data)) {
+  console.log(data.name); // 安全
+}
+        </code></pre>
+                    <div class="note">
+                        型アサーションは「信頼」、型ガードは「検証」。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>const assertions</h3>
+                    <p>値を変更不可能な定数として扱う</p>
+                    <pre><code data-trim class="language-typescript code-medium">
+// 通常の配列
+const stands = ["za warudo", "killer queen"]; // string[]
+
+// const assertion
+const standsConst = ["za warudo", "killer queen"] as const;
+// readonly ["za warudo", "killer queen"]
+
+// オブジェクトの場合
+const config = {
+  timeout: 5000,
+  retries: 3
+} as const;
+// { readonly timeout: 5000; readonly retries: 3 }
+        </code></pre>
+                    <div class="note">
+                        型を正確に推論させたい場合に有効。特にunion型の作成時に便利。
+                    </div>
+                </section>
+                <section>
+                    <h2>Type Assertions 使用時の注意点</h2>
+                    <ul>
+                        <li>実行時の型チェックは行われない</li>
+                        <li>「型の嘘」を可能にしてしまう</li>
+                        <li>unknown → 具体的な型への変換で使用</li>
+                        <li>デバッグが困難になる可能性</li>
+                    </ul>
+                    <pre><code data-trim class="language-typescript">
+// 危険な例
+const badCast = "jotaro" as any as number;
+console.log(badCast * 2); // 実行時エラー
+
+// 適切な例
+const jsonData = JSON.parse(response) as User;
+        </code></pre>
+                    <div class="note">
+                        型アサーションは最後の手段。できるだけ型ガードや適切な型定義を使おう。
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック⑥</h4>
+                    <div class="quiz">
+                        <h3>以下のコードの出力は？</h3>
+                        <pre><code class="code-small language-typescript">const user = {
+  score: 0,
+  avatar: "",  // 空の文字列 - ユーザーがアバターを削除した
+  backup: null as string | null // 最初はnull、あとで文字列（URLなど）を入れるための型指定
+};
+
+const result1 = user.score || 100;
+const result2 = user.score ?? 100;
+const result3 = user.avatar || "default.jpg";
+const result4 = user.avatar ?? "default.jpg";
+const result5 = user.backup || "fallback.jpg";
+const result6 = user.backup ?? "fallback.jpg";
+console.log(result1, result2, result3, result4, result5, result6);
+</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) 100, 0, "default.jpg", "", "fallback.jpg", "fallback.jpg"</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) 100, 0,
+                                "default.jpg", "", "fallback.jpg", "fallback.jpg"</div>
+                            <div class="quiz-option">C) 0, 0, "", "", null, null</div>
+                            <div class="quiz-option">D) 100, 100, "default.jpg", "default.jpg", "fallback.jpg",
+                                "fallback.jpg"</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) <code>||</code> は falsy値 (0, "") で fallback するが、<code>??</code> は
+                            null/undefined のみ。
+                            <br>avatarが空文字の場合: <code>||</code> は "default.jpg"、<code>??</code> は "" を保持
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Classes & Access Modifiers -->
+            <section>
+                <section>
+                    <h2>クラス & アクセス修飾子</h2>
+                    <p>オブジェクト指向の基本構造</p>
+                </section>
+
+                <section>
+                    <h2>プロトタイプ継承とは？</h2>
+                    <p>JavaScriptの<strong>オブジェクト指向</strong>の基本メカニズム</p>
+                    <ul>
+                        <li class="fragment">オブジェクトが他のオブジェクトから<em>直接</em>継承する</li>
+                        <li class="fragment">クラスベースの言語とは<strong>異なる</strong>アプローチ</li>
+                        <li class="fragment">全てのオブジェクトは<code>prototype</code>チェーンを持つ</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>プロトタイプチェーン</h2>
+                    <pre><code data-trim class="language-javascript code-medium">
+const animal = {
+  speak: function() {
+    return "何か音を出す";
+  }
+};
+
+const dog = Object.create(animal);
+dog.bark = function() {
+  return "わんわん！";
+};
+
+console.log(dog.speak()); // "何か音を出す" ← animalから継承
+console.log(dog.bark());  // "わんわん！" ← 自分のメソッド
+  </code></pre>
+                </section>
+
+                <section>
+                    <h2>他の言語との比較</h2>
+                    <div class="comparison">
+                        <div>
+                            <h3>PHP/Ruby (クラスベース)</h3>
+                            <pre><code data-trim class="language-php code-medium-small">
+class Animal {
+  public function speak() {
+    return "音を出す";
+  }
+}
+
+class Dog extends Animal {
+  public function bark() {
+    return "わんわん";
+  }
+}
+      </code></pre>
+                            <p><small>設計図(クラス) → インスタンス</small></p>
+                        </div>
+                        <div>
+                            <h3>JavaScript (プロトタイプベース)</h3>
+                            <pre><code data-trim class="language-javascript code-medium-small">
+function Animal() {}
+Animal.prototype.speak = function() {
+  return "音を出す";
+};
+
+
+function Dog() {}
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.bark = function() {
+  return "わんわん";
+};
+      </code></pre>
+                            <p><small>オブジェクト → オブジェクト</small></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ES6のclassは「syntactic sugar」</h2>
+                    <div class="fragment">
+                        <h3>実際には同じ</h3>
+                        <div class="comparison">
+                            <pre><code data-trim class="language-javascript code-medium">
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+  
+  bark() {
+    return "わんわん";
+  }
+}
+</code></pre>
+                            <pre><code data-trim class="language-javascript code-medium">
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  return "わんわん";
+};
+    </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>なぜ理解が重要？</h2>
+                    <ul>
+                        <li class="fragment"><code>this</code>の動作を理解するため</li>
+                        <li class="fragment">継承の仕組みを把握するため</li>
+                        <li class="fragment">デバッグ時に内部動作を追跡できる</li>
+                        <li class="fragment">TypeScriptの型システムとの関係</li>
+                    </ul>
+                    <div class="fragment note">
+                        <code>class</code>はプロトタイプの「見た目をよくしたもの」
+                    </div>
+                </section>
+
+                <section>
+                    <h3>基本的なクラス定義</h3>
+                    <pre><code data-line-numbers="|1|2-3|4,8|4-6|" data-trim class="language-typescript code-medium-small">
+class Stand {
+    name: string;         // クラスプロパティ
+
+    constructor(name: string, public power: number) { // public引数はプロパティの自動宣言＋初期化
+        this.name = name;   // コンストラクタでプロパティを初期化
+    }
+
+    attack(): string {     // クラスメソッド
+        return `${this.name}で攻撃！パワー: ${this.power}`;
+    }
+}
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+const starPlatinum = new Stand("スタープラチナ", 100);
+console.log(starPlatinum.attack()); // "スタープラチナで攻撃！パワー: 100"
+console.log(starPlatinum.power);    // 100 (public引数で自動生成)
+    </code></pre>
+                    <div class="note">
+                        <code>constructor(public prop: type)</code>は <code>this.prop = prop</code> + プロパティ宣言の省略形
+                    </div>
+                </section>
+
+                <section>
+                    <h3>アクセス修飾子</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class Character {
+    public name: string;        // どこからでもアクセス可能
+    private hp: number;         // クラス内のみ
+    protected level: number;    // 継承先でも使用可能
+    
+    constructor(name: string, hp: number, level: number) {
+        this.name = name;
+        this.hp = hp;
+        this.level = level;
+    }
+    
+    private heal(): void {
+        this.hp += 20;
+    }
+}
+    </code></pre>
+                    <div class="note">
+                        デフォルトは<code>public</code>。<code>private</code>は外部からアクセス不可、<code>protected</code>は継承先でのみ使用可能。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>継承とオーバーライド</h3>
+                    <pre><code data-trim data-line-numbers="|1|4-6|8-10|12-14|" class="language-typescript code-small">
+class Villain extends Character {
+    private evilPlan: string;
+    
+    constructor(name: string, hp: number, level: number, plan: string) {
+        super(name, hp, level); // 親クラスのコンストラクタを呼び出し
+        this.evilPlan = plan;
+    }
+    
+    public getStatus(): string { // メソッドオーバーライド
+        return `${super.getStatus()}, 計画: ${this.evilPlan}`;
+    }
+    
+    protected useSpecialAbility(): void {
+        console.log(`${this.name}が特殊能力を使用！レベル${this.level}の力で！`);
+    }
+}</code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const dio = new Villain("ディオ", 200, 50, "世界征服");
+console.log(dio.getStatus()); // "ディオ: HP 200, Lv.50, 計画: 世界征服"
+// dio.useSpecialAbility();   // ✕ エラー: protected
+    </code></pre>
+                    <div class="note">
+                        <code>super()</code>: 親のコンストラクタ/メソッド呼び出し、<code>protected</code>は継承先でのみ使用可能
+                    </div>
+                </section>
+
+                <section>
+                    <h3>readonly & static</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class ClubMember {
+    readonly membershipId: string;
+    private static memberCount: number = 0;
+    static readonly clubName: string = "雛見沢分校";
+    
+    constructor(public name: string, membershipId: string) {
+        this.membershipId = membershipId;
+        ClubMember.memberCount++; // private staticもクラス内からアクセス可能
+    }
+    
+    static getClubInfo(): string {
+        return `${ClubMember.clubName}: ${ClubMember.memberCount}人`; // staticプロパティはクラス名でアクセス
+    }
+}
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const keiichi = new ClubMember("前原圭一", "001");
+const rena = new ClubMember("竜宮レナ", "002");
+console.log(ClubMember.getClubInfo());  // "雛見沢分校: 2人"
+// keiichi.membershipId = "003";        // ✕ エラー: readonly
+// console.log(ClubMember.memberCount); // ✕ エラー: private static
+    </code></pre>
+                    <div class="note">
+                        <code>readonly</code>: 初期化後変更不可、<code>static</code>:
+                        クラス自体に属する（インスタンス不要）、<br><code>private static</code>: クラス内でのみアクセス可能
+                    </div>
+                </section>
+                <section>
+                    <h3>getter/setter</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+class Pokemon {
+    private _hp: number;
+    
+    constructor(public name: string, private _maxHp: number) {
+        this._hp = _maxHp;
+    }
+    
+    get hp(): number { return this._hp; }
+    
+    set hp(value: number) {
+        this._hp = Math.max(0, Math.min(value, this._maxHp));
+    }
+    
+    get healthPercentage(): number {
+        return Math.round((this._hp / this._maxHp) * 100);
+    }
+}
+    </code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+const pikachu = new Pokemon("ピカチュウ", 100);
+pikachu.hp = 150;        // setter (maxHpに制限される)
+console.log(pikachu.hp); // 100
+console.log(pikachu.healthPercentage); // 100 (read-only)
+    </code></pre>
+                    <div class="note">
+                        <code>get</code>: プロパティアクセス時の処理、<code>set</code>: 代入時の検証・変換
+                    </div>
+                </section>
+                <section>
+                    <h3>抽象クラス</h3>
+                    <pre><code data-trim class="language-typescript code-small">
+abstract class Weapon {
+    constructor(public name: string, public damage: number) {}
+    
+    abstract attack(): string; // 子クラスで実装必須
+    
+    public getInfo(): string { // 共通の実装
+        return `${this.name} (威力: ${this.damage})`;
+    }
+}
+
+class Sword extends Weapon {
+    attack(): string {
+        return `${this.name}で斬りつけた！${this.damage}のダメージ！`;
+    }
+}
+    </code></pre>
+                    <pre><code data-trim class="language-typescript code-small">
+// const weapon = new Weapon("", 0); // ✕ エラー: 抽象クラスはインスタンス化不可
+const sword = new Sword("エクスカリバー", 50);
+console.log(sword.attack()); // "エクスカリバーで斬りつけた！50のダメージ！"
+    </code></pre>
+                    <div class="note">
+                        <code>abstract</code>: インスタンス化不可、子クラスでの実装強制。共通処理と個別実装を分離
+                    </div>
+                </section>
+                <section>
+                    <h3>まとめ</h3>
+                    <ul>
+                        <li><strong>クラス</strong>: オブジェクト指向の基本構造</li>
+                        <li><strong>アクセス修飾子</strong>: public, private, protected</li>
+                        <li><strong>継承</strong>: extends, super, オーバーライド</li>
+                        <li><strong>getter/setter</strong>: プロパティアクセスの制御</li>
+                        <li><strong>static</strong>: インスタンス不要のクラス機能</li>
+                        <li><strong>abstract</strong>: 継承強制の抽象クラス</li>
+                    </ul>
+                    <div class="note">
+                        TypeScriptの<code>class</code>は本質的にJavaScriptのプロトタイプベース継承の糖衣構文
+                    </div>
+                </section>
+            </section>
+
+            <!-- Modules -->
+            <section>
+                <section>
+                    <h1>モジュール</h1>
+                    <p>コードの整理と再利用</p>
+                </section>
+
+                <section>
+                    <h3>エクスポート</h3>
+                    <p><code>export</code> でモジュール外部に公開。</p>
+                    <pre><code data-trim data-line-numbers="|2,6,12|" class="language-typescript code-medium-small">
+// stands.ts
+export class Stand {
+    constructor(public name: string, public power: number) {}
+}
+
+export const STAND_TYPES = {
+    CLOSE_RANGE,
+    LONG_RANGE
+} as const;
+
+// デフォルトエクスポート
+export default class StandUser {
+    constructor(public name: string, public stand: Stand) {}
+}
+    </code></pre>
+                    <div class="note">
+                        <code>default export</code> は1つまで、<code>named export</code>
+                        は複数可能
+                    </div>
+                </section>
+
+                <section>
+                    <h3>インポート</h3>
+                    <p><code>import</code> でモジュールを読み込み。</p>
+                    <pre><code data-trim data-line-numbers="|2,4,6|8-9|" class="language-typescript code-medium-small">
+// main.ts
+import StandUser, { Stand, STAND_TYPES } from './stands';
+
+import { Stand as StandClass } from './stands';
+
+import * as StandModule from './stands';
+
+const jotaro = new StandUser("承太郎", new Stand("スタープラチナ", 100));
+const dio = new StandModule.default("DIO", new StandModule.Stand("ザ・ワールド", 95));
+    </code></pre>
+                    <div class="note">
+                        <code>* as</code> で全てを名前空間オブジェクトとして取得。<br>
+                        <code>default export</code> は <code>ModuleName.default</code> でアクセス
+                    </div>
+                </section>
+
+                <section>
+                    <h3>まとめ</h3>
+                    <ul>
+                        <li><strong>export/import</strong>: ファイル間でコード共有</li>
+                        <li><strong>default export</strong>: 1つまで、named export: 複数可</li>
+                        <li><strong>import { } from</strong>: 必要なものだけ取得</li>
+                        <li><strong>import * as</strong>: 全部まとめて名前空間で</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Generics -->
+            <section>
+                <section>
+                    <h1>ジェネリクス</h1>
+                </section>
+                <section>
+                    <h2>ジェネリクスとは</h2>
+                    <p>型を「後で決める」仕組み</p>
+                    <ul>
+                        <li>関数やクラスを書く時点では型を決めない</li>
+                        <li>使う時に具体的な型を指定</li>
+                        <li>型安全性を保ちながら再利用可能なコードが書ける</li>
+                    </ul>
+                    <div class="note">
+                        ジェネリクスは「汎用的な」という意味。一つのコードで複数の型に対応できる仕組み。
+                    </div>
+                </section>
+                <section>
+                    <h3>実はもう使っている！</h3>
+                    <pre><code class="language-typescript code-medium">// 普段書いているこれもジェネリクス
+const stands: string[] = ["star platinum", "the world"];
+const numbers: number[] = [1, 2, 3];
+
+// 実は以下と同じ意味
+const stands: Array&lt;string&gt; = ["star platinum", "the world"];
+const numbers: Array&lt;number&gt; = [1, 2, 3];
+
+// Promise も同じ
+const response: Promise&lt;string&gt; = fetch("/api").then(r => r.text());</code></pre>
+                    <div class="note">
+                        <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code> などはジェネリクスの典型例。<br>
+                        <code>&lt;T&gt;</code> の部分に具体的な型を入れて使う。もう慣れ親しんでいる！
+                    </div>
+                </section>
+                <section>
+                    <h3>なぜ必要？</h3>
+                    <pre><code class="language-typescript code-medium" data-line-numbers="1-4|6-13|">// ジェネリクスなしだと...
+function getFirstStand(stands: Stand[]): Stand { return stands[0]; }
+function getFirstFragment(fragments: Fragment[]): Fragment { return fragments[0]; }
+// 型ごとに同じ関数を作る必要がある
+
+// ジェネリクスがあると
+function getFirst&lt;T&gt;(items: T[]): T {
+  return items[0];
+}
+
+// 一つの関数で全てに対応
+const firstStand = getFirst(stands); // Stand型
+const firstFragment = getFirst(fragments); // Fragment型</code></pre>
+                    <div class="note">
+                        同じ処理でも型が違うと別々の関数が必要になる。ジェネリクスで一つの関数で済む。
+                    </div>
+                </section>
+                <section>
+                    <h3>基本的な使い方</h3>
+                    <pre><code class="language-typescript code-medium" data-line-numbers="2|">// 関数のジェネリクス
+function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}
+
+// 使い方
+const result1 = identity&lt;string&gt;("za warudo"); // 明示的に型指定
+const result2 = identity("muda muda"); // 型推論で自動判定
+
+// 型が保持される
+console.log(result1.length); // OK: string のメソッドが使える
+console.log(result2.toUpperCase()); // OK: 型推論で string と判定</code></pre>
+                    <div class="note">
+                        <code>&lt;T&gt;</code> が型パラメータ。関数呼び出し時に具体的な型が決まる。<br>型推論があるので明示的に書かなくてもOK。
+                    </div>
+                </section>
+                <section>
+                    <h3>基本的な使い方</h3>
+                    <pre><code class="language-typescript code-medium">// 複数の型パラメータ - 関連する異なる型を扱う時
+function createPair&lt;T, U&gt;(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+// ユーザーとそのメインスタンドをペアにする
+const jotaro = createPair("jotaro", { name: "star platinum", power: 95 });
+// [string, Stand]
+
+// APIレスポンスとメタデータをペアにする  
+const response = createPair(userData, { timestamp: Date.now() });
+// [User, { timestamp: number }]</code></pre>
+                    <div class="note">
+                        複数の型パラメータは関連する異なる型を組み合わせる時に使う。<br>
+                        <code>&lt;T, U&gt;</code> は慣例的な名前。<code>&lt;TKey, TValue&gt;</code> や
+                        <code>&lt;TData, TMeta&gt;</code>
+                        など意味のある名前でもOK。
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック⑦</h4>
+                    <div class="quiz">
+                        <h3>なぜこのコードは any より generics の方が良い？</h3>
+                        <pre><code class="code-small language-typescript">// any 版
+function processData(data: any): any {
+  return data;
+}
+
+// generics 版
+function processData&lt;T&gt;(data: T): T {
+  return data;
+}
+
+const result = processData("jotaro");
+</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) 実行速度が速い</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
+                                型安全性と補完機能を保持</div>
+                            <div class="quiz-option">C) メモリ使用量が少ない</div>
+                            <div class="quiz-option">D) 書くコードが短い</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) any は型情報を失うが、generics は型を保持。型エラーも検出できる。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>配列操作の例</h3>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// ジェネリクスを使った汎用的な関数
+function findByName&lt;T extends { name: string }&gt;(items: T[], name: string): T | undefined {
+  return items.find(item => item.name === name);
+}
+
+const stands: Stand[] = [
+  { name: "star platinum", user: "jotaro", power: 95 },
+  { name: "the world", user: "dio", power: 90 }
+];
+
+const weapons: Weapon[] = [
+  { name: "arrow", damage: 50, type: "ranged" },
+  { name: "requiem arrow", damage: 100, type: "ranged" }
+];
+</code></pre>
+                    <pre><code data-trim class="language-typescript code-medium-small">
+// 型安全に使える
+const starPlatinum = findByName(stands, "star platinum"); // Stand | undefined
+const arrow = findByName(weapons, "arrow"); // Weapon | undefined</code></pre>
+                    <div class="note">
+                        <code>extends</code>で型に制約を加えることができる。<code>name</code>プロパティを持つ型のみ受け入れる。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>実用的な例：APIレスポンス</h3>
+                    <pre><code class="language-typescript code-small">interface ApiResponse&lt;T&gt; {
+  data: T;
+  status: "success" | "error";
+}
+
+// 汎用的なAPI関数
+async function fetchData&lt;T&gt;(url: string): Promise&lt;ApiResponse&lt;T&gt;&gt; {
+  const response = await fetch(url);
+  return response.json();
+}</code></pre>
+
+                    <pre><code class="language-typescript code-small">// 使用時に型が決まる
+const standsResponse = await fetchData&lt;Stand[]&gt;("/api/stands");
+const userResponse = await fetchData&lt;User&gt;("/api/user");
+
+// 型安全にアクセス
+if (standsResponse.status === "success") {
+  standsResponse.data.forEach(stand => {
+    console.log(stand.name); // Stand型として扱われる
+  });
+}</code></pre>
+                    <div class="note">
+                        APIレスポンスの共通構造をジェネリクスで定義。<code>data</code>の型だけ変えて再利用できる。
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック⑧</h4>
+                    <div class="quiz">
+                        <h3>この関数の型パラメータ T の制約は何？</h3>
+                        <pre><code class="language-typescript">function findByPower&lt;T extends { power: number }&gt;(
+  items: T[], 
+  minPower: number
+): T[] {
+  return items.filter(item => item.power >= minPower);
+}
+</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) T は任意の型</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) T は power
+                                プロパティ（number型）を持つ型</div>
+                            <div class="quiz-option">C) T は配列型のみ</div>
+                            <div class="quiz-option">D) T は number 型のみ</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) <code>extends { power: number }</code> は「power プロパティを持つ型」の制約。
+                            <br>power を持つ任意のオブジェクト型に対応できる。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック⑨</h4>
+                    <div class="quiz">
+                        <h3>以下のコードの出力は？</h3>
+                        <pre><code class="code-small language-typescript">function echo&lt;T&gt;(value: T): T {
+  return value;
+}
+
+const result1 = echo("za warudo");
+const result2 = echo&lt;string&gt;("muda muda");
+const result3 = echo(42);
+
+console.log(typeof result1, typeof result2, typeof result3);
+</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) object, object, object</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) string,
+                                string, number</div>
+                            <div class="quiz-option">C) any, string, any</div>
+                            <div class="quiz-option">D) T, T, T</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) 型推論により result1 は string、明示指定で result2 も string、result3 は number。
+                            <br>generics は実行時には消えるが、開発時の型チェックで正しい型を保持する。
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>ジェネリクスの利点</h2>
+                    <ul>
+                        <li><strong>再利用性</strong>: 一つのコードで複数の型に対応</li>
+                        <li><strong>型安全性</strong>: <code>any</code>を使わずに型チェックを維持</li>
+                        <li><strong>補完機能</strong>: エディタの型情報に基づく支援</li>
+                        <li><strong>保守性</strong>: 型変更時の影響範囲が明確</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>使うべき場面</h2>
+                    <ul>
+                        <li>配列操作、データ変換の汎用関数</li>
+                        <li>APIレスポンスの型定義</li>
+                        <li>複数の型で同じ処理をしたい時</li>
+                        <li>ライブラリやユーティリティ関数の作成</li>
+                    </ul>
+                    <div class="note">
+                        型の「形」が同じで処理も同じなら、ジェネリクスを検討する。型安全性を保ちながらコードの重複を避けられる。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Index Signatures -->
+            <section>
+                <section>
+                    <h2>Index Signatures</h2>
+                    <p>動的なオブジェクト構造を扱う方法</p>
+                </section>
+
+                <section>
+                    <h3>Index Signatures【インデックスシグネチャ】</h3>
+                    <pre><code class="language-typescript code-medium-small">// プロパティ名が事前に分からない場合
+interface StringDictionary {
+    [key: string]: string;
+}
+
+interface NumberDictionary {
+    [key: string]: number;
+    length: number; // ok, lengthはnumber型
+    // name: string; // error, インデックスシグネチャと競合
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// 複数のインデックスシグネチャ
+interface MixedDictionary {
+    [key: string]: any;
+    [key: number]: string; // 数値キーは文字列キーに割り当て可能である必要がある
+}</code></pre>
+                    <div class="note">
+                        オブジェクトのプロパティ名が動的に決まる場合に使用する。APIレスポンスや設定オブジェクトでよく使われる。
+                    </div>
+                </section>
+                <section>
+                    <h3>まとめ </h3>
+                    <div class="comparison">
+                        <div>
+                            <h4>存在する理由</h4>
+                            <ul>
+                                <li>動的なオブジェクト構造</li>
+                                <li>APIレスポンスの型定義</li>
+                                <li>ライブラリの内部実装</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>なぜ避けるべきか</h4>
+                            <ul>
+                                <li>型安全性の喪失</li>
+                                <li>IDE支援の低下</li>
+                                <li>バグの発見が困難</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comparison">
+                        <pre><code class="language-typescript code-medium-small">
+// ✕ 非推奨: 型安全なし
+interface Config {
+    [key: string]: any;
+}
+
+</code></pre>
+
+                        <pre><code class="language-typescript code-medium-small">// ✓ 推奨: 型明示で安全
+interface Config {
+    apiUrl: string;
+    timeout: number;
+    retries?: number;
+}
+</code></pre>
+                    </div>
+                    <div class="note">
+                        <p><strong>現実的な判断：</strong> 必要な時もあるが、まず具体的な型定義を検討する</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Conditional Types -->
+            <section>
+                <section>
+                    <h2>Conditional Types【条件型】</h2>
+                    <p>型レベルでの条件分岐</p>
+                </section>
+
+                <section>
+                    <h3>基本的なConditional Types</h3>
+                    <pre><code class="language-typescript code-medium">// T extends U ? X : Y の形
+// 「TがUを継承/拡張できるか？」で分岐
+type IsString&lt;T&gt; = T extends string ? true : false;
+
+type Test1 = IsString&lt;string&gt;;  // true
+type Test2 = IsString&lt;number&gt;;  // false
+type Test3 = IsString&lt;"hello"&gt;;  // true（文字列リテラル型はstring型に含まれる）</code></pre>
+                    <div class="note">
+                        <code>extends</code> は「継承」ではなく「含まれる/代入可能」の意味。<br>
+                        <code>T extends string</code> は「Tがstring型に代入可能か？」を判定。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>実用例</h3>
+                    <pre><code class="language-typescript code-medium">// null/undefinedを除外する型
+type NonNull&lt;T&gt; = T extends null | undefined ? never : T;
+
+type SafeString = NonNull&lt;string | null&gt;;  // string
+type SafeNumber = NonNull&lt;number | undefined&gt;;  // number
+
+// 配列かどうかを判定
+type IsArray&lt;T&gt; = T extends unknown[] ? true : false;
+
+type ArrayCheck1 = IsArray&lt;string[]&gt;;  // true
+type ArrayCheck2 = IsArray&lt;string&gt;;    // false</code></pre>
+                    <div class="note">
+                        conditional typesは型の「フィルタリング」に使われることが多い。<br>
+                        TypeScriptの組み込みユーティリティ型の多くがこれで実装されている。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Utility Types -->
+            <section>
+                <section>
+                    <h2>Utility Types【ユーティリティ型】</h2>
+                    <p>TypeScriptが提供する便利な型変換ツール</p>
+                </section>
+
+                <section>
+                    <h3>基本的なユーティリティ型</h3>
+                    <pre><code class="language-typescript code-small">interface User {
+    id: number;
+    name: string;
+    email: string;
+    isActive: boolean;
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// Partial&lt;T&gt; - 全プロパティを省略可能に
+type UserUpdate = Partial&lt;User&gt;; // { id?: number; name?: string; email?: string; isActive?: boolean; }
+
+// Pick&lt;T, K&gt; - 特定のプロパティだけ選択
+type UserProfile = Pick&lt;User, "name" | "email"&gt;; // { name: string; email: string; }
+
+// Omit&lt;T, K&gt; - 特定のプロパティを除外
+type UserWithoutId = Omit&lt;User, "id"&gt;; // { name: string; email: string; isActive: boolean; }
+
+// Record&lt;K, T&gt; - キーと値の型を指定してオブジェクト型作成
+type UserStatus = Record&lt;string, boolean&gt;; // { [key: string]: boolean; }</code></pre>
+                    <div class="note">
+                        既存の型から新しい型を作成する際に使用する。<br>
+                        手動で型を定義し直す必要がなく、元の型が変更されても自動で追従する。
+                    </div>
+                </section>
+
+                <section>
+                    <h3>実用例</h3>
+                    <pre><code class="language-typescript code-medium-small">// API更新用（一部のフィールドのみ）
+function updateUser(id: number, updates: Partial&lt;User&gt;) {
+    // name だけ更新、email だけ更新などが可能
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// 公開用プロフィール（idを隠す）
+function getPublicProfile(user: User): Omit&lt;User, "id"&gt; {
+    const { id, ...publicData } = user;
+    return publicData;
+}</code></pre>
+
+                    <pre><code class="language-typescript code-medium-small">// 設定値の管理
+const config: Record&lt;string, string&gt; = {
+    apiUrl: "https://api.example.com",
+    theme: "dark"
+};</code></pre>
+                    <div class="note">
+                        既存の型から新しい型を作るときに重宝する。<br>
+                        特にAPI設計やフォーム処理でよく使う。
+                    </div>
+                </section>
+                <section>
+                    <h3>ユーティリティ型の使い分け</h3>
+                    <ul>
+                        <li><strong>Partial&lt;T&gt;</strong>: 更新処理で一部のフィールドのみ受け取りたい</li>
+                        <li><strong>Pick&lt;T, K&gt;</strong>: 大きな型から必要な部分だけ抽出したい</li>
+                        <li><strong>Omit&lt;T, K&gt;</strong>: 特定のフィールドを隠したい（公開API等）</li>
+                        <li><strong>Record&lt;K, T&gt;</strong>: 動的なキーを持つオブジェクト型を作りたい</li>
+                    </ul>
+                    <div class="note">
+                        元の型定義が変更されても自動で追従するため、保守性が高い。<br>
+                        手動で型を複製するより、ユーティリティ型を使う方が安全。
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice -->
+            <section>
+                <section>
+                    <h1>TypeScript 実践演習</h1>
+                    <h3>2つの課題 (各5-15分)</h3>
+                    <p>今日学んだ内容を実際に使ってみよう！</p>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_2/task.md">typescript-lessons/lesson_2/task.md</a>
+                    </div>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題1</span> ユーティリティ型でユーザー型変換</h2>
+
+                    <p><strong>以下の <code>User</code> から新しい型を作成してください</strong></p>
+                    <pre><code class="language-typescript">interface User {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+    isActive: boolean;
+}</code></pre>
+
+                    <ul>
+                        <li><code>PublicUser</code>: <code>password</code> を除いた型</li>
+                        <li><code>UserUpdate</code>: <code>id</code> を除き、全て省略可能な型</li>
+                        <li><code>UserSummary</code>: <code>id</code> と <code>name</code> のみの型</li>
+                    </ul>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_2/task.md">typescript-lessons/lesson_2/task.md</a>
+                    </div>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題1</span> 解答例</h2>
+                    <p>ユーティリティ型を組み合わせて必要な型を作成</p>
+                    <pre><code class="language-typescript">// password を除いた型
+type PublicUser = Omit&lt;User, "password"&gt;;
+
+// id を除き、全て省略可能
+type UserUpdate = Partial&lt;Omit&lt;User, "id"&gt;&gt;;
+
+// 指定されたプロパティのみ
+type UserSummary = Pick&lt;User, "id" | "name"&gt;;</code></pre>
+                </section>
+                <section>
+                    <h2><span class="task-number">課題2</span> ジェネリクスでデータ変換</h2>
+
+                    <p><strong>以下の関数をジェネリクスを使って型安全に書き直してください</strong></p>
+                    <pre><code class="language-typescript code-medium-small">// 現在の実装（型が不十分）
+function transformArray(items: any[], transformer: (item: any) => any): any[] {
+    return items.map(transformer);
+}
+
+// 使用例
+const numbers = [1, 2, 3];
+const strings = transformArray(numbers, (n) => n.toString());
+const lengths = transformArray(["hello", "world"], (s) => s.length);</code></pre>
+
+                    <ul>
+                        <li>入力の配列の型を保持する</li>
+                        <li>変換関数の入力・出力型を正しく推論する</li>
+                        <li>戻り値の型を正確に推論する</li>
+                    </ul>
+                    <div class="note fragment"><strong>ヒント:</strong> 2つの型パラメータが必要です <code>&lt;T, U&gt;</code></div>
+                </section>
+
+                <section>
+                    <h2><span class="task-number">課題2</span> 解答例</h2>
+                    <p>ジェネリクスで入力と出力の型を関連付ける</p>
+                    <pre><code class="language-typescript">function transformArray&lt;T, U&gt;(items: T[], transformer: (item: T) => U): U[] {
+    return items.map(transformer);
+}
+
+// 使用例 - 型推論が正しく動作
+const numbers = [1, 2, 3];
+const strings = transformArray(numbers, (n) => n.toString()); // string[]
+const lengths = transformArray(["hello", "world"], (s) => s.length); // number[]
+
+// TypeScriptが型エラーを検出
+// transformArray(numbers, (n) => n.charAt(0)); // Error: charAt は number にない</code></pre>
+                    <div class="note">2つの型パラメータ <code>&lt;T, U&gt;</code> を使って入力と出力の型を関連付けている</div>
+                </section>
+            </section>
+
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h1>第2回まとめ</h1>
+
+                    <ul>
+                        <li><strong>型システム：</strong>型エイリアス、インターフェース、列挙型</li>
+                        <li><strong>型アサーション：</strong>型アサーションとconstアサーション</li>
+                        <li><strong>null/undefinedの扱い：</strong>安全チェック</li>
+                        <li><strong>クラス：</strong>アクセス修飾子とプロトタイプ継承の基礎</li>
+                        <li><strong>モジュール：</strong>基本的なimport/export</li>
+                        <li><strong>ジェネリクス：</strong>再利用可能な型の作成</li>
+                        <li><strong>インデックスシグネチャ：</strong>動的なキーの型付け</li>
+                        <li><strong>条件型：</strong>基本的な条件型の使用例</li>
+                        <li><strong>ユーティリティ型：</strong>Partial、Pick、Omit、Recordなどの活用</li>
+                    </ul>
+                </section>
+
+                <!-- Homework -->
+                <section>
+                    <h1>宿題・実践課題</h1>
+
+                    <h3>斬魄刀管理システム改良版</h3>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_2/homework"
+                            target="_blank">typescript-lessons/lesson_2/homework</a></div>
+                </section>
+
+                <!-- In next episode -->
+                <section>
+                    <h1>次回予告</h1>
+                    <p><strong>React基礎①:</strong> Reactとは、JSX、コンポーネント、Propsの使い方
+                    </p>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            width: 1800,
+            height: 900,
+            margin: 0.1,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight],
+            highlight: {
+                escapeHTML: true
+            }
+        });
+
+        // Quiz interaction
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                // Remove previous selections
+                this.parentNode.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.background = 'rgba(255,255,255,0.1)';
+                });
+
+                // Highlight selected option
+                this.style.background = 'rgba(102, 126, 234, 0.5)';
+            });
+        });
+    </script>
+</body>
+
+</html>
