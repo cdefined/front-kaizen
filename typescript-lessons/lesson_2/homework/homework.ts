@@ -1,268 +1,143 @@
-// JSONファイルからデータをインポート
-import data from "./data.json";
+import {
+  type Zanpakuto,
+  zanpakutoCollection,
+} from "../../lesson_1/homework/data";
 
-// 型定義
-interface BaseZanpakuto {
-  name: string;
-  owner: string;
-  shikaiAbility: string;
-  powerLevel: number;
-  isReleased: boolean;
+type ZanpakutoType = Zanpakuto["type"];
+
+interface SearchFilters {
+  type?: ZanpakutoType;
+  minPowerLevel?: number;
+  maxPowerLevel?: number;
+  hasBankai?: boolean;
+  isReleased?: boolean;
+  owner?: string;
 }
 
-interface MeleeZanpakuto extends BaseZanpakuto {
-  type: "melee";
-  weaponForm: "sword" | "axe" | "whip" | "dual";
-  range: number;
+interface ZanpakutoStats {
+  total: number;
+  byType: Record<ZanpakutoType, number>;
+  averagePowerLevel: number;
+  releasedCount: number;
+  bankaiCount: number;
 }
 
-interface KidoZanpakuto extends BaseZanpakuto {
-  type: "kido";
-  spellCategory: "hado" | "bakudo" | "kaido";
-  castingTime: number;
-}
+class ZanpakutoManager {
+  private zanpakutos: Zanpakuto[] = [];
 
-interface ElementalZanpakuto extends BaseZanpakuto {
-  type: "elemental";
-  element: "fire" | "ice" | "lightning" | "earth" | "water";
-  aoeRadius: number;
-}
-
-interface IllusionZanpakuto extends BaseZanpakuto {
-  type: "illusion";
-  illusionType: "visual" | "mental" | "sensory";
-  duration: number;
-}
-
-type Zanpakuto =
-  | MeleeZanpakuto
-  | KidoZanpakuto
-  | ElementalZanpakuto
-  | IllusionZanpakuto;
-
-interface BankaiData {
-  name: string;
-  multiplier: number;
-  specialAbility: string;
-}
-
-type CaptainZanpakuto<T extends Zanpakuto = Zanpakuto> = T & {
-  bankai: BankaiData;
-  rank: "captain" | "lieutenant" | "vice-captain";
-};
-
-// TODO: ZanpakutoRegistryクラスの実装
-class ZanpakutoRegistry<T extends Zanpakuto = Zanpakuto> {
-  private collection: Map<string, T>;
-
-  constructor() {
-    // TODO: collectionを初期化
+  constructor(initialData?: Zanpakuto[]) {
+    // TODO: 実装
+    throw new Error("Not implemented");
   }
 
-  register(zanpakuto: T): void {
-    // TODO: 登録処理を実装
+  // 斬魄刀を追加
+  add(zanpakuto: Zanpakuto): void {
+    // TODO: 実装
+    throw new Error("Not implemented");
   }
 
-  findByOwner(owner: string): T | undefined {
-    // TODO: 所有者検索を実装
+  // 条件で検索
+  search(filters: SearchFilters): Zanpakuto[] {
+    // TODO: 実装
+    throw new Error("Not implemented");
   }
 
-  filterByType<K extends T["type"]>(type: K): Array<Extract<T, { type: K }>> {
-    // TODO: 型ガード付きの型フィルタリングを実装
+  // 統計情報を取得
+  getStats(): ZanpakutoStats {
+    // TODO: 実装
+    throw new Error("Not implemented");
   }
 
-  getStats(): {
-    total: number;
-    byType: Record<T["type"], number>;
-    averagePower: number;
-  } {
-    // TODO: 統計計算を実装
-  }
-}
-
-// TODO: 卍解の型ガードを実装
-function hasBankai(zanpakuto: Zanpakuto): zanpakuto is CaptainZanpakuto {
-  // TODO: 卍解チェックを実装
-}
-
-// TODO: 卍解戦闘力計算を実装
-function calculateBankaiPower(zanpakuto: CaptainZanpakuto): number {
-  // TODO: 卍解戦闘力を計算 (基本値 * 倍率)
-}
-
-// TODO: CaptainRegistryクラスの実装
-class CaptainRegistry extends ZanpakutoRegistry<CaptainZanpakuto> {
-  getPowerRankings(): Array<{
-    owner: string;
-    basePower: number;
-    bankaiPower: number;
-    rank: CaptainZanpakuto["rank"];
-  }> {
-    // TODO: 戦闘力ランキングを実装
+  // 全データを取得
+  getAll(): Zanpakuto[] {
+    // TODO: 実装（防御的コピー）
+    throw new Error("Not implemented");
   }
 
-  getByRank<R extends CaptainZanpakuto["rank"]>(
-    rank: R,
-  ): Array<CaptainZanpakuto & { rank: R }> {
-    // TODO: ランクフィルタリングを実装
-  }
-}
-
-// TODO: 戦闘システムの実装（ボーナス点用）
-interface BattleResult {
-  winner: string;
-  loser: string;
-  damageDealt: number;
-  rounds: number;
-  usedBankai: boolean;
-}
-
-type BattleStrategy<T extends Zanpakuto> = {
-  [K in T["type"]]: (attacker: Extract<T, { type: K }>, defender: T) => number;
-};
-
-class BattleSimulator {
-  private strategies: BattleStrategy<Zanpakuto>;
-
-  constructor(strategies: BattleStrategy<Zanpakuto>) {
-    this.strategies = strategies;
-  }
-
-  simulate(
-    zanpakuto1: Zanpakuto,
-    zanpakuto2: Zanpakuto,
-    options?: {
-      allowBankai?: boolean;
-      rounds?: number;
-    },
-  ): BattleResult {
-    // TODO: 戦闘シミュレーションを実装
+  // パワーレベルで更新
+  updatePowerLevel(name: string, newPowerLevel: number): boolean {
+    // TODO: 実装
+    // 戻り値: 更新成功時 true、対象が見つからない場合 false
     throw new Error("Not implemented");
   }
 }
 
-// TODO: 分析用名前空間の実装（ボーナス点用）
-type ZanpakutoStats = {
-  [K in Zanpakuto["type"]]: {
-    count: number;
-    averagePower: number;
-    topPerformer: string;
-  };
-};
-
-namespace ZanpakutoAnalytics {
-  export function analyzeByType(zanpakutos: Zanpakuto[]): ZanpakutoStats {
-    // TODO: 型別分析を実装
+class ZanpakutoFormatter {
+  static formatBasic(zanpakuto: Zanpakuto): string {
+    // TODO: 実装
+    // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
     throw new Error("Not implemented");
   }
 
-  export function findStrongest<T extends Zanpakuto["type"]>(
-    zanpakutos: Zanpakuto[],
-    type: T,
-  ): Extract<Zanpakuto, { type: T }> | undefined {
-    // TODO: 特定タイプの最強を検索
+  static formatDetailed(zanpakuto: Zanpakuto): string {
+    // TODO: 実装
+    // 例: "Zangetsu (Kurosaki Ichigo) - Melee [Released] - Power: 8500 - Bankai: Tensa Zangetsu"
+    throw new Error("Not implemented");
+  }
+
+  static formatStats(stats: ZanpakutoStats): string {
+    // TODO: 実装
+    // 例: "Total: 10 | Melee: 4, Kido: 2, Elemental: 3, Illusion: 1 | Avg Power: 7850 | Released: 5/10 | Bankai: 8/10"
     throw new Error("Not implemented");
   }
 }
 
-// テストデータのセットアップ
-const zanpakutos = data.zanpakutos as Zanpakuto[];
-const captains = data.captains as CaptainZanpakuto[];
+// テストコード
+console.log("=== 斬魄刀管理システム改良版テスト ===");
 
-// レジストリの初期化
-const registry = new ZanpakutoRegistry<Zanpakuto>();
-const captainRegistry = new CaptainRegistry();
+const manager = new ZanpakutoManager(zanpakutoCollection);
 
-// 全斬魄刀を登録
-zanpakutos.forEach((z) => registry.register(z));
-captains.forEach((c) => captainRegistry.register(c));
+// 基本機能テスト
+console.log("基本機能テスト:");
+const allZanpakutos = manager.getAll();
+console.assert(allZanpakutos.length === 10, "Initial data load failed");
 
-// テスト
-console.log("=== テスト開始 ===");
+// 検索機能テスト
+console.log("検索機能テスト:");
+const meleeZanpakutos = manager.search({ type: "melee" });
+console.assert(meleeZanpakutos.length === 4, "Melee search failed");
 
-console.log("Test 1: Basic functionality");
-const ichigo = registry.findByOwner("Kurosaki Ichigo");
-console.assert(ichigo?.name === "Zangetsu", "Should find Ichigo's Zangetsu");
-console.log("✓ Owner search works");
+const strongZanpakutos = manager.search({ minPowerLevel: 8000 });
+console.assert(strongZanpakutos.length === 5, "Power level search failed");
 
-console.log("Test 2: Type filtering");
-const meleeTypes = registry.filterByType("melee");
-console.assert(meleeTypes.length === 3, "Should find 3 melee types");
+const bankaiZanpakutos = manager.search({ hasBankai: true });
+console.assert(bankaiZanpakutos.length === 8, "Bankai search failed");
+
+// 統計テスト
+console.log("統計テスト:");
+const stats = manager.getStats();
+console.assert(stats.total === 10, "Stats total incorrect");
+console.assert(stats.byType.melee === 4, "Stats type count incorrect");
 console.assert(
-  meleeTypes.every((z) => z.type === "melee"),
-  "All should be melee type",
-);
-console.log("✓ Type filtering works");
-
-console.log("Test 3: Statistics");
-const stats = registry.getStats();
-console.assert(stats.total === 11, "Should have 11 total zanpakutos");
-console.assert(stats.byType.melee === 3, "Should have 3 melee types");
-console.assert(stats.byType.elemental === 3, "Should have 3 elemental types");
-console.assert(stats.byType.illusion === 2, "Should have 2 illusion types");
-console.assert(stats.byType.kido === 3, "Should have 3 kido types");
-console.log("✓ Statistics calculation works");
-
-console.log("Test 4: Bankai system");
-const yamamoto = captainRegistry.findByOwner("Yamamoto Genryusai");
-console.assert(yamamoto !== undefined, "Should find Yamamoto");
-console.assert(hasBankai(yamamoto), "Yamamoto should have bankai");
-
-const regularIchigo = registry.findByOwner("Kurosaki Ichigo");
-console.assert(
-  !hasBankai(regularIchigo),
-  "Regular Ichigo shouldn't have bankai",
-);
-console.log("✓ Bankai detection works");
-
-console.log("Test 5: Bankai power calculation");
-if (yamamoto && hasBankai(yamamoto)) {
-  const bankaiPower = calculateBankaiPower(yamamoto);
-  console.assert(
-    bankaiPower === 9500 * 2.5,
-    "Bankai power should be base * multiplier",
-  );
-  console.log("✓ Bankai power calculation works");
-}
-
-console.log("Test 6: Captain registry");
-const captainStats = captainRegistry.getStats();
-console.assert(
-  captainStats.total === 6,
-  "Should have 6 captain-level zanpakutos",
+  Math.abs(stats.averagePowerLevel - 7970) < 50,
+  "Stats average incorrect",
 );
 
-const rankings = captainRegistry.getPowerRankings();
-console.assert(rankings.length === 6, "Should have 6 rankings");
-console.assert(
-  rankings[0].owner === "Yamamoto Genryusai",
-  "Yamamoto should be strongest",
-);
-console.log("✓ Captain registry works");
+// 更新テスト
+console.log("更新テスト:");
+const updateSuccess = manager.updatePowerLevel("Zangetsu", 9000);
+console.assert(updateSuccess === true, "Update should succeed");
+const updateFail = manager.updatePowerLevel("NonExistent", 1000);
+console.assert(updateFail === false, "Update should fail for non-existent");
 
-console.log("Test 7: Rank filtering");
-const captainRank = captainRegistry.getByRank("captain");
-console.assert(captainRank.length === 4, "Should have 4 captains");
-console.assert(
-  captainRank.every((c) => c.rank === "captain"),
-  "All should be captain rank",
-);
-console.log("✓ Rank filtering works");
+// フォーマッターテスト
+console.log("フォーマッターテスト:");
+const formatted = ZanpakutoFormatter.formatBasic(zanpakutoCollection[0]);
+console.assert(formatted.includes("Zangetsu"), "Basic format test failed");
 
-console.log("=== All Tests Passed! ===");
+console.log("=== テスト完了 ===");
 
-console.log("\n=== Advanced Type Features Demo ===");
+// 実行例
+console.log("\n=== 実行例 ===");
+console.log("統計情報:");
+console.log(ZanpakutoFormatter.formatStats(manager.getStats()));
 
-type ElementalZanpakutos = Extract<Zanpakuto, { type: "elemental" }>;
-const elementalOnes = registry.filterByType("elemental");
-console.log(`Found ${elementalOnes.length} elemental zanpakutos`);
+console.log("\n強力な斬魄刀 (8000以上):");
+manager
+  .search({ minPowerLevel: 8000 })
+  .forEach((z) => console.log(ZanpakutoFormatter.formatDetailed(z)));
 
-type HasBankai<T> = T extends { bankai: any } ? T : never;
-const withBankai: HasBankai<CaptainZanpakuto>[] = captains;
-console.log(`${withBankai.length} zanpakutos have bankai`);
-
-type PartialZanpakuto = Partial<Zanpakuto>;
-type ZanpakutoNames = Pick<Zanpakuto, "name" | "owner">;
-type WithoutPowerLevel = Omit<Zanpakuto, "powerLevel">;
-
-console.log("✓ Advanced type features demonstrated");
+console.log("\n解放済みの斬魄刀:");
+manager
+  .search({ isReleased: true })
+  .forEach((z) => console.log(ZanpakutoFormatter.formatBasic(z)));

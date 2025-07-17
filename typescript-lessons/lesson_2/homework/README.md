@@ -2,229 +2,230 @@
 
 ## 課題概要
 
-前回の斬魄刀システムを拡張し、より高度な型システムを活用した管理システムを実装してください。
+前回の斬魄刀管理システムをクラスベースで改良し、実際のアプリケーションで使われるような機能を追加してください。
 
-## 基本型定義の拡張
+### 基本型定義の拡張
 
 ```typescript
-// 基本の斬魄刀情報
-interface BaseZanpakuto {
+// 前回の Zanpakuto interface は維持
+interface Zanpakuto {
   name: string;
   owner: string;
+  type: "melee" | "kido" | "elemental" | "illusion";
+  bankai?: string;
   shikaiAbility: string;
   powerLevel: number;
   isReleased: boolean;
 }
 
-// 型別の追加プロパティ
-interface MeleeZanpakuto extends BaseZanpakuto {
-  type: "melee";
-  weaponForm: "sword" | "axe" | "whip" | "dual";
-  range: number;
+// 新しい型定義
+type ZanpakutoType = Zanpakuto["type"];
+
+interface SearchFilters {
+  type?: ZanpakutoType;
+  minPowerLevel?: number;
+  maxPowerLevel?: number;
+  hasBankai?: boolean;
+  isReleased?: boolean;
+  owner?: string;
 }
 
-interface KidoZanpakuto extends BaseZanpakuto {
-  type: "kido";
-  spellCategory: "hado" | "bakudo" | "kaido";
-  castingTime: number;
+interface ZanpakutoStats {
+  total: number;
+  byType: Record<ZanpakutoType, number>;
+  averagePowerLevel: number;
+  releasedCount: number;
+  bankaiCount: number;
 }
-
-interface ElementalZanpakuto extends BaseZanpakuto {
-  type: "elemental";
-  element: "fire" | "ice" | "lightning" | "earth" | "water";
-  aoeRadius: number;
-}
-
-interface IllusionZanpakuto extends BaseZanpakuto {
-  type: "illusion";
-  illusionType: "visual" | "mental" | "sensory";
-  duration: number;
-}
-
-type Zanpakuto =
-  | MeleeZanpakuto
-  | KidoZanpakuto
-  | ElementalZanpakuto
-  | IllusionZanpakuto;
-
-// 卍解情報
-interface BankaiData {
-  name: string;
-  multiplier: number;
-  specialAbility: string;
-}
-
-// 隊長級の斬魄刀（卍解必須）
-type CaptainZanpakuto<T extends Zanpakuto = Zanpakuto> = T & {
-  bankai: BankaiData;
-  rank: "captain" | "lieutenant" | "vice-captain";
-};
 ```
 
-## 実装する機能
+### 実装するクラス
 
-### 1. 型安全なコレクション管理クラス
+#### 1. ZanpakutoManager クラス
+
+斬魄刀コレクションを管理するメインクラス。
 
 ```typescript
-class ZanpakutoRegistry<T extends Zanpakuto = Zanpakuto> {
-  private collection: Map<string, T>;
+class ZanpakutoManager {
+  private zanpakutos: Zanpakuto[] = [];
 
-  constructor();
+  constructor(initialData?: Zanpakuto[]) {
+    // TODO: 実装
+  }
 
-  // 斬魄刀を登録
-  register(zanpakuto: T): void;
+  // 斬魄刀を追加
+  add(zanpakuto: Zanpakuto): void {
+    // TODO: 実装
+  }
 
-  // 所有者で検索
-  findByOwner(owner: string): T | undefined;
-
-  // 型でフィルタリング（型ガード付き）
-  filterByType<K extends T["type"]>(type: K): Array<Extract<T, { type: K }>>;
+  // 条件で検索
+  search(filters: SearchFilters): Zanpakuto[] {
+    // TODO: 実装
+  }
 
   // 統計情報を取得
-  getStats(): {
-    total: number;
-    byType: Record<T["type"], number>;
-    averagePower: number;
-  };
+  getStats(): ZanpakutoStats {
+    // TODO: 実装
+  }
+
+  // 全データを取得
+  getAll(): Zanpakuto[] {
+    // TODO: 実装（防御的コピー）
+  }
+
+  // パワーレベルで更新
+  updatePowerLevel(name: string, newPowerLevel: number): boolean {
+    // TODO: 実装
+    // 戻り値: 更新成功時 true、対象が見つからない場合 false
+  }
 }
 ```
 
-### 2. 卍解システム
+#### 2. ZanpakutoFormatter クラス
+
+表示用のフォーマット機能を提供する静的クラス。
 
 ```typescript
-// 卍解を持つ斬魄刀かどうかの型ガード
-function hasBankai(zanpakuto: Zanpakuto): zanpakuto is CaptainZanpakuto;
+class ZanpakutoFormatter {
+  static formatBasic(zanpakuto: Zanpakuto): string {
+    // TODO: 実装
+    // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
+  }
 
-// 卍解発動時の戦闘力計算
-function calculateBankaiPower(zanpakuto: CaptainZanpakuto): number;
+  static formatDetailed(zanpakuto: Zanpakuto): string {
+    // TODO: 実装
+    // 例: "Zangetsu (Kurosaki Ichigo) - Melee [Released] - Power: 8500 - Bankai: Tensa Zangetsu"
+  }
 
-// 隊長級斬魄刀の管理
-class CaptainRegistry extends ZanpakutoRegistry<CaptainZanpakuto> {
-  // 戦闘力ランキング（卍解込み）
-  getPowerRankings(): Array<{
-    owner: string;
-    basePower: number;
-    bankaiPower: number;
-    rank: CaptainZanpakuto["rank"];
-  }>;
-
-  // 特定ランクの隊長を取得
-  getByRank<R extends CaptainZanpakuto["rank"]>(
-    rank: R,
-  ): Array<CaptainZanpakuto & { rank: R }>;
+  static formatStats(stats: ZanpakutoStats): string {
+    // TODO: 実装
+    // 例: "Total: 10 | Melee: 4, Kido: 2, Elemental: 3, Illusion: 1 | Avg Power: 7850 | Released: 5/10 | Bankai: 8/10"
+  }
 }
 ```
 
-### 3. 戦闘シミュレーション
+---
+
+## ボーナス課題 (各 5 点)
+
+### ボーナス 1: Generic Repository Pattern
 
 ```typescript
-// 戦闘結果
-interface BattleResult {
-  winner: string;
-  loser: string;
-  damageDealt: number;
-  rounds: number;
-  usedBankai: boolean;
+interface Repository<T> {
+  add(item: T): void;
+  findById(id: string): T | undefined;
+  findAll(): T[];
+  update(id: string, item: Partial<T>): boolean;
+  delete(id: string): boolean;
 }
 
-// 型別の戦闘ロジック
-type BattleStrategy<T extends Zanpakuto> = {
-  [K in T["type"]]: (attacker: Extract<T, { type: K }>, defender: T) => number;
-};
-
-// 戦闘シミュレーター
-class BattleSimulator {
-  private strategies: BattleStrategy<Zanpakuto>;
-
-  constructor(strategies: BattleStrategy<Zanpakuto>);
-
-  simulate(
-    zanpakuto1: Zanpakuto,
-    zanpakuto2: Zanpakuto,
-    options?: {
-      allowBankai?: boolean;
-      rounds?: number;
-    },
-  ): BattleResult;
+class ZanpakutoRepository implements Repository<Zanpakuto> {
+  // TODO: name をユニークIDとして使用した実装
 }
 ```
 
-### 4. 分析ツール
+### ボーナス 2: Utility Types の活用
 
 ```typescript
-// 統計分析用のユーティリティ型
-type ZanpakutoStats = {
-  [K in Zanpakuto["type"]]: {
-    count: number;
-    averagePower: number;
-    topPerformer: string;
-  };
-};
+// 必要なフィールドのみを持つ型
+type ZanpakutoSummary = Pick<Zanpakuto, "name" | "owner" | "powerLevel">;
 
-// 分析機能
-namespace ZanpakutoAnalytics {
-  export function analyzeByType(zanpakutos: Zanpakuto[]): ZanpakutoStats;
+// 更新可能なフィールドのみを持つ型
+type ZanpakutoUpdateData = Partial<Omit<Zanpakuto, "name" | "owner">>;
 
-  export function findStrongest<T extends Zanpakuto["type"]>(
+// 型別統計情報
+type TypeStats = Record<ZanpakutoType, ZanpakutoSummary[]>;
+
+class AdvancedZanpakutoManager extends ZanpakutoManager {
+  getSummaries(): ZanpakutoSummary[] {
+    // TODO: 実装
+  }
+
+  updateZanpakuto(name: string, updateData: ZanpakutoUpdateData): boolean {
+    // TODO: 実装
+  }
+
+  getStatsByType(): TypeStats {
+    // TODO: 実装
+  }
+}
+```
+
+### ボーナス 3: Enum の活用
+
+```typescript
+enum PowerTier {
+  ROOKIE = "ROOKIE", // 0-6000
+  LIEUTENANT = "LIEUTENANT", // 6001-7500
+  CAPTAIN = "CAPTAIN", // 7501-8500
+  ELITE = "ELITE", // 8501-9000
+  LEGENDARY = "LEGENDARY", // 9001+
+}
+
+class TierAnalyzer {
+  static getTier(powerLevel: number): PowerTier {
+    // TODO: 実装
+  }
+
+  static getTierDistribution(
     zanpakutos: Zanpakuto[],
-    type: T,
-  ): Extract<Zanpakuto, { type: T }> | undefined;
+  ): Record<PowerTier, number> {
+    // TODO: 実装
+  }
 }
 ```
 
-## 採点基準
+### ボーナス 4: 複雑な検索とソート
 
-### 基本実装 (70 点)
+```typescript
+type SortField = keyof Pick<Zanpakuto, "name" | "owner" | "powerLevel">;
+type SortOrder = "asc" | "desc";
 
-- [ ] 型定義の正確な実装
-- [ ] 基本クラスの実装
-- [ ] 型ガードの実装
-- [ ] テストの通過
+interface SearchOptions extends SearchFilters {
+  sortBy?: SortField;
+  sortOrder?: SortOrder;
+  limit?: number;
+  offset?: number;
+}
 
-### 応用実装 (20 点)
-
-- [ ] ジェネリクスの適切な活用 (+5 点)
-- [ ] 条件付き型の使用 (+5 点)
-- [ ] ユーティリティ型の活用 (+5 点)
-- [ ] 型安全な enum/const assertion の使用 (+5 点)
-
-### 発展実装 (10 点)
-
-- [ ] 独自のユーティリティ型の定義 (+3 点)
-- [ ] 高度な型推論の活用 (+3 点)
-- [ ] パフォーマンス最適化 (+2 点)
-- [ ] エラーハンドリングの充実 (+2 点)
-
-## 実行とテスト
-
-```bash
-npm run lesson2
+class AdvancedSearch {
+  static search(zanpakutos: Zanpakuto[], options: SearchOptions): Zanpakuto[] {
+    // TODO: フィルタリング、ソート、ページネーション実装
+  }
+}
 ```
 
-**ヒント:**
+### ボーナス 5: Type Guards と Conditional Types
 
-- `Extract<T, U>` で union 型から特定の型を抽出
-- `keyof` と `in` で型安全なオブジェクト操作
-- `const assertion` で文字列リテラル型を保持
-- 型ガードで分岐後の型推論を活用
-- JSON ファイルのインポートは `import data from './data.json'` で可能
+```typescript
+// 卍解を持つ斬魄刀の型
+type ZanpakutoWithBankai = Zanpakuto & { bankai: string };
 
-**禁止事項:**
+// 型による条件分岐
+type ZanpakutoDetails<T extends Zanpakuto> = T extends ZanpakutoWithBankai
+  ? { hasBankai: true; bankaiName: string }
+  : { hasBankai: false; bankaiName: null };
 
-- `any` 型の使用
-- 型アサーション `as` の乱用
-- `@ts-ignore` コメント
+class TypeGuards {
+  static hasBankai(zanpakuto: Zanpakuto): zanpakuto is ZanpakutoWithBankai {
+    // TODO: 実装
+  }
 
-## 提出物
-
-1. `homework.ts` - 実装コード（テスト含む）
-2. 使用した高度な型機能の説明（コメント）
-
-## ファイル構成
-
+  static getDetails<T extends Zanpakuto>(zanpakuto: T): ZanpakutoDetails<T> {
+    // TODO: 実装
+  }
+}
 ```
-lesson_2/
-├── README.md          # この課題説明
-├── data.json          # 斬魄刀データ
-└── homework.ts        # 実装 + テスト
-```
+
+---
+
+## 評価基準
+
+- **基本課題 (50 点)**: ZanpakutoManager と ZanpakutoFormatter クラスの実装
+- **ボーナス課題 (各 10 点)**: 最大 50 点のボーナス
+
+### 実行確認
+
+`npm run lesson2` でテストを実行し、すべてのテストが通ることを確認してください。
+
+---
