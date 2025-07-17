@@ -184,13 +184,11 @@ type SortOrder = "asc" | "desc";
 interface SearchOptions extends SearchFilters {
   sortBy?: SortField;
   sortOrder?: SortOrder;
-  limit?: number;
-  offset?: number;
 }
 
 class AdvancedSearch {
   static search(zanpakutos: Zanpakuto[], options: SearchOptions): Zanpakuto[] {
-    // TODO: フィルタリング、ソート、ページネーション実装
+    // TODO: フィルタリング + ソート実装
   }
 }
 ```
@@ -198,8 +196,8 @@ class AdvancedSearch {
 ### ボーナス 5: Type Guards と Conditional Types
 
 ```typescript
-// 卍解を持つ斬魄刀の型
-type ZanpakutoWithBankai = Zanpakuto & { bankai: string };
+// 解放済み斬魄刀の型
+type ReleasedZanpakuto = Zanpakuto & { isReleased: true };
 
 // 型による条件分岐
 type ZanpakutoDetails<T extends Zanpakuto> = T extends ZanpakutoWithBankai
@@ -207,7 +205,7 @@ type ZanpakutoDetails<T extends Zanpakuto> = T extends ZanpakutoWithBankai
   : { hasBankai: false; bankaiName: null };
 
 class TypeGuards {
-  static hasBankai(zanpakuto: Zanpakuto): zanpakuto is ZanpakutoWithBankai {
+  static isReleased(zanpakuto: Zanpakuto): zanpakuto is ReleasedZanpakuto {
     // TODO: 実装
   }
 
