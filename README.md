@@ -11,7 +11,7 @@
 
 ## 2. TypeScript 入門 ②
 
-interface、type、enum、ジェネリクス、型の拡
+interface、type、型の拡、enum、クラス、ジェネリクス、ユーティリティ型
 
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/typescript-lessons/lesson_2/slides.html)
 - [プレゼンテーションのコード例](/typescript-lessons/lesson_2/slides_examples.ts)

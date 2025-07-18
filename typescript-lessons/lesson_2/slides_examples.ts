@@ -176,7 +176,7 @@ type ColorType = (typeof Color)[keyof typeof Color];
 // ============================================
 
 // Null vs undefined examples
-let userName: string; // undefined
+let userName; // undefined
 console.log(userName); // undefined
 
 function processUser(name?: string) {
