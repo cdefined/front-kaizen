@@ -5,6 +5,7 @@
   "scripts": {
     "lesson1": "tsc && node dist/lesson_1/homework/homework.js",
     "lesson2": "tsc && node dist/lesson_2/homework/homework.js",
+    "run-homework": "node scripts/run-homework.js",
     "clean": "rm -rf dist"
   },
   "repository": {
