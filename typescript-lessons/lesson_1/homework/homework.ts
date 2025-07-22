@@ -1,14 +1,11 @@
-import { type Zanpakuto, zanpakutoCollection } from "../data";
+import { type Zanpakuto, zanpakutoCollection } from "./data";
 
 // ここに関数を実装してください
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
-  // フォーマットされた文字列を返す
-  // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
-  return `${zanpakuto.name} (${zanpakuto.owner}) - ${
-    zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1)
-  } Type [${zanpakuto.isReleased ? "Released" : "Sealed"}]`;
+  // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 2. filterByType
@@ -16,30 +13,22 @@ function filterByType(
   zanpakutos: Zanpakuto[],
   targetType: Zanpakuto["type"]
 ): Zanpakuto[] {
-  // 指定されたタイプの斬魄刀をフィルタリングして返す
-  return zanpakutos.filter((zanpakuto) => zanpakuto.type === targetType);
+  // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 3. hasBankai (type guard)
 function hasBankai(
   zanpakuto: Zanpakuto
 ): zanpakuto is Zanpakuto & { bankai: string } {
-  // 卍解を持っているかどうかをチェック
-  return zanpakuto.bankai !== undefined && zanpakuto.bankai !== "";
+  // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // 4. getRankings
 function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
-  // powerLevelでソートして、上位N件の斬魄刀をフォーマットして返す
-  return [...zanpakutos]
-    .sort(
-      (zanpakutoA, zanpakutoB) => zanpakutoB.powerLevel - zanpakutoA.powerLevel
-    )
-    .slice(0, topN)
-    .map(
-      (zanpakuto) =>
-        `${zanpakuto.name} (${zanpakuto.owner}) - Power Level: ${zanpakuto.powerLevel} - Type: ${zanpakuto.type}`
-    );
+  // TODO: 実装
+  throw new Error("Not implemented");
 }
 
 // テスト
