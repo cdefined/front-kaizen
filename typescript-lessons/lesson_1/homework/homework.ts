@@ -1,4 +1,4 @@
-import { type Zanpakuto, zanpakutoCollection } from "./data";
+import { type Zanpakuto, zanpakutoCollection } from "../data";
 
 // ここに関数を実装してください
 
@@ -16,43 +16,30 @@ function filterByType(
   zanpakutos: Zanpakuto[],
   targetType: Zanpakuto["type"]
 ): Zanpakuto[] {
-  try {
-    // 指定されたタイプの斬魄刀をフィルタリングして返す
-    return zanpakutos.filter((zanpakuto) => zanpakuto.type === targetType);
-  } catch (error) {
-    throw new Error("Not implemented");
-  }
+  // 指定されたタイプの斬魄刀をフィルタリングして返す
+  return zanpakutos.filter((zanpakuto) => zanpakuto.type === targetType);
 }
 
 // 3. hasBankai (type guard)
 function hasBankai(
   zanpakuto: Zanpakuto
 ): zanpakuto is Zanpakuto & { bankai: string } {
-  try {
-    // 卍解を持っているかどうかをチェック
-    return zanpakuto.bankai !== undefined && zanpakuto.bankai !== "";
-  } catch (error) {
-    throw new Error("Not implemented");
-  }
+  // 卍解を持っているかどうかをチェック
+  return zanpakuto.bankai !== undefined && zanpakuto.bankai !== "";
 }
 
 // 4. getRankings
 function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
-  try {
-    // powerLevelでソートして、上位N件の斬魄刀をフォーマットして返す
-    return zanpakutos
-      .sort(
-        (zanpakutoA, zanpakutoB) =>
-          zanpakutoB.powerLevel - zanpakutoA.powerLevel
-      )
-      .slice(0, topN)
-      .map(
-        (zanpakuto) =>
-          `${zanpakuto.name} (${zanpakuto.owner}) - Power Level: ${zanpakuto.powerLevel} - Type: ${zanpakuto.type}`
-      );
-  } catch (error) {
-    throw new Error("Not implemented");
-  }
+  // powerLevelでソートして、上位N件の斬魄刀をフォーマットして返す
+  return [...zanpakutos]
+    .sort(
+      (zanpakutoA, zanpakutoB) => zanpakutoB.powerLevel - zanpakutoA.powerLevel
+    )
+    .slice(0, topN)
+    .map(
+      (zanpakuto) =>
+        `${zanpakuto.name} (${zanpakuto.owner}) - Power Level: ${zanpakuto.powerLevel} - Type: ${zanpakuto.type}`
+    );
 }
 
 // テスト
