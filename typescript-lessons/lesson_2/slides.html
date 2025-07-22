@@ -201,6 +201,86 @@
                 </aside>
             </section>
 
+            <!-- In a previous episode -->
+            <section>
+                <section>
+                    <h1>TypeScript 基本型まとめ</h1>
+                    <h3>前回の復習</h3>
+                    <ul>
+                        <li>プリミティブ型とオブジェクト型</li>
+                        <li>ウニオン型と型推論</li>
+                        <li>関数の型定義</li>
+                    </ul>
+                    <aside class="notes">
+                        前回（ぜんかい）は TypeScript の基本（きほん）的（てき）な型（かた）について 学（まな）びました。<br>
+                        プリミティブ型、オブジェクト型、ウニオン型、関数（かんすう）の型について 説明（せつめい）しました。<br>
+                        今日（きょう）は 簡単（かんたん）に 復習（ふくしゅう）します。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>重要ポイント①: 型の種類</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>プリミティブ型</h4>
+                            <pre><code class="language-typescript">let name: string = "梨花";
+let age: number = 11;
+let isAlive: boolean = true;</code></pre>
+
+                            <h4>配列とオブジェクト</h4>
+                            <pre><code class="language-typescript">let members: string[] = ["圭一", "レナ"];
+let user: { name: string; age: number } = {
+    name: "梨花", 
+    age: 11
+};</code></pre>
+                        </div>
+                        <div>
+                            <h4>ウニオン型</h4>
+                            <pre><code class="language-typescript">let id: number | string = 123;
+type Status = "pending" | "done";</code></pre>
+
+                            <h4>特殊な型</h4>
+                            <pre><code class="language-typescript">let data: any = "危険"; // 使わない
+let secret: unknown = "安全";
+function log(): void { }
+function error(): never { 
+    throw new Error(); 
+}</code></pre>
+                        </div>
+                    </div>
+                    <aside class="notes">
+                        TypeScript の主（おも）な型（かた）を まとめました。<br>
+                        プリミティブ型は 文字列（もじれつ）、数値（すうち）、真偽値（しんぎち）です。<br>
+                        配列（はいれつ）と オブジェクトも 型（かた）を 決（き）められます。<br>
+                        Union型で 複数（ふくすう）の型を 許可（きょか）できます。<br>
+                        any は 危険（きけん）、unknown は 安全（あんぜん）です。<br>
+                        void は 戻り値（もどりち）なし、never は 絶対（ぜったい）に戻（もど）らない関数（かんすう）です。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>重要ポイント②: 実践的な使い方</h2>
+
+                    <h4>型推論を活用</h4>
+                    <pre><code class="language-typescript">// 型を書かなくてもOK
+let price = 1000;        // 自動的に number
+let items = ["A", "B"];  // 自動的に string[]</code></pre>
+
+                    <h4>型ガードで安全に</h4>
+                    <pre><code class="language-typescript">function process(value: string | number) {
+    if (typeof value === "string") {
+        return value.toUpperCase(); // string として使える
+    }
+    return value.toFixed(2);        // number として使える
+}</code></pre>
+                    <aside class="notes">
+                        実際（じっさい）に TypeScript を使（つか）うときの コツを まとめました。<br>
+                        型推論（かたすいろん）を使うと 型（かた）を 書かなくても 自動（じどう）で 決（き）まります。<br>
+                        型ガードで Union型を 安全（あんぜん）に 使（つか）えます。<br>
+                    </aside>
+                </section>
+            </section>
+
             <!-- Type aliases and interfaces -->
             <section>
                 <section>
