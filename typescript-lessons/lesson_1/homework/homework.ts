@@ -4,16 +4,11 @@ import { type Zanpakuto, zanpakutoCollection } from "./data";
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
-  try {
-    // フォーマットされた文字列を返す
-    // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
-    return `${zanpakuto.name} (${zanpakuto.owner}) - ${
-      zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1)
-    } Type [${zanpakuto.isReleased ? "Released" : "Sealed"}]`;
-  } catch (error) {
-    // エラーが発生した場合はエラーメッセージを投げる
-    throw new Error("Not implemented");
-  }
+  // フォーマットされた文字列を返す
+  // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
+  return `${zanpakuto.name} (${zanpakuto.owner}) - ${
+    zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1)
+  } Type [${zanpakuto.isReleased ? "Released" : "Sealed"}]`;
 }
 
 // 2. filterByType
