@@ -24,6 +24,10 @@
             text-transform: none;
         }
 
+        .reveal .annotation {
+            font-size: 0.8em;
+        }
+
         .reveal .slides section {
             text-align: left;
         }
@@ -367,44 +371,6 @@ type ClubMember = Person & {
                     </aside>
                 </section>
                 <section>
-                    <h4>理解度チェック①</h4>
-                    <div class="quiz">
-                        <h3>以下のうち、型エイリアスでのみ定義可能なものはどれ？</h3>
-                        <div class="comparison">
-                            <pre><code class="code-medium">// A
-type Status = "active" | "inactive" | "pending";
-
-// B
-type Callback = (data: string) => void;</code></pre>
-
-                            <pre><code class="code-medium">// C
-type UserArray = User[];
-
-// D
-type UserTuple = [string, number, boolean];</code></pre>
-                        </div>
-                        <div class="quiz-options">
-                            <div class="quiz-option">A) ユニオン型のみ</div>
-                            <div class="quiz-option">B) 関数型のみ</div>
-                            <div class="quiz-option">C) 配列型のみ</div>
-                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) すべて type
-                                でのみ定義可能</div>
-                        </div>
-                    </div>
-                    <div class="fragment" data-fragment-index="1">
-                        <div class="note">
-                            <strong>答え:</strong> D) interface はオブジェクトの形状のみ定義可能。ユニオン型、関数型、配列型、タプル型などは type でのみ定義できます。
-                        </div>
-                    </div>
-                    <aside class="notes">
-                        typeだけで作「つく」ることができるのはどれですか？
-                        interfaceはobjectだけです。
-                        union typeはtypeだけです。
-                        function typeもtypeだけです。
-                        答「こた」えはDです。全部「ぜんぶ」typeだけです。
-                    </aside>
-                </section>
-                <section>
                     <h2>インターフェース</h2>
                     <p>インターフェースはオブジェクトの構造を定義します</p>
                     <pre><code data-line-numbers="|2|" class="code-medium-small language-typescript">// 基本的なインターフェース
@@ -517,6 +483,44 @@ type ExtendedClubMember = ClubMember & {
                     </aside>
                 </section>
                 <section>
+                    <h4>理解度チェック①</h4>
+                    <div class="quiz">
+                        <h3>以下のうち、型エイリアスでのみ定義可能なものはどれ？</h3>
+                        <div class="comparison">
+                            <pre><code class="code-medium">// A
+type Status = "active" | "inactive" | "pending";
+
+// B
+type Callback = (data: string) => void;</code></pre>
+
+                            <pre><code class="code-medium">// C
+type UserArray = User[];
+
+// D
+type UserTuple = [string, number, boolean];</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) ユニオン型のみ</div>
+                            <div class="quiz-option">B) 関数型のみ</div>
+                            <div class="quiz-option">C) 配列型のみ</div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) すべて type
+                                でのみ定義可能</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> D) interface はオブジェクトの形状のみ定義可能。ユニオン型、関数型、配列型、タプル型などは type でのみ定義できます。
+                        </div>
+                    </div>
+                    <aside class="notes">
+                        typeだけで作「つく」ることができるのはどれですか？
+                        interfaceはobjectだけです。
+                        union typeはtypeだけです。
+                        function typeもtypeだけです。
+                        答「こた」えはDです。全部「ぜんぶ」typeだけです。
+                    </aside>
+                </section>
+                <section>
                     <h4>理解度チェック②</h4>
                     <div class="quiz">
                         <h3>エラーになるのはどれ？</h3>
@@ -615,7 +619,7 @@ interface Stand {
                             <tr>
                                 <td>宣言マージ</td>
                                 <td><strong>✕</strong> 不可（エラー）</td>
-                                <td><strong>○</strong> 可能</td>
+                                <td><strong>✓</strong> 可能</td>
                             </tr>
                             <tr>
                                 <td>拡張方法</td>
@@ -630,11 +634,11 @@ interface Stand {
                             <tr>
                                 <td>再定義</td>
                                 <td><strong>✕</strong> 同名で定義不可</td>
-                                <td><strong>○</strong> OK（マージ）</td>
+                                <td><strong>✓</strong> OK（マージ）</td>
                             </tr>
                             <tr>
                                 <td>複雑な型の表現</td>
-                                <td><strong>○</strong> 条件型・ユニオン型等に強い</td>
+                                <td><strong>✓</strong> 条件型・ユニオン型等に強い</td>
                                 <td><strong>✕</strong> 不向き</td>
                             </tr>
                             <tr>
@@ -655,7 +659,7 @@ interface Stand {
                 <section>
                     <h4>理解度チェック④</h4>
                     <div class="quiz">
-                        <h3>どの組み合わせが正しい？</h3>
+                        <h3>どの組み合わせが正しい？<span class="annotation">※複数回答</span></h3>
                         <pre><code class="code-medium language-typescript">// A - Stand能力のID
 "the-world" | "star-platinum" | "crazy-diamond";
 
@@ -687,7 +691,7 @@ interface Stand {
                 <section>
                     <h4>理解度チェック⑤</h4>
                     <div class="quiz">
-                        <h3>どの構文が正しい？</h3>
+                        <h3>どの構文が正しい？<span class="annotation">※複数回答</span></h3>
                         <div class="comparison">
                             <pre><code class="code-small language-typescript">type Stand = {
   name: string;
@@ -747,7 +751,7 @@ interface HamonUser2 extends Hamon { // D
             <!-- Enums -->
             <section>
                 <section>
-                    <h1>enum</h1>
+                    <h1>enum【列挙型】</h1>
                     <ul class="fragment">
                         <li><strong>名前付き定数</strong>の集合を定義</li>
                         <li>数値・文字列・異種混合の3タイプ</li>
@@ -906,7 +910,7 @@ function processUser(name?: string) {
   console.log(name); // 引数を渡さなければ undefined
 }
 
-const user = { name: "dio" };
+const user: any = { name: "dio" };
 console.log(user.age); // 存在しないプロパティは undefined
         </code></pre>
                     <div class="note">
@@ -1128,7 +1132,7 @@ function getStandPowerSafe(stand?: Stand) {
             <!-- Type Assertions -->
             <section>
                 <section>
-                    <h2>Type Assertions（型アサーション）</h2>
+                    <h2>Type Assertions【型アサーション】</h2>
                     <p>「この値は絶対この型だ」とTypeScriptに伝える</p>
                     <pre><code data-trim class="language-typescript">
 // 2つの書き方
@@ -1353,7 +1357,7 @@ Dog.prototype.bark = function() {
                 </section>
 
                 <section>
-                    <h2>ES6のclassは糖衣構文</h2>
+                    <h2>JSのclassは糖衣構文</h2>
                     <div class="fragment">
                         <h3>実際には同じ</h3>
                         <div class="comparison">
@@ -1380,19 +1384,19 @@ Dog.prototype.bark = function() {
                         </div>
                     </div>
                     <aside class="notes">
-                        ES6のclassについて説明「せつめい」します。これは糖衣構文「とういこうぶん」です。見「み」た目「め」が綺麗「きれい」になっただけです。内部「ないぶ」では同「おな」じことをしています。プロトタイプを使「つか」っています。
+                        JSのclassについて説明「せつめい」します。これは糖衣構文「とういこうぶん」です。見「み」た目「め」が綺麗「きれい」になっただけです。内部「ないぶ」では同「おな」じことをしています。プロトタイプを使「つか」っています。
                     </aside>
                 </section>
 
                 <section>
                     <h2>なぜ理解が重要？</h2>
                     <ul>
-                        <li class="fragment"><code>this</code>の動作を理解するため</li>
-                        <li class="fragment">継承の仕組みを把握するため</li>
-                        <li class="fragment">デバッグ時に内部動作を追跡できる</li>
-                        <li class="fragment">TypeScriptの型システムとの関係</li>
+                        <li><code>this</code>の動作を理解するため</li>
+                        <li>継承の仕組みを把握するため</li>
+                        <li>デバッグ時に内部動作を追跡できる</li>
+                        <li>TypeScriptの型システムとの関係</li>
                     </ul>
-                    <div class="fragment note">
+                    <div class="note">
                         <code>class</code>はプロトタイプの「見た目をよくしたもの」
                     </div>
                     <aside class="notes">
@@ -1703,27 +1707,6 @@ const dio = new StandModule.default("DIO", new StandModule.Stand("ザ・ワー�
                     </aside>
                 </section>
                 <section>
-                    <h3>実はもう使っている！</h3>
-                    <pre><code class="language-typescript code-medium">// 普段書いているこれもジェネリクス
-const stands: string[] = ["star platinum", "the world"];
-const numbers: number[] = [1, 2, 3];
-
-// 実は以下と同じ意味
-const stands: Array&lt;string&gt; = ["star platinum", "the world"];
-const numbers: Array&lt;number&gt; = [1, 2, 3];
-
-// Promise も同じ
-const response: Promise&lt;string&gt; = fetch("/api").then(r => r.text());</code></pre>
-                    <div class="note">
-                        <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code> などはジェネリクスの典型例。<br>
-                        <code>&lt;T&gt;</code> の部分に具体的な型を入れて使う。もう慣れ親しんでいる！
-                    </div>
-                    <aside class="notes">
-                        実「じつ」は、もうジェネリクスを使「つか」っています。string配列「はいれつ」やnumber配列「はいれつ」を書「か」く時「とき」、これもジェネリクスです。Array<string>
-                            とPromise<string>も同「おな」じです。<T>の部分「ぶぶん」に具体的「ぐたいてき」な型「かた」を入「い」れて使「つか」います。もう慣「な」れ親「した」しんでいますね。
-                    </aside>
-                </section>
-                <section>
                     <h3>なぜ必要？</h3>
                     <pre><code class="language-typescript code-medium" data-line-numbers="1-4|6-13|">// ジェネリクスなしだと...
 function getFirstStand(stands: Stand[]): Stand { return stands[0]; }
@@ -1768,6 +1751,27 @@ console.log(result2.toUpperCase()); // OK: 型推論で string と判定</code><
                     </aside>
                 </section>
                 <section>
+                    <h3>実はもう使っている！</h3>
+                    <pre><code class="language-typescript code-medium">// 普段書いているこれもジェネリクス
+const stands: string[] = ["star platinum", "the world"];
+const numbers: number[] = [1, 2, 3];
+
+// 実は以下と同じ意味
+const stands: Array&lt;string&gt; = ["star platinum", "the world"];
+const numbers: Array&lt;number&gt; = [1, 2, 3];
+
+// Promise も同じ
+const response: Promise&lt;string&gt; = fetch("/api").then(r => r.text());</code></pre>
+                    <div class="note">
+                        <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code> などはジェネリクスの典型例。<br>
+                        <code>&lt;T&gt;</code> の部分に具体的な型を入れて使う。もう慣れ親しんでいる！
+                    </div>
+                    <aside class="notes">
+                        実「じつ」は、もうジェネリクスを使「つか」っています。string配列「はいれつ」やnumber配列「はいれつ」を書「か」く時「とき」、これもジェネリクスです。Array<string>
+                            とPromise<string>も同「おな」じです。<T>の部分「ぶぶん」に具体的「ぐたいてき」な型「かた」を入「い」れて使「つか」います。もう慣「な」れ親「した」しんでいますね。
+                    </aside>
+                </section>
+                <section>
                     <h3>基本的な使い方</h3>
                     <pre><code class="language-typescript code-medium">// 複数の型パラメータ - 関連する異なる型を扱う時
 function createPair&lt;T, U&gt;(first: T, second: U): [T, U] {
@@ -1795,7 +1799,7 @@ const response = createPair(userData, { timestamp: Date.now() });
                 <section>
                     <h4>理解度チェック⑦</h4>
                     <div class="quiz">
-                        <h3>なぜこのコードは any より generics の方が良い？</h3>
+                        <h3>なぜこのコードは any よりジェネリクスの方が良い？</h3>
                         <pre><code class="code-small language-typescript">// any 版
 function processData(data: any): any {
   return data;
@@ -2120,7 +2124,7 @@ type ArrayCheck2 = IsArray&lt;string&gt;;    // false</code></pre>
                     <h2>Utility Types【ユーティリティ型】</h2>
                     <p>TypeScriptが提供する便利な型変換ツール</p>
                     <aside class="notes">
-                        ユーティリティ型「ゆーてぃりてぃがた」について説明「せつめい」します。TypeScriptが提供「ていきょう」する便利「べんり」な型変換「かたへんかん」ツールです。既存「きそん」の型「かた」から新「あたら」しい型「かた」を作「つく」ることができます。
+                        ユーティリティ型「がた」について説明「せつめい」します。既存「きそん」の型「かた」から新「あたら」しい型「かた」を作「つく」る便利「べんり」なツールです。
                     </aside>
                 </section>
 
@@ -2149,10 +2153,11 @@ type UserStatus = Record&lt;string, boolean&gt;; // { [key: string]: boolean; }<
                         手動で型を定義し直す必要がなく、元の型が変更されても自動で追従する。
                     </div>
                     <aside class="notes">
-                        基本的「きほんてき」なユーティリティ型「がた」を見「み」ましょう。まずUserインターフェースがあります。id、name、email、isActiveの4「よん」つのプロパティがあります。これを使「つか」って新「あたら」しい型「かた」を作「つく」ります。
-                    </aside>
-                    <aside class="notes">
-                        Partial「ぱーしゃる」は全「すべ」てのプロパティを省略可能「しょうりゃくかのう」にします。Pick「ぴっく」は特定「とくてい」のプロパティだけ選択「せんたく」します。Omit「おみっと」は特定「とくてい」のプロパティを除外「じょがい」します。Record「れこーど」はキーと値「あたい」の型「かた」を指定「してい」してオブジェクト型「がた」を作成「さくせい」します。
+                        基本的「きほんてき」な4「よ」つを見「み」てみましょう。<br>
+                        Partial「ぱーしゃる」で全部「ぜんぶ」オプショナルに。<br>
+                        Pick「ぴっく」で必要「ひつよう」な部分「ぶぶん」だけ。<br>
+                        Omit「おみっと」で不要「ふよう」な部分「ぶぶん」を削除「さくじょ」。<br>
+                        Record「れこーど」でキー・バリューペアを定義「ていぎ」します。
                     </aside>
                 </section>
 
@@ -2179,10 +2184,9 @@ const config: Record&lt;string, string&gt; = {
                         特にAPI設計やフォーム処理でよく使う。
                     </div>
                     <aside class="notes">
-                        実用例「じつようれい」を見「み」ましょう。updateUser関数「かんすう」では、Partial「ぱーしゃる」を使「つか」って一部「いちぶ」のフィールドだけ更新「こうしん」できます。nameだけ、emailだけなど、必要「ひつよう」な部分「ぶぶん」だけ変更「へんこう」できます。
-                    </aside>
-                    <aside class="notes">
-                        getPublicProfile関数「かんすう」では、Omit「おみっと」を使「つか」ってidを隠「かく」します。公開用「こうかいよう」のプロフィールでは、idは見「み」せたくないからです。config設定「せってい」では、Record「れこーど」を使「つか」って動的「どうてき」なキーを持「も」つオブジェクトを作「つく」ります。
+                        実際「じっさい」の開発「かいはつ」でよく使「つか」う場面「ばめん」です。<br>
+                        API「えーぴーあい」の更新「こうしん」、公開「こうかい」データの作成「さくせい」、設定「せってい」の管理「かんり」など。<br>
+                        型安全性「がたあんぜんせい」を保「たも」ちながら柔軟「じゅうなん」に開発「かいはつ」できます。
                     </aside>
                 </section>
                 <section>
@@ -2198,7 +2202,11 @@ const config: Record&lt;string, string&gt; = {
                         手動で型を複製するより、ユーティリティ型を使う方が安全。
                     </div>
                     <aside class="notes">
-                        ユーティリティ型「がた」の使「つか」い分「わ」けを覚「おぼ」えましょう。Partial「ぱーしゃる」は更新処理「こうしんしょり」で使「つか」います。Pick「ぴっく」は大「おお」きな型「かた」から必要「ひつよう」な部分「ぶぶん」だけ取「と」ります。Omit「おみっと」は特定「とくてい」のフィールドを隠「かく」します。Record「れこーど」は動的「どうてき」なキーを持「も」つオブジェクト型「がた」を作「つく」ります。
+                        どれを使「つか」うか迷「まよ」ったときのコツです。<br>
+                        「一部「いちぶ」だけ変更「へんこう」」ならPartial「ぱーしゃる」。<br>
+                        「必要「ひつよう」な部分「ぶぶん」だけ」ならPick「ぴっく」。<br>
+                        「隠「かく」したい部分「ぶぶん」がある」ならOmit「おみっと」。<br>
+                        「キーが決「き」まっていない」ならRecord「れこーど」です。
                     </aside>
                 </section>
             </section>
