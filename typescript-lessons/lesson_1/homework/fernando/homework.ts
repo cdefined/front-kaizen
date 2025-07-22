@@ -5,11 +5,9 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
-  // TODO: 実装
   return `${zanpakuto.name} (${zanpakuto.owner}) - ${capitalize(
     zanpakuto.type
   )} Type [${zanpakuto.isReleased ? "Released" : "Sealed"}]`;
-  throw new Error("Not implemented");
 }
 
 // 2. filterByType
@@ -17,24 +15,19 @@ function filterByType(
   zanpakutos: Zanpakuto[],
   targetType: Zanpakuto["type"]
 ): Zanpakuto[] {
-  // TODO: 実装
   return zanpakutos.filter((item) => item.type === targetType);
-  throw new Error("Not implemented");
 }
 
 // 3. hasBankai (type guard)
 function hasBankai(
   zanpakuto: Zanpakuto
 ): zanpakuto is Zanpakuto & { bankai: string } {
-  // TODO: 実装
-  return "bankai" in zanpakuto;
-  throw new Error("Not implemented");
+  return "bankai" in zanpakuto && typeof zanpakuto["bankai"] === "string";
 }
 
 // 4. getRankings
 function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
-  // TODO: 実装
-  return zanpakutos
+  return [...zanpakutos]
     .sort((a, b) => b.powerLevel - a.powerLevel)
     .slice(0, topN)
     .map(
@@ -43,7 +36,6 @@ function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
           zanpakuto.powerLevel
         }`
     );
-  throw new Error("Not implemented");
 }
 
 // テスト
