@@ -1,4 +1,4 @@
-import { type Zanpakuto, zanpakutoCollection } from "./data";
+import { type Zanpakuto, zanpakutoCollection } from "../data";
 
 // ここに関数を実装してください
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
