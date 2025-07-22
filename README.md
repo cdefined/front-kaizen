@@ -11,7 +11,7 @@
 
 ## 2. TypeScript 入門 ②
 
-interface、type、enum、ジェネリクス、型の拡
+interface、type、型の拡、enum、クラス、ジェネリクス、ユーティリティ型
 
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/typescript-lessons/lesson_2/slides.html)
 - [プレゼンテーションのコード例](/typescript-lessons/lesson_2/slides_examples.ts)
@@ -20,9 +20,25 @@ interface、type、enum、ジェネリクス、型の拡
 
 ## コードレビューと提出
 
-1. このリポジトリを **clone** する
-1. `.devcontainer` に TypeScript がインストール済みなので、VSCode の Dev Containers 機能を使って簡単に開発環境を構築できる
-1. `master` ブランチから新しいブランチを切り、作業を行う（例: `feat/lesson1`）
-1. 課題を完了させたら、**Pull Request** を作成する
+### 準備
+
+1. リポジトリを **clone**
+1. `.devcontainer` で [VSCode Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) 使用
+1. 各レッスンの `lesson_*/homework/` に自分のディレクトリ作成（例: `karino`）
+1. オリジナルの `homework.ts` を自分のディレクトリにコピー
+
+### 作業フロー
+
+1. `master` から新ブランチ切る（例: `feat/lesson1`）
+1. 自分のディレクトリの `homework.ts` で課題対応
+1. `npm run run-homework [lesson名] [受講者名]` で実行テスト
+
+   - lesson 名: `lesson1`（アンダースコア無し）
+   - 受講者名: ディレクトリ名と一致させる
+
+1. **Pull Request** 作成
 1. レビュー後にフィードバックがあれば、修正して再度 push する
-1. Pull Request のコメントは自由で、気軽に難しかった点などを書いてください
+
+### 注意
+
+- PR のコメントは自由で、気軽に難しかった点などを書いてください
