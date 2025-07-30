@@ -19,7 +19,7 @@ const RevealTimer = {
         style.textContent = `
             .reveal .timer {
                 color: #667eea;
-                margin: 20px auto;
+                margin: 0 auto;
                 max-width: 400px;
             }
 
@@ -30,7 +30,6 @@ const RevealTimer = {
                 display: flex;
                 align-items: flex-start;
                 justify-content: center;
-                margin-bottom: 20px;
             }
 
             .reveal .timer .time-input {
