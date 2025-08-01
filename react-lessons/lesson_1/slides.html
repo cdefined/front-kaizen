@@ -362,7 +362,7 @@ button.addEventListener('click', () => {
                     </ul>
 
                     <div class="note">
-                        <p>これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix等のフレームワーク）</p>
+                        これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix等のフレームワーク）
                     </div>
                 </section>
 
@@ -467,7 +467,7 @@ button.addEventListener('click', () => {
                     </table>
 
                     <div class="note">
-                        <p><strong>結論</strong>：Reactは学習コストとエコシステムのバランスが良く、転職市場でも最も有利</p>
+                        <strong>結論</strong>：Reactは学習コストとエコシステムのバランスが良く、転職市場でも最も有利
                     </div>
                 </section>
             </section>
@@ -677,6 +677,130 @@ function Greeting({ name, age }) {  // 分割代入
 // 使用
 &lt;Greeting name="Kurosaki Ichigo" age={15} /&gt;</code></pre>
                     <p class="note">propsは<strong>読み取り専用</strong></p>
+                </section>
+
+                <!-- Components Deep Dive - Add after existing component intro -->
+                <section>
+                    <h2>コンポーネントの解剖学</h2>
+                    <pre><code data-lang="jsx" class="code-medium-small">// 1. 関数宣言（大文字で始める）
+function UserCard({ name, email, isAdmin }) {
+  // 2. ロジック（普通のJS）
+  const roleText = isAdmin ? 'Admin' : 'User';
+  
+  // 3. JSXを返す（必須）
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+      &lt;span&gt;{roleText}&lt;/span&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+                    <pre><code data-lang="jsx" class="code-medium-small">// 4. 使用 = HTMLタグみたいに
+&lt;UserCard name="コヨーテ　スターク" email="starrk@espada.es" isAdmin={true} /&gt;</code></pre>
+                </section>
+
+                <!-- Props Explained Better -->
+                <section>
+                    <h2>Props詳細: データの流れ</h2>
+                    <div class="comparison">
+                        <div>
+                            <p>Railsのpartial:</p>
+                            <pre><code data-lang="erb">&lt;%= render 'user_card', 
+    user: @user, 
+    show_admin: true %&gt;</code></pre>
+                        </div>
+                        <div>
+                            <p>Reactのcomponent:</p>
+                            <pre><code data-lang="jsx">&lt;UserCard 
+  name={user.name}
+  email={user.email} 
+  isAdmin={true} /&gt;</code></pre>
+                        </div>
+                    </div>
+                    <div class="note">props = partial variables みたいなもの</div>
+                </section>
+
+                <!-- Props Destructuring Explained -->
+                <section>
+                    <h2>Props受け取り方法</h2>
+                    <pre><code data-lang="jsx">// 方法1: propsオブジェクトそのまま
+function Greeting(props) {
+  return &lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;;
+}
+
+// 方法2: 分割代入（destructuring）- 推奨
+function Greeting({ name, age }) {
+  return &lt;h1&gt;Hello, {name}! You are {age}&lt;/h1&gt;;
+}
+
+// 方法3: 分割代入 + デフォルト値
+function Greeting({ name = "Guest", age = 0 }) {
+  return &lt;h1&gt;Hello, {name}! You are {age}&lt;/h1&gt;;
+}</code></pre>
+                    <div class="note">分割代入 = JSの機能、Reactじゃない</div>
+                </section>
+
+                <!-- Component Composition -->
+                <section>
+                    <h2>コンポーネント合成: 積み木みたいに</h2>
+                    <pre><code data-lang="jsx">// 小さいコンポーネント
+function Avatar({ src, alt }) {
+  return &lt;img src={src} alt={alt} className="avatar" /&gt;;
+}
+
+function UserName({ name, isOnline }) {
+  return (
+    &lt;span className={`username ${isOnline ? 'online' : 'offline'}`}&gt;
+      {name}
+    &lt;/span&gt;
+  );
+}</code></pre>
+
+                    <pre><code data-lang="jsx">// 合成して大きいコンポーネント
+function UserProfile({ user }) {
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;Avatar src={user.avatar} alt={user.name} /&gt;
+      &lt;UserName name={user.name} isOnline={user.isOnline} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                </section>
+
+                <!-- Children Prop -->
+                <section>
+                    <h2>children prop: タグの中身</h2>
+                    <pre><code data-lang="jsx">// Cardコンポーネント
+function Card({ title, children }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      &lt;div className="card-content"&gt;
+        {children}  {/* ここに中身が入る */}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+                    <pre><code data-lang="jsx">// 使用方法
+&lt;Card title="Profile"&gt;
+  &lt;p&gt;This goes into children&lt;/p&gt;
+  &lt;button&gt;Edit Profile&lt;/button&gt;
+&lt;/Card&gt;</code></pre>
+                    <div class="note">children = タグで囲んだ中身すべて</div>
+                </section>
+
+                <!-- Component Best Practices -->
+                <section>
+                    <h2>コンポーネントのベストプラクティス</h2>
+                    <ul>
+                        <li><strong>1つの責任</strong>: 1コンポーネント = 1つの仕事</li>
+                        <li><strong>純粋関数</strong>: 同じprops → 同じ結果</li>
+                        <li><strong>再利用可能</strong>: 複数の場所で使える設計</li>
+                        <li><strong>分かりやすい名前</strong>: 何をするか名前で分かる</li>
+                    </ul>
                 </section>
 
                 <!-- Event listeners -->
