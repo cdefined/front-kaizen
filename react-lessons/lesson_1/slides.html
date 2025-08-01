@@ -492,17 +492,15 @@ button.addEventListener('click', () => {
                     <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
                 </dl>
             </section>
-
+            <!-- Section 1: JSX Basics -->
             <section>
                 <section>
-                    <h1>Reactの核となる概念</h1>
-                    <p>JSX、コンポーネント</p>
+                    <h1>JSX = JavaScript + XML</h1>
+                    <p>普通のHTMLから始めよう</p>
                 </section>
 
-                <!-- JSXとは -->
                 <section>
-                    <h2>JSX = JavaScript + XML</h2>
-                    <p>普通のHTMLから始めよう</p>
+                    <h2>HTMLをそのまま書ける</h2>
                     <pre><code data-lang="html">&lt;div class="greeting"&gt;
   &lt;h1&gt;Hello, World!&lt;/h1&gt;
   &lt;p&gt;今日はいい天気ですね&lt;/p&gt;
@@ -527,98 +525,26 @@ button.addEventListener('click', () => {
                     </div>
                 </section>
 
-                <!-- JSX in depth -->
                 <section>
-                    <h2>JSXの正体: ただの関数呼び出し</h2>
+                    <h2>JSXの正体</h2>
                     <p>JSXはこれにコンパイルされる：</p>
-                    <pre><code data-lang="jsx">function Greeting() {
-  return React.createElement(
-    "div",
-    { className: "greeting" },
-    React.createElement("h1", null, "Hello, World!"),
-    React.createElement("p", null, "今日はいい天気ですね")
-  );
-}</code></pre>
-                    <div class="note">
-                        つまり<strong>JSX = syntactic sugar</strong>
-                    </div>
+                    <pre><code data-lang="jsx">// JSX
+&lt;div className="greeting"&gt;Hello!&lt;/div&gt;
+
+// ↓ コンパイル後
+React.createElement(
+  "div",
+  { className: "greeting" },
+  "Hello!"
+);</code></pre>
+                    <div class="note">つまり<strong>JSX = syntactic sugar</strong></div>
                 </section>
 
-                <!-- JavaScript in brackets -->
                 <section>
-                    <h2>JavaScriptを埋め込む: {}</h2>
-                    <pre><code data-lang="jsx">function User({ name, email, isAdmin }) {
-  const greeting = isAdmin ? 'Captain' : 'Squad Member';
-  
-  return (
-    &lt;div className="user-card"&gt;
-      &lt;h2&gt;{name}&lt;/h2&gt;
-      &lt;p&gt;{email}&lt;/p&gt;
-      &lt;span&gt;Role: {greeting}&lt;/span&gt;
-      &lt;small&gt;登録日: {new Date().getFullYear()}年&lt;/small&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-                    <div class="note"><code>{}</code>の中は普通のJavaScript式（ERBの<code>&lt;%= %&gt;</code>みたいなもの）</note>
-                </section>
-
-                <!-- JSX vs ERB -->
-                <section>
-                    <h2>配列をレンダリング</h2>
-                    <div class="comparison">
-                        <div>
-                            <p>JSXだとこう:</p>
-                            <pre><code data-lang="jsx">function TodoList({ todos }) {
-  return (
-    &lt;ul&gt;
-      {todos.map(todo =&gt; (
-        &lt;li key={todo.id}&gt;
-          {todo.text}
-        &lt;/li&gt;
-      ))}
-    &lt;/ul&gt;
-  );
-}</code></pre>
-                        </div>
-                        <div>
-                            <p>ERBだとこう:</p>
-                            <pre><code data-lang="erb">&lt;ul&gt;
-  &lt;% @todos.each do |todo| %&gt;
-    &lt;li&gt;&lt;%= todo.text %&gt;&lt;/li&gt;
-  &lt;% end %&gt;
-&lt;/ul&gt;</code></pre>
-                        </div>
-                    </div>
-                    <div class="note">
-                        <code>key</code>は必須！Reactが効率的に更新するため
-                    </div>
-                </section>
-
-                <!-- Conditionals -->
-                <section>
-                    <h2>条件レンダリング: ERBっぽいけどJS</h2>
-                    <pre><code data-lang="jsx" class="code-small">function UserProfile({ user, isLoggedIn }) {
-  return (
-    &lt;div&gt;
-      {isLoggedIn ? ( // 三項演算子 - ERBの&lt;% if %&gt;っぽい 
-        &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;
-      ) : (
-        &lt;h1&gt;Please log in&lt;/h1&gt;
-      )}
-      {user.isAdmin && ( // && で条件表示 - ERBの&lt;% if %&gt;(else無し)
-        &lt;div className="admin-panel"&gt;Admin tools&lt;/div&gt;
-      )}
-    &lt;/div&gt;
-  );
-}</code></pre>
-                </section>
-
-                <!-- My JSX, my Rules -->
-                <section>
-                    <h2>JSXのルール（重要）</h2>
-                    <ul>
-                        <li class="fragment"><strong>必ず1つの要素を返す</strong>
-                            <pre><code data-lang="jsx">// ❌ ダメ
+                    <h2>JSXのルール</h2>
+                    <div class="fragment">
+                        <h3>1. 必ず1つの要素を返す</h3>
+                        <pre><code data-lang="jsx">// ❌ ダメ
 return (
   &lt;h1&gt;Title&lt;/h1&gt;
   &lt;p&gt;Content&lt;/p&gt;
@@ -631,46 +557,243 @@ return (
     &lt;p&gt;Content&lt;/p&gt;
   &lt;/&gt;
 );</code></pre>
-                        </li>
-                        <li class="fragment"><strong>すべてのタグを閉じる</strong>: <code>&lt;br /&gt;</code>,
-                            <code>&lt;img /&gt;</code>
-                        </li>
-                        <li class="fragment"><strong>camelCase属性</strong>: <code>onClick</code>, <code>className</code>,
-                            <code>htmlFor</code>
-                        </li>
-                    </ul>
+                    </div>
                 </section>
 
-                <!-- Components -->
                 <section>
-                    <h2>コンポーネント = 関数</h2>
+                    <h2>JSXのルール</h2>
+                    <div>
+                        <h3>2. すべてのタグを閉じる</h3>
+                        <pre><code data-lang="jsx">// ❌ HTML風だとダメ
+&lt;br&gt;
+&lt;img src="photo.jpg"&gt;
+&lt;input type="text"&gt;
+
+// ✅ 必ず閉じる
+&lt;br /&gt;
+&lt;img src="photo.jpg" /&gt;
+&lt;input type="text" /&gt;</code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>JSXのルール</h2>
+                    <div>
+                        <h3>3. camelCase属性</h3>
+                        <pre><code data-lang="jsx">// ❌ HTML属性名
+&lt;div class="container" onclick="handleClick()"&gt;
+&lt;label for="email"&gt;
+
+// ✅ camelCase
+&lt;div className="container" onClick={handleClick}&gt;
+&lt;label htmlFor="email"&gt;</code></pre>
+                        <div class="note">
+                            <code>class</code> → <code>className</code><br>
+                            <code>for</code> → <code>htmlFor</code><br>
+                            <code>onclick</code> → <code>onClick</code>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 2: JavaScript in JSX -->
+            <section>
+                <section>
+                    <h1>JSXにJavaScriptを埋め込む</h1>
+                    <p>{}で動的コンテンツ</p>
+                </section>
+
+                <section>
+                    <h2>変数を表示: {}</h2>
+                    <pre><code data-lang="jsx">function User({ name, email }) {
+  const greeting = 'こんにちは';
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{greeting}, {name}さん&lt;/h2&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+      &lt;p&gt;今年は{new Date().getFullYear()}年です。&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note"><code>{}</code>の中は普通のJavaScript式</div>
+                </section>
+
+                <section>
+                    <h2>条件レンダリング: 三項演算子</h2>
+                    <pre><code data-lang="jsx">function UserProfile({ user, isLoggedIn }) {
+  return (
+    &lt;div&gt;
+      {isLoggedIn ? (
+        &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;  {/* trueの場合 */}
+      ) : (
+        &lt;h1&gt;Please log in&lt;/h1&gt;          {/* falseの場合 */}
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note">
+                        <code>condition ? trueの時 : falseの時</code><br>
+                        必ず両方の場合を書く必要がある
+                    </div>
+                </section>
+
+                <section>
+                    <h2>条件レンダリング: && 演算子</h2>
+                    <pre><code data-lang="jsx">function UserProfile({ user }) {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;
+      {user.isAdmin && (
+        &lt;div className="admin-panel"&gt;  {/* trueの時だけ表示 */}
+          Admin tools
+        &lt;/div&gt;
+      )}
+      {user.notifications.length > 0 && &lt;span&gt;You have {user.notifications.length} messages&lt;/span&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note">
+                        <code>condition && JSX</code><br>
+                        falseの時は何も表示しない（elseが不要な時）
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ERBとの比較</h2>
+                    <div class="comparison">
+                        <div>
+                            <p>JSX:</p>
+                            <pre><code data-lang="jsx">{user.loggedIn ? (
+  &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;
+) : (
+  &lt;h1&gt;Please log in&lt;/h1&gt;
+)}
+
+{user.isAdmin && (
+  &lt;div className="admin-panel"&gt;
+    Admin tools
+  &lt;/div&gt;
+)}</code></pre>
+                        </div>
+                        <div>
+                            <p>ERB:</p>
+                            <pre><code data-lang="erb">&lt;% if user.logged_in? %&gt;
+  &lt;h1&gt;Welcome &lt;%= user.name %&gt;!&lt;/h1&gt;
+&lt;% else %&gt;
+  &lt;h1&gt;Please log in&lt;/h1&gt;
+&lt;% end %&gt;
+
+&lt;% if user.admin? %&gt;
+  &lt;div class="admin-panel"&gt;
+    Admin tools
+  &lt;/div&gt;
+&lt;% end %&gt;</code></pre>
+                        </div>
+                    </div>
+                    <div class="note">JSXは式だからreturnの中に直接書ける</div>
+                </section>
+
+                <section>
+                    <h2>配列をレンダリング</h2>
+                    <pre><code data-lang="jsx">function TodoList({ todos }) {
+  return (
+    &lt;ul&gt;
+      {todos.map(todo =&gt; (
+        &lt;li key={todo.id}&gt;
+          {todo.text}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+                    <div class="note">
+                        <code>key</code>は必須！Reactが効率的に更新するため
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 3: Components Basics -->
+            <section>
+                <section>
+                    <h1>コンポーネント = 関数</h1>
+                    <p>再利用できるUI部品</p>
+                </section>
+
+                <section>
+                    <h2>最初のコンポーネント</h2>
                     <pre><code data-lang="jsx">// これがコンポーネント
-function Welcome({ name }) {
-  return &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+function Welcome() {
+  return &lt;h1&gt;Hello, World!&lt;/h1&gt;;
 }
 
 // 使う時
 function App() {
   return (
     &lt;div&gt;
-      &lt;Welcome name="Mayuri Kurotsuchi" /&gt;
-      &lt;Welcome name="Sosuke Aizen" /&gt;
+      &lt;Welcome /&gt;
+      &lt;Welcome /&gt;
     &lt;/div&gt;
   );
 }</code></pre>
                     <div class="note">関数名は<strong>大文字で始める</strong>（HTMLタグと区別するため）</div>
                 </section>
 
-                <!-- Props -->
                 <section>
-                    <h2>Props = 関数の引数</h2>
+                    <h2>コンポーネントの解剖学</h2>
+                    <pre><code data-lang="jsx">// 1. 関数宣言（大文字で始める）
+function UserCard() {
+  // 2. ロジック（普通のJS）
+  const userName = 'Ichigo Kurosaki';
+  
+  // 3. JSXを返す（必須）
+  return (
+    &lt;div className="user-card"&gt;
+      &lt;h3&gt;{userName}&lt;/h3&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                </section>
+
+                <section>
+                    <h2>コンポーネント合成</h2>
+                    <pre><code data-lang="jsx">// 小さいコンポーネント
+function Avatar({ src, alt }) {
+  return &lt;img src={src} alt={alt} className="avatar" /&gt;;
+}
+
+function UserName({ name }) {
+  return &lt;span className="username"&gt;{name}&lt;/span&gt;;
+}</code></pre>
+
+                    <pre><code data-lang="jsx">// 合成して大きいコンポーネント
+function UserProfile({ user }) {
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;Avatar src={user.avatar} alt={user.name} /&gt;
+      &lt;UserName name={user.name} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                </section>
+            </section>
+
+            <!-- Section 4: Props -->
+            <section>
+                <section>
+                    <h1>Props = 関数の引数</h1>
+                    <p>コンポーネントにデータを渡す</p>
+                </section>
+
+                <section>
+                    <h2>Props基本</h2>
                     <pre><code data-lang="jsx">// 普通の関数
 function greet(name, age) {
   return `こんにちは、${name}さん（${age}歳）`;
 }
 
 // Reactコンポーネント
-function Greeting({ name, age }) {  // 分割代入
+function Greeting({ name, age }) {
   return &lt;p&gt;こんにちは、{name}さん（{age}歳）&lt;/p&gt;;
 }
 
@@ -679,50 +802,6 @@ function Greeting({ name, age }) {  // 分割代入
                     <p class="note">propsは<strong>読み取り専用</strong></p>
                 </section>
 
-                <!-- Components Deep Dive - Add after existing component intro -->
-                <section>
-                    <h2>コンポーネントの解剖学</h2>
-                    <pre><code data-lang="jsx" class="code-medium-small">// 1. 関数宣言（大文字で始める）
-function UserCard({ name, email, isAdmin }) {
-  // 2. ロジック（普通のJS）
-  const roleText = isAdmin ? 'Admin' : 'User';
-  
-  // 3. JSXを返す（必須）
-  return (
-    &lt;div&gt;
-      &lt;h3&gt;{name}&lt;/h3&gt;
-      &lt;p&gt;{email}&lt;/p&gt;
-      &lt;span&gt;{roleText}&lt;/span&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-
-                    <pre><code data-lang="jsx" class="code-medium-small">// 4. 使用 = HTMLタグみたいに
-&lt;UserCard name="コヨーテ　スターク" email="starrk@espada.es" isAdmin={true} /&gt;</code></pre>
-                </section>
-
-                <!-- Props Explained Better -->
-                <section>
-                    <h2>Props詳細: データの流れ</h2>
-                    <div class="comparison">
-                        <div>
-                            <p>Railsのpartial:</p>
-                            <pre><code data-lang="erb">&lt;%= render 'user_card', 
-    user: @user, 
-    show_admin: true %&gt;</code></pre>
-                        </div>
-                        <div>
-                            <p>Reactのcomponent:</p>
-                            <pre><code data-lang="jsx">&lt;UserCard 
-  name={user.name}
-  email={user.email} 
-  isAdmin={true} /&gt;</code></pre>
-                        </div>
-                    </div>
-                    <div class="note">props = partial variables みたいなもの</div>
-                </section>
-
-                <!-- Props Destructuring Explained -->
                 <section>
                     <h2>Props受け取り方法</h2>
                     <pre><code data-lang="jsx">// 方法1: propsオブジェクトそのまま
@@ -735,50 +814,21 @@ function Greeting({ name, age }) {
   return &lt;h1&gt;Hello, {name}! You are {age}&lt;/h1&gt;;
 }
 
-// 方法3: 分割代入 + デフォルト値
+// 方法3: デフォルト値
 function Greeting({ name = "Guest", age = 0 }) {
   return &lt;h1&gt;Hello, {name}! You are {age}&lt;/h1&gt;;
 }</code></pre>
-                    <div class="note">分割代入 = JSの機能、Reactじゃない</div>
                 </section>
 
-                <!-- Component Composition -->
                 <section>
-                    <h2>コンポーネント合成: 積み木みたいに</h2>
-                    <pre><code data-lang="jsx">// 小さいコンポーネント
-function Avatar({ src, alt }) {
-  return &lt;img src={src} alt={alt} className="avatar" /&gt;;
-}
-
-function UserName({ name, isOnline }) {
-  return (
-    &lt;span className={`username ${isOnline ? 'online' : 'offline'}`}&gt;
-      {name}
-    &lt;/span&gt;
-  );
-}</code></pre>
-
-                    <pre><code data-lang="jsx">// 合成して大きいコンポーネント
-function UserProfile({ user }) {
-  return (
-    &lt;div className="user-profile"&gt;
-      &lt;Avatar src={user.avatar} alt={user.name} /&gt;
-      &lt;UserName name={user.name} isOnline={user.isOnline} /&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-                </section>
-
-                <!-- Children Prop -->
-                <section>
-                    <h2>children prop: タグの中身</h2>
+                    <h2>children prop</h2>
                     <pre><code data-lang="jsx">// Cardコンポーネント
 function Card({ title, children }) {
   return (
     &lt;div className="card"&gt;
       &lt;h2&gt;{title}&lt;/h2&gt;
       &lt;div className="card-content"&gt;
-        {children}  {/* ここに中身が入る */}
+        {children}
       &lt;/div&gt;
     &lt;/div&gt;
   );
@@ -792,63 +842,46 @@ function Card({ title, children }) {
                     <div class="note">children = タグで囲んだ中身すべて</div>
                 </section>
 
-                <!-- Component Best Practices -->
-                <section>
-                    <h2>コンポーネントのベストプラクティス</h2>
-                    <ul>
-                        <li><strong>1つの責任</strong>: 1コンポーネント = 1つの仕事</li>
-                        <li><strong>純粋関数</strong>: 同じprops → 同じ結果</li>
-                        <li><strong>再利用可能</strong>: 複数の場所で使える設計</li>
-                        <li><strong>分かりやすい名前</strong>: 何をするか名前で分かる</li>
-                    </ul>
-                </section>
-
-                <!-- Event listeners -->
                 <section>
                     <h2>イベントハンドラー</h2>
-                    <pre><code data-lang="jsx">function Button() {
-  const handleClick = () => {
-    alert('クリックされた！');
-  };
-
+                    <pre><code data-lang="jsx">function Button({ onClick, children }) {
   return (
-    &lt;button onClick={handleClick}&gt;
-      クリックして
+    &lt;button onClick={onClick}&gt;
+      {children}
     &lt;/button&gt;
   );
 }</code></pre>
-                    <div class="note"><code>onClick</code> = 関数を渡すだけ</div>
-                </section>
 
-                <!-- Forms -->
-                <section>
-                    <h2>フォーム入力</h2>
-                    <pre><code data-lang="jsx">function LoginForm() {
-  const handleSubmit = (event) => {
-    event.preventDefault(); // フォーム送信を停止
-    console.log('ログイン処理');
-  };
-
+                    <pre><code data-lang="jsx">// 使用
+function App() {
+  const handleClick = () => alert('クリック！');
+  
   return (
-    &lt;form onSubmit={handleSubmit}&gt;
-      &lt;input type="email" placeholder="Email" /&gt;
-      &lt;input type="password" placeholder="Password" /&gt;
-      &lt;button type="submit"&gt;Login&lt;/button&gt;
-    &lt;/form&gt;
+    &lt;Button onClick={handleClick}&gt;
+      クリックして
+    &lt;/Button&gt;
   );
 }</code></pre>
-                    <div class="note">Railsフォームヘルパーの代わりに普通のHTML</div>
                 </section>
 
                 <section>
-                    <h2>まとめ</h2>
-                    <ul>
-                        <li class="fragment">HTMLライクな構文をJSに書ける</li>
-                        <li class="fragment">{}でJavaScript式を埋め込める</li>
-                        <li class="fragment">実際は<code>React.createElement()</code>の糖衣構文</li>
-                        <li class="fragment">コンポーネント = JSXを返す関数</li>
-                        <li class="fragment">イベントハンドラー = 関数を渡すだけ</li>
-                    </ul>
+                    <h2>Props vs Rails partials</h2>
+                    <div class="comparison">
+                        <div>
+                            <p>Reactのcomponent:</p>
+                            <pre><code data-lang="jsx">&lt;UserCard 
+  name={user.name}
+  email={user.email} 
+  isAdmin={true} /&gt;</code></pre>
+                        </div>
+                        <div>
+                            <p>Railsのpartial:</p>
+                            <pre><code data-lang="erb">&lt;%= render 'user_card', 
+    user: @user, 
+    show_admin: true %&gt;</code></pre>
+                        </div>
+                    </div>
+                    <div class="note">props = partial variables みたいなもの</div>
                 </section>
             </section>
 
