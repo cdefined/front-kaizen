@@ -915,10 +915,10 @@ mysteryB.toUpperCase(); // B</code></pre>
                 <!-- Practice -->
                 <section>
                     <h1>TypeScript 実践演習</h1>
-                    <h3>3つの課題 (各5-10分)</h3>
+                    <h3>1つの課題 (15-20分)</h3>
                     <p>今日学んだ内容を実際に使ってみよう！</p>
                     <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
+                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_1/task.md">react-lessons/lesson_1/task.md</a>
                     </div>
                 </section>
 
@@ -926,36 +926,48 @@ mysteryB.toUpperCase(); // B</code></pre>
                 <section>
                     <div class="timer"></div>
 
-                    <h2><span class="task-number">課題1</span> Union型とtype guard</h2>
+                    <h2><span class="task-number">課題1</span> Props付きのコンポーネント</h2>
 
-                    <p><strong>関数 <code>processId</code> を作成してください</strong></p>
+                    <p><strong><code>&lt;ZanpakutoCard&gt;</code> コンポーネントを作成してください</strong></p>
                     <ul>
-                        <li>引数 <code>id</code> は <code>number</code> または <code>string</code> のいずれかです</li>
-                        <li><code>number</code> の場合は <code>"ID: 123"</code>、<code>string</code> の場合は
-                            <code>"CODE: ABC"</code> の形式で返す
+                        <li><code>zanpakuto</code> オブジェクトを <strong>Props</strong> として受け取る</li>
+                        <li>以下のプロパティをすべて表示すること:
+                            <ul>
+                                <li><code>name</code>, <code>owner</code>, <code>type</code>, <code>bankai</code>,
+                                    <code>shikaiAbility</code>, <code>powerLevel</code>, <code>isReleased</code>
+                                </li>
+                            </ul>
                         </li>
+                        <li><code>bankai</code> は存在する場合のみ表示</li>
                     </ul>
 
-                    <pre><code data-lang="typescript">// テスト
-console.log(processId(123));    // "ID: 123"
-console.log(processId("ABC"));  // "CODE: ABC"
-                </code></pre>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/task.md">typescript-lessons/lesson_1/task.md</a>
-                    </div>
-                </section>
+                    <pre><code data-lang="typescript">export interface Zanpakuto {
+  name: string;
+  owner: string;
+  type: "melee" | "kido" | "elemental" | "illusion";
+  bankai?: string;
+  shikaiAbility: string;
+  powerLevel: number;
+  isReleased: boolean;
+}
+    </code></pre>
 
-                <!-- Task 1 Solution -->
+                    <div class="note"><a href="task.md">react-lessons/lesson_1/task.md</a></div>
+                </section>
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
-                    <p>型ガード　【type guard】を使うことができます</p>
-                    <pre><code data-lang="typescript">function processId(id: number | string): string {
-    // typeof演算子を使って型を判定
-    if (typeof id === "number") {
-        return `ID: ${id}`;
-    } else {
-        return `CODE: ${id}`;
-    }
+                    <p><code>props</code> を受け取って全てのプロパティを表示する</p>
+                    <pre><code data-lang="tsx">function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{zanpakuto.name}（{zanpakuto.owner}の斬魄刀）&lt;/h2&gt;
+      &lt;p&gt;タイプ: {zanpakuto.type}&lt;/p&gt;
+      {zanpakuto.bankai && &lt;p&gt;卍解: {zanpakuto.bankai}&lt;/p&gt;}
+      &lt;p&gt;始解能力: {zanpakuto.shikaiAbility}&lt;/p&gt;
+      &lt;p&gt;霊圧レベル: {zanpakuto.powerLevel}&lt;/p&gt;
+      &lt;p&gt;解放済み: {zanpakuto.isReleased ? "はい" : "いいえ"}&lt;/p&gt;
+    &lt;/div&gt;
+  );
 }</code></pre>
                 </section>
             </section>

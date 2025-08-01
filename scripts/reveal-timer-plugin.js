@@ -124,7 +124,7 @@ class Timer {
     render() {
         this.element.innerHTML = `
             <div class="time-container">
-                <input type="number" class="time-input minutes" id="minutes-${this.id}" min="0" max="59" value="5">
+                <input type="number" class="time-input minutes" id="minutes-${this.id}" min="0" max="59" value="15">
                 <span class="time-separator">:</span>
                 <input type="number" class="time-input seconds" id="seconds-${this.id}" min="0" max="59" value="0" step="10">
                 <div class="timer-display" id="display-${this.id}" hidden>05:00</div>
