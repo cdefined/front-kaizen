@@ -9,8 +9,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-
     <style>
         .reveal {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -174,18 +172,7 @@
         }
 
         .reveal pre code {
-            max-height: 500px;
-            font-size: 0.7em;
-            line-height: 1.4;
-        }
-
-        .reveal code {
-            color: #ff79c6;
-        }
-
-        .reveal .code-comment {
-            color: #6272a4;
-            font-style: italic;
+            padding: 1em;
         }
 
         .timer {
@@ -262,7 +249,7 @@
                     <div class="comparison">
                         <div class="comparison-item">
                             <h4>従来のJavaScript</h4>
-                            <pre><code class="language-javascript code-small">const button = document.getElementById('btn');
+                            <pre><code data-lang="javascript" class="code-small">const button = document.getElementById('btn');
 const counter = document.getElementById('count');
 let count = 0;
 
@@ -275,7 +262,7 @@ button.addEventListener('click', () => {
                         </div>
                         <div class="comparison-item">
                             <h4>React</h4>
-                            <pre><code class="language-jsx code-small">function Counter() {
+                            <pre><code data-lang="tsx" class="code-small">function Counter() {
   const [count, setCount] = useState(0);
   
   return (
@@ -487,24 +474,257 @@ button.addEventListener('click', () => {
 
             <!-- Core Concepts -->
             <section>
+                <h2>Reactの核となる概念</h2>
+                <dl>
+                    <dt><strong>コンポーネント</strong></dt>
+                    <dd>UIを独立した再利用可能な部品として作成</dd>
+
+                    <dt><strong>JSX</strong></dt>
+                    <dd>JavaScriptの中にHTMLライクな構文を書ける</dd>
+
+                    <dt><strong>State（状態）</strong></dt>
+                    <dd>コンポーネントが持つ変更可能なデータ</dd>
+
+                    <dt><strong>Props</strong></dt>
+                    <dd>親コンポーネントから子へ渡すデータ</dd>
+
+                    <dt><strong>仮想DOM</strong></dt>
+                    <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
+                </dl>
+            </section>
+
+            <section>
                 <section>
-                    <h2>Reactの核となる概念</h2>
-                    <dl>
-                        <dt><strong>コンポーネント</strong></dt>
-                        <dd>UIを独立した再利用可能な部品として作成</dd>
+                    <h1>Reactの核となる概念</h1>
+                    <p>JSX、コンポーネント</p>
+                </section>
 
-                        <dt><strong>JSX</strong></dt>
-                        <dd>JavaScriptの中にHTMLライクな構文を書ける</dd>
+                <!-- JSXとは -->
+                <section>
+                    <h2>JSX = JavaScript + XML</h2>
+                    <p>普通のHTMLから始めよう</p>
+                    <pre><code data-lang="html">&lt;div class="greeting"&gt;
+  &lt;h1&gt;Hello, World!&lt;/h1&gt;
+  &lt;p&gt;今日はいい天気ですね&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+                    <div class="fragment">
+                        <p>→ JSXならこれをJS関数の中に書ける</p>
+                    </div>
+                </section>
 
-                        <dt><strong>State（状態）</strong></dt>
-                        <dd>コンポーネントが持つ変更可能なデータ</dd>
+                <section>
+                    <h2>JSXの実際</h2>
+                    <pre><code data-lang="jsx">function Greeting() {
+  return (
+    &lt;div className="greeting"&gt;
+      &lt;h1&gt;Hello, World!&lt;/h1&gt;
+      &lt;p&gt;今日はいい天気ですね&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note">
+                        <code>className</code>に注意！ <code>class</code>はJSの予約語だから
+                    </div>
+                </section>
 
-                        <dt><strong>Props</strong></dt>
-                        <dd>親コンポーネントから子へ渡すデータ</dd>
+                <!-- JSX in depth -->
+                <section>
+                    <h2>JSXの正体: ただの関数呼び出し</h2>
+                    <p>JSXはこれにコンパイルされる：</p>
+                    <pre><code data-lang="jsx">function Greeting() {
+  return React.createElement(
+    "div",
+    { className: "greeting" },
+    React.createElement("h1", null, "Hello, World!"),
+    React.createElement("p", null, "今日はいい天気ですね")
+  );
+}</code></pre>
+                    <div class="note">
+                        つまり<strong>JSX = syntactic sugar</strong>
+                    </div>
+                </section>
 
-                        <dt><strong>仮想DOM</strong></dt>
-                        <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
-                    </dl>
+                <!-- JavaScript in brackets -->
+                <section>
+                    <h2>JavaScriptを埋め込む: {}</h2>
+                    <pre><code data-lang="jsx">function User({ name, email, isAdmin }) {
+  const greeting = isAdmin ? 'Captain' : 'Squad Member';
+  
+  return (
+    &lt;div className="user-card"&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+      &lt;span&gt;Role: {greeting}&lt;/span&gt;
+      &lt;small&gt;登録日: {new Date().getFullYear()}年&lt;/small&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note"><code>{}</code>の中は普通のJavaScript式（ERBの<code>&lt;%= %&gt;</code>みたいなもの）</note>
+                </section>
+
+                <!-- JSX vs ERB -->
+                <section>
+                    <h2>配列をレンダリング</h2>
+                    <div class="comparison">
+                        <div>
+                            <p>JSXだとこう:</p>
+                            <pre><code data-lang="jsx">function TodoList({ todos }) {
+  return (
+    &lt;ul&gt;
+      {todos.map(todo =&gt; (
+        &lt;li key={todo.id}&gt;
+          {todo.text}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+                        </div>
+                        <div>
+                            <p>ERBだとこう:</p>
+                            <pre><code data-lang="erb">&lt;ul&gt;
+  &lt;% @todos.each do |todo| %&gt;
+    &lt;li&gt;&lt;%= todo.text %&gt;&lt;/li&gt;
+  &lt;% end %&gt;
+&lt;/ul&gt;</code></pre>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <code>key</code>は必須！Reactが効率的に更新するため
+                    </div>
+                </section>
+
+                <!-- Conditionals -->
+                <section>
+                    <h2>条件レンダリング: ERBっぽいけどJS</h2>
+                    <pre><code data-lang="jsx" class="code-small">function UserProfile({ user, isLoggedIn }) {
+  return (
+    &lt;div&gt;
+      {isLoggedIn ? ( // 三項演算子 - ERBの&lt;% if %&gt;っぽい 
+        &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;
+      ) : (
+        &lt;h1&gt;Please log in&lt;/h1&gt;
+      )}
+      {user.isAdmin && ( // && で条件表示 - ERBの&lt;% if %&gt;(else無し)
+        &lt;div className="admin-panel"&gt;Admin tools&lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                </section>
+
+                <!-- My JSX, my Rules -->
+                <section>
+                    <h2>JSXのルール（重要）</h2>
+                    <ul>
+                        <li class="fragment"><strong>必ず1つの要素を返す</strong>
+                            <pre><code data-lang="jsx">// ❌ ダメ
+return (
+  &lt;h1&gt;Title&lt;/h1&gt;
+  &lt;p&gt;Content&lt;/p&gt;
+);
+
+// ✅ OK - Fragment使用
+return (
+  &lt;&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Content&lt;/p&gt;
+  &lt;/&gt;
+);</code></pre>
+                        </li>
+                        <li class="fragment"><strong>すべてのタグを閉じる</strong>: <code>&lt;br /&gt;</code>,
+                            <code>&lt;img /&gt;</code>
+                        </li>
+                        <li class="fragment"><strong>camelCase属性</strong>: <code>onClick</code>, <code>className</code>,
+                            <code>htmlFor</code>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Components -->
+                <section>
+                    <h2>コンポーネント = 関数</h2>
+                    <pre><code data-lang="jsx">// これがコンポーネント
+function Welcome({ name }) {
+  return &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+}
+
+// 使う時
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Welcome name="Mayuri Kurotsuchi" /&gt;
+      &lt;Welcome name="Sosuke Aizen" /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    <div class="note">関数名は<strong>大文字で始める</strong>（HTMLタグと区別するため）</div>
+                </section>
+
+                <!-- Props -->
+                <section>
+                    <h2>Props = 関数の引数</h2>
+                    <pre><code data-lang="jsx">// 普通の関数
+function greet(name, age) {
+  return `こんにちは、${name}さん（${age}歳）`;
+}
+
+// Reactコンポーネント
+function Greeting({ name, age }) {  // 分割代入
+  return &lt;p&gt;こんにちは、{name}さん（{age}歳）&lt;/p&gt;;
+}
+
+// 使用
+&lt;Greeting name="Kurosaki Ichigo" age={15} /&gt;</code></pre>
+                    <p class="note">propsは<strong>読み取り専用</strong></p>
+                </section>
+
+                <!-- Event listeners -->
+                <section>
+                    <h2>イベントハンドラー</h2>
+                    <pre><code data-lang="jsx">function Button() {
+  const handleClick = () => {
+    alert('クリックされた！');
+  };
+
+  return (
+    &lt;button onClick={handleClick}&gt;
+      クリックして
+    &lt;/button&gt;
+  );
+}</code></pre>
+                    <div class="note"><code>onClick</code> = 関数を渡すだけ</div>
+                </section>
+
+                <!-- Forms -->
+                <section>
+                    <h2>フォーム入力</h2>
+                    <pre><code data-lang="jsx">function LoginForm() {
+  const handleSubmit = (event) => {
+    event.preventDefault(); // フォーム送信を停止
+    console.log('ログイン処理');
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input type="email" placeholder="Email" /&gt;
+      &lt;input type="password" placeholder="Password" /&gt;
+      &lt;button type="submit"&gt;Login&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+                    <div class="note">Railsフォームヘルパーの代わりに普通のHTML</div>
+                </section>
+
+                <section>
+                    <h2>まとめ</h2>
+                    <ul>
+                        <li class="fragment">HTMLライクな構文をJSに書ける</li>
+                        <li class="fragment">{}でJavaScript式を埋め込める</li>
+                        <li class="fragment">実際は<code>React.createElement()</code>の糖衣構文</li>
+                        <li class="fragment">コンポーネント = JSXを返す関数</li>
+                        <li class="fragment">イベントハンドラー = 関数を渡すだけ</li>
+                    </ul>
                 </section>
             </section>
 
@@ -513,7 +733,7 @@ button.addEventListener('click', () => {
                     <h4>理解度チェック①</h4>
                     <div class="quiz">
                         <h3>どちらがエラーになる？</h3>
-                        <pre><code class="language-typescript">let mysteryA: any = "梨花";
+                        <pre><code data-lang="typescript">let mysteryA: any = "梨花";
 let mysteryB: unknown = "梨花";
 
 mysteryA.toUpperCase(); // A
@@ -559,7 +779,7 @@ mysteryB.toUpperCase(); // B</code></pre>
                         </li>
                     </ul>
 
-                    <pre><code class="typescript">// テスト
+                    <pre><code data-lang="typescript">// テスト
 console.log(processId(123));    // "ID: 123"
 console.log(processId("ABC"));  // "CODE: ABC"
                 </code></pre>
@@ -572,7 +792,7 @@ console.log(processId("ABC"));  // "CODE: ABC"
                 <section>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
                     <p>型ガード　【type guard】を使うことができます</p>
-                    <pre><code class="typescript">function processId(id: number | string): string {
+                    <pre><code data-lang="typescript">function processId(id: number | string): string {
     // typeof演算子を使って型を判定
     if (typeof id === "number") {
         return `ID: ${id}`;
@@ -619,11 +839,28 @@ console.log(processId("ABC"));  // "CODE: ABC"
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
     <script src="../../scripts/reveal-timer-plugin.js"></script>
+    <script type="module">
+        import { codeToHtml } from 'https://esm.sh/shiki@3.0.0';
+
+        const codeBlocks = document.querySelectorAll('pre code[data-lang]');
+
+        for (const block of codeBlocks) {
+            const lang = block.dataset.lang;
+            const theme = block.dataset.theme || 'night-owl'; // 'material-theme-darker'
+            const rawCode = block.textContent.trim();
+
+            const html = await codeToHtml(rawCode, { lang, theme });
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const shikiHTML = wrapper.firstElementChild;
+
+            const pre = block.closest('pre');
+            if (pre && shikiHTML) pre.replaceWith(shikiHTML);
+        }
+    </script>
 
     <script>
         Reveal.initialize({
@@ -635,23 +872,10 @@ console.log(processId("ABC"));  // "CODE: ABC"
             transition: 'slide',
             transitionSpeed: 'fast',
             backgroundTransition: 'fade',
-            plugins: [RevealHighlight, RevealNotes, RevealTimer],
+            plugins: [RevealNotes, RevealTimer],
             highlight: {
                 escapeHTML: true
             }
-        });
-
-        // Quiz interaction
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function () {
-                // Remove previous selections
-                this.parentNode.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.style.background = 'rgba(255,255,255,0.1)';
-                });
-
-                // Highlight selected option
-                this.style.background = 'rgba(102, 126, 234, 0.5)';
-            });
         });
     </script>
 </body>
