@@ -4,11 +4,11 @@ import { type Zanpakuto, zanpakutoCollection } from "../data";
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
-  const zanpakuto_type = zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1);
+  const zanpakutoType = zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1);
   if (zanpakuto.isReleased) {
-    return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakuto_type} Type [Released]`
+    return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakutoType} Type [Released]`
   } else {
-     return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakuto_type} Type [Sealed]`
+     return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakutoType} Type [Sealed]`
   }
 }
 
