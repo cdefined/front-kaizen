@@ -5,11 +5,8 @@ import { type Zanpakuto, zanpakutoCollection } from "../data";
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
   const zanpakutoType = zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1);
-  if (zanpakuto.isReleased) {
-    return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakutoType} Type [Released]`
-  } else {
-     return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakutoType} Type [Sealed]`
-  }
+
+  return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakutoType} Type [${zanpakuto.isReleased ? "Released" : "Sealed"}]`
 }
 
 // 2. filterByType
