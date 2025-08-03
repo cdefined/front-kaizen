@@ -4,7 +4,6 @@ import { type Zanpakuto, zanpakutoCollection } from "../data";
 
 // 1. formatZanpakuto
 function formatZanpakuto(zanpakuto: Zanpakuto): string {
-  // TODO: 実装
   const zanpakuto_type = zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1);
   if (zanpakuto.isReleased) {
     return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakuto_type} Type [Released]`
@@ -18,7 +17,6 @@ function filterByType(
   zanpakutos: Zanpakuto[],
   targetType: Zanpakuto["type"],
 ): Zanpakuto[] {
-  // TODO: 実装
   return zanpakutos.filter(zanpakuto => zanpakuto.type === targetType)
 }
 
@@ -26,7 +24,6 @@ function filterByType(
 function hasBankai(
   zanpakuto: Zanpakuto,
 ): zanpakuto is Zanpakuto & { bankai: string } {
-  // TODO: 実装
   return typeof zanpakuto.bankai === "string";
 }
 
