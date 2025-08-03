@@ -29,7 +29,7 @@ function hasBankai(
 
 // 4. getRankings
 function getRankings(zanpakutos: Zanpakuto[], topN: number): string[] {
-  return zanpakutos
+  return [...zanpakutos]
     .sort((a, b) => b.powerLevel - a.powerLevel)
     .slice(0, topN)
     .map((zanpakuto, index) => 
