@@ -244,37 +244,40 @@
                         <li>コードが複雑になりがち</li>
                     </ul>
                 </section>
+
+                <!-- DOM vs React Comparison -->
                 <section>
-                    <h2>コード比較</h2>
+                    <h2>コード比較：DOM操作 vs React</h2>
                     <div class="comparison">
                         <div class="comparison-item">
-                            <h4>従来のJavaScript</h4>
-                            <pre><code data-lang="javascript" class="code-small">const button = document.getElementById('btn');
+                            <h4>従来のDOM操作</h4>
+                            <pre><code data-lang="javascript">const button = document.getElementById('btn');
 const counter = document.getElementById('count');
 let count = 0;
 
 button.addEventListener('click', () => {
   count++;
   counter.textContent = count;
-  // 他の場所でcountを使用している箇所も
-  // 手動で更新する必要がある
+  
+  // 他の要素も手動で更新
+  updateHeader(count);
+  updateFooter(count);
 });</code></pre>
                         </div>
                         <div class="comparison-item">
                             <h4>React</h4>
-                            <pre><code data-lang="tsx" class="code-small">function Counter() {
-  const [count, setCount] = useState(0);
-  
-  return (
-    &lt;div&gt;
-      &lt;span&gt;{count}&lt;/span&gt;
-      &lt;button onClick={() => setCount(count + 1)}&gt;
-        +1
-      &lt;/button&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
+                            <pre><code data-lang="jsx">&lt;div&gt;
+  &lt;h1&gt;カウンター&lt;/h1&gt;
+  &lt;span&gt;{count}&lt;/span&gt;
+  &lt;button onClick={handleClick}&gt;
+    +1
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
                         </div>
+                    </div>
+
+                    <div class="note">
+                        Reactなら「何を表示するか」だけ書けばOK
                     </div>
                 </section>
 
@@ -296,7 +299,162 @@ button.addEventListener('click', () => {
                     </div>
                 </section>
 
+                <!-- Virtual DOM Introduction -->
+                <section>
+                    <h2>仮想DOM【Virtual DOM】とは？</h2>
+                    <p class="intro-text"><strong>メモリ上にDOMの軽量コピーを保持する仕組み</strong></p>
+
+                    <ul>
+                        <li>実際のDOMより高速に操作可能</li>
+                        <li>変更前後を比較して差分を検出</li>
+                        <li>最小限の実DOM更新のみ実行</li>
+                    </ul>
+
+                    <div class="note">
+                        「全体を再描画」と言いつつ、実際は必要な部分だけ更新
+                    </div>
+                </section>
+
+                <!-- Virtual DOM Process -->
+                <section>
+                    <h2>仮想DOMの動作プロセス</h2>
+
+                    <div class="comparison">
+                        <img src="https://i.imgur.com/dIejeNk.png" />
+                        <div class="process-steps">
+                            <div class="fragment">
+                                <h4>1. 状態変更</h4>
+                                <p>setStateやsetCountなどで状態を更新</p>
+                            </div>
+
+                            <div class="fragment">
+                                <h4>2. 新しい仮想DOMツリー作成</h4>
+                                <p>新しい状態に基づいてメモリ上に仮想DOMを構築</p>
+                            </div>
+
+                            <div class="fragment">
+                                <h4>3. 差分検出【Diffing】</h4>
+                                <p>前回の仮想DOMと今回の仮想DOMを比較</p>
+                            </div>
+
+                            <div class="fragment">
+                                <h4>4. 最小限更新【Reconciliation】</h4>
+                                <p>変更された部分のみ実DOMに反映</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>仮想DOMの動作プロセス</h2>
+
+                </section>
+
+                <!-- Why Virtual DOM is Fast -->
+                <section>
+                    <h2>なぜ仮想DOMは高速なのか？</h2>
+
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <h4>実DOM操作</h4>
+                            <ul>
+                                <li>ブラウザのレンダリングエンジンが重い</li>
+                                <li>レイアウト計算が発生</li>
+                                <li>再描画処理が必要</li>
+                                <li>1つの変更でも全体に影響</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-item">
+                            <h4>仮想DOM</h4>
+                            <ul>
+                                <li>JavaScriptオブジェクトなので軽量</li>
+                                <li>メモリ上での比較計算</li>
+                                <li>バッチ処理で最適化</li>
+                                <li>変更部分のみ実DOM更新</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Virtual DOM Example -->
+                <section>
+                    <h2>仮想DOM　具体例</h2>
+
+                    <div class="example">
+                        <h4>JSX</h4>
+                        <pre><code data-lang="jsx">&lt;div&gt;
+  &lt;h1&gt;カウント: {count}&lt;/h1&gt;
+  &lt;button&gt;+1&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+                        <h4>仮想DOM（概念）</h4>
+                        <pre><code data-lang="javascript">{
+  type: 'div',
+  children: [
+    {
+      type: 'h1',
+      children: `カウント: ${count}`
+    },
+    {
+      type: 'button',
+      children: '+1'
+    }
+  ]
+}</code></pre>
+                    </div>
+
+                    <div class="note">
+                        countが0→1に変わった時、h1のテキスト部分のみ実DOM更新
+                    </div>
+                </section>
+
+                <!-- Similar frameworks/libs -->
+                <section>
+                    <h2>React類似技術の一覧</h2>
+                    <ul>
+                        <li>Vue</li>
+                        <li>Angular</li>
+                        <li>Svelte</li>
+                        <li>SolidJS</li>
+                        <li>Preact</li>
+                        <li>Lit</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Core Concepts -->
+            <section>
+                <section>
+                    <h2>Reactの核となる概念</h2>
+                    <dl>
+                        <dt>単方向データバインディング
+                        </dt>
+                        <dd>データ（State / Props） → UI（View）</dd>
+
+                        <dt><strong>コンポーネント</strong></dt>
+                        <dd>UIを独立した再利用可能な部品として作成</dd>
+
+                        <dt><strong>JSX</strong></dt>
+                        <dd>JavaScriptの中にHTMLライクな構文を書ける</dd>
+
+                        <dt><strong>State（状態）</strong></dt>
+                        <dd>コンポーネントが持つ変更可能なデータ</dd>
+
+                        <dt><strong>Props</strong></dt>
+                        <dd>親コンポーネントから子へ渡すデータ</dd>
+
+                        <dt><strong>仮想DOM</strong></dt>
+                        <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
+                    </dl>
+                </section>
+            </section>
+
+            <section>
                 <!-- SPA Introduction -->
+                <section>
+                    <h1>SPA【Single Page Application】</h1>
+                </section>
                 <section>
                     <h2>SPA【Single Page Application】とは？</h2>
 
@@ -385,113 +543,9 @@ button.addEventListener('click', () => {
                         本コースでは基本的なSPAから始めますが、実際のプロダクションでは上記のフレームワークを使用することが多い
                     </div>
                 </section>
-
-                <!-- React vs Others -->
-                <section>
-                    <h2>主要フレームワーク比較</h2>
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>React</th>
-                                <th>Vue</th>
-                                <th>Angular</th>
-                                <th>Svelte</th>
-                                <th>SolidJS</th>
-                                <th>Preact</th>
-                                <th>Lit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="metric">学習コスト</td>
-                                <td>中</td>
-                                <td>中</td>
-                                <td>高</td>
-                                <td>中</td>
-                                <td>中</td>
-                                <td>低</td>
-                                <td>中</td>
-                            </tr>
-                            <tr>
-                                <td class="metric">エコシステム</td>
-                                <td>最大</td>
-                                <td>大</td>
-                                <td>大</td>
-                                <td>小</td>
-                                <td>小</td>
-                                <td>中</td>
-                                <td>小</td>
-                            </tr>
-                            <tr>
-                                <td class="metric">TypeScript</td>
-                                <td>オプション</td>
-                                <td>オプション</td>
-                                <td>標準</td>
-                                <td>標準</td>
-                                <td>標準</td>
-                                <td>オプション</td>
-                                <td>標準</td>
-                            </tr>
-                            <tr>
-                                <td class="metric">バンドルサイズ</td>
-                                <td>42KB</td>
-                                <td>36KB</td>
-                                <td>130KB</td>
-                                <td>10KB</td>
-                                <td>7KB</td>
-                                <td>3KB</td>
-                                <td>5KB</td>
-                            </tr>
-                            <tr>
-                                <td class="metric">パフォーマンス</td>
-                                <td>良</td>
-                                <td>良</td>
-                                <td>良</td>
-                                <td>優秀</td>
-                                <td>優秀</td>
-                                <td>良</td>
-                                <td>良</td>
-                            </tr>
-                            <tr>
-                                <td class="metric">求人数</td>
-                                <td>最多</td>
-                                <td>多</td>
-                                <td>多</td>
-                                <td>少</td>
-                                <td>極少</td>
-                                <td>少</td>
-                                <td>少</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="note">
-                        <strong>結論</strong>：Reactは学習コストとエコシステムのバランスが良く、転職市場でも最も有利
-                    </div>
-                </section>
             </section>
 
-            <!-- Core Concepts -->
-            <section>
-                <h2>Reactの核となる概念</h2>
-                <dl>
-                    <dt><strong>コンポーネント</strong></dt>
-                    <dd>UIを独立した再利用可能な部品として作成</dd>
 
-                    <dt><strong>JSX</strong></dt>
-                    <dd>JavaScriptの中にHTMLライクな構文を書ける</dd>
-
-                    <dt><strong>State（状態）</strong></dt>
-                    <dd>コンポーネントが持つ変更可能なデータ</dd>
-
-                    <dt><strong>Props</strong></dt>
-                    <dd>親コンポーネントから子へ渡すデータ</dd>
-
-                    <dt><strong>仮想DOM</strong></dt>
-                    <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
-                </dl>
-            </section>
             <!-- Section 1: JSX Basics -->
             <section>
                 <section>
