@@ -18,6 +18,13 @@ interface、type、型の拡、enum、クラス、ジェネリクス、ユーテ
 - [プレゼンテーションの演習課題](/typescript-lessons/lesson_2/task.md)
 - [宿題・実践課題](/typescript-lessons/lesson_2/homework/README.md)
 
+## 3. React 基礎 ①
+
+React とは、JSX、コンポーネント、Props の使い方
+
+- [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_1/slides.html)
+- [プレゼンテーションの演習課題・実践課題](/react-lessons/lesson_1/task.md)
+
 ## コードレビューと提出
 
 ### 準備

@@ -914,9 +914,30 @@ mysteryB.toUpperCase(); // B</code></pre>
             <section>
                 <!-- Practice -->
                 <section>
-                    <h1>TypeScript 実践演習</h1>
+                    <h1>React 実践演習</h1>
                     <h3>1つの課題 (15-20分)</h3>
+
                     <p>今日学んだ内容を実際に使ってみよう！</p>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_1/task.md">react-lessons/lesson_1/task.md</a>
+                    </div>
+                </section>
+                <section>
+                    <h3>セットアップ手順</h3>
+                    <ol>
+                        <li>masterブランチに切り替え、更新を取得する
+                            <pre><code>git switch master
+git pull origin main</code></pre>
+                        </li>
+                        <li>パッケージをインストールする
+                            <pre><code>cd react-lessons/
+npm install</code></pre>
+                        </li>
+                        <li>開発サーバーを起動する
+                            <pre><code>npm run dev</code></pre>
+                        </li>
+                        <li>ブラウザで「<a href="http://localhost:5173/">http://localhost:5173/</a>」を開く</li>
+                    </ol>
                     <div class="note"><a
                             href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_1/task.md">react-lessons/lesson_1/task.md</a>
                     </div>
@@ -958,14 +979,16 @@ mysteryB.toUpperCase(); // B</code></pre>
                     <h2><span class="task-number">課題1</span> 解答例</h2>
                     <p><code>props</code> を受け取って全てのプロパティを表示する</p>
                     <pre><code data-lang="tsx">function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
+  const { name, owner, type, bankai, shikaiAbility, powerLevel, isReleased } = zanpakuto;  // 分割代入でプロパティを展開
+  
   return (
     &lt;div&gt;
-      &lt;h2&gt;{zanpakuto.name}（{zanpakuto.owner}の斬魄刀）&lt;/h2&gt;
-      &lt;p&gt;タイプ: {zanpakuto.type}&lt;/p&gt;
-      {zanpakuto.bankai && &lt;p&gt;卍解: {zanpakuto.bankai}&lt;/p&gt;}
-      &lt;p&gt;始解能力: {zanpakuto.shikaiAbility}&lt;/p&gt;
-      &lt;p&gt;霊圧レベル: {zanpakuto.powerLevel}&lt;/p&gt;
-      &lt;p&gt;解放済み: {zanpakuto.isReleased ? "はい" : "いいえ"}&lt;/p&gt;
+      &lt;h2&gt;{name}（{owner}の斬魄刀）&lt;/h2&gt; {/* JSXでは{}内にJavaScript式を書ける */}
+      &lt;p&gt;タイプ: {type}&lt;/p&gt;
+      {bankai && &lt;p&gt;卍解: {bankai}&lt;/p&gt;} {/* 条件付きレンダリングの&&演算子：左側がtruthyの場合、右側を実行 */}
+      &lt;p&gt;始解能力: {shikaiAbility}&lt;/p&gt;
+      &lt;p&gt;霊圧レベル: {powerLevel}&lt;/p&gt;
+      &lt;p&gt;解放済み: {isReleased ? "はい" : "いいえ"}&lt;/p&gt; {/* 三項演算子 - 条件 ? 真の場合 : 偽の場合 */}
     &lt;/div&gt;
   );
 }</code></pre>
@@ -975,26 +998,11 @@ mysteryB.toUpperCase(); // B</code></pre>
             <section>
                 <!-- Summary -->
                 <section>
-                    <h1>第3回まとめ</h1>
+                    <h1>第1回まとめ</h1>
 
                     <h2>今日学んだこと</h2>
                     <ul>
                         <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
-                    </ul>
-                </section>
-
-                <!-- Homework -->
-                <section>
-                    <h1>宿題・実践課題</h1>
-
-                    <h3>斬魄刀コレクション管理システム</h3>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/typescript-lessons/lesson_1/homework"
-                            target="_blank">typescript-lessons/lesson_1/homework</a></div>
-                    <br>
-                    <h3>実践での重要ポイント</h3>
-                    <ul>
-                        <li>型推論を信頼しつつ、関数の戻り値は明示的に書く</li>
                     </ul>
                 </section>
 
@@ -1009,6 +1017,7 @@ mysteryB.toUpperCase(); // B</code></pre>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.min.js"></script>
     <script src="../../scripts/reveal-timer-plugin.js"></script>
     <script type="module">
         import { codeToHtml } from 'https://esm.sh/shiki@3.0.0';
@@ -1041,7 +1050,7 @@ mysteryB.toUpperCase(); // B</code></pre>
             transition: 'slide',
             transitionSpeed: 'fast',
             backgroundTransition: 'fade',
-            plugins: [RevealNotes, RevealTimer],
+            plugins: [RevealNotes, RevealTimer, RevealMarkdown],
             highlight: {
                 escapeHTML: true
             }
