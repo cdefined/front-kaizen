@@ -55,7 +55,24 @@ class ZanpakutoManager {
   // 統計情報を取得
   getStats(): ZanpakutoStats {
     // TODO: 実装
-    throw new Error("Not implemented");
+    const total = this.zanpakutos.length;
+    const byType: Record<ZanpakutoType, number> = {
+      melee: 0,
+      kido: 0,
+      elemental: 0,
+      illusion: 0,
+    };
+    const averagePowerLevel = 0;
+    const releasedCount = 0;
+    const bankaiCount = 0;
+ 
+    return {
+      total,
+      byType,
+      averagePowerLevel,
+      releasedCount,
+      bankaiCount,
+    };
   }
 
   // 全データを取得
@@ -116,14 +133,14 @@ const bankaiZanpakutos = manager.search({ hasBankai: true });
 console.assert(bankaiZanpakutos.length === 8, "Bankai search failed");
 
 // 統計テスト
-// console.log("統計テスト:");
-// const stats = manager.getStats();
-// console.assert(stats.total === 10, "Stats total incorrect");
-// console.assert(stats.byType.melee === 4, "Stats type count incorrect");
-// console.assert(
-//   Math.abs(stats.averagePowerLevel - 7970) < 50,
-//   "Stats average incorrect",
-// );
+console.log("統計テスト:");
+const stats = manager.getStats();
+console.assert(stats.total === 10, "Stats total incorrect");
+console.assert(stats.byType.melee === 4, "Stats type count incorrect");
+console.assert(
+  Math.abs(stats.averagePowerLevel - 7970) < 50,
+  "Stats average incorrect",
+);
 
 // 更新テスト
 console.log("更新テスト:");
