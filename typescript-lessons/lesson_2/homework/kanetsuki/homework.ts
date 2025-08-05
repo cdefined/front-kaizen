@@ -62,13 +62,16 @@ class ZanpakutoManager {
       illusion: 0,
     };
     let averagePowerLevel = 0;
+    let totalPowerLevel = 0;
     let releasedCount = 0;
     let bankaiCount = 0;
 
     for (const zanpakuto of this.zanpakutos) {
       byType[zanpakuto.type]++;
-
+      totalPowerLevel += zanpakuto.powerLevel;
     }
+
+    averagePowerLevel = totalPowerLevel / total
  
     return {
       total,
