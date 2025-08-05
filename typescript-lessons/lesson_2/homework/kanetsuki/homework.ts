@@ -78,7 +78,7 @@ class ZanpakutoFormatter {
   static formatBasic(zanpakuto: Zanpakuto): string {
     // TODO: 実装
     // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
-    throw new Error("Not implemented");
+    return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakuto.type} Type [${zanpakuto.isReleased ? "Released" : "Not Released"}]`;
   }
 
   static formatDetailed(zanpakuto: Zanpakuto): string {
