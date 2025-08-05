@@ -50,8 +50,7 @@ class ZanpakutoManager {
 
   // 全データを取得
   getAll(): Zanpakuto[] {
-    // TODO: 実装（防御的コピー）
-    throw new Error("Not implemented");
+    return [...this.zanpakutos];
   }
 
   // パワーレベルで更新
