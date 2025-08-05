@@ -111,9 +111,8 @@ class ZanpakutoFormatter {
   }
 
   static formatStats(stats: ZanpakutoStats): string {
-    // TODO: 実装
     // 例: "Total: 10 | Melee: 4, Kido: 2, Elemental: 3, Illusion: 1 | Avg Power: 7850 | Released: 5/10 | Bankai: 8/10"
-    throw new Error("Not implemented");
+    return `Total: ${stats.total} | Melee: ${stats.byType.melee}, Kido: ${stats.byType.kido}, Elemental: ${stats.byType.elemental}, Illusion: ${stats.byType.illusion} | Avg Power: ${stats.averagePowerLevel} | Released: ${stats.releasedCount}/${stats.total} | Bankai: ${stats.bankaiCount}/${stats.total}`;
   }
 }
 
