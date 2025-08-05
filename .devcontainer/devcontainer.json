@@ -27,5 +27,7 @@
 
   "forwardPorts": [4242],
 
-  "remoteUser": "node"
+  "remoteUser": "node",
+
+  "postStartCommand": "cd react-lessons/ && npm install"
 }
