@@ -54,7 +54,6 @@ class ZanpakutoManager {
 
   // 統計情報を取得
   getStats(): ZanpakutoStats {
-    // TODO: 実装
     const total = this.zanpakutos.length;
     const byType: Record<ZanpakutoType, number> = {
       melee: 0,
@@ -62,9 +61,14 @@ class ZanpakutoManager {
       elemental: 0,
       illusion: 0,
     };
-    const averagePowerLevel = 0;
-    const releasedCount = 0;
-    const bankaiCount = 0;
+    let averagePowerLevel = 0;
+    let releasedCount = 0;
+    let bankaiCount = 0;
+
+    for (const zanpakuto of this.zanpakutos) {
+      byType[zanpakuto.type]++;
+
+    }
  
     return {
       total,
@@ -93,7 +97,6 @@ class ZanpakutoManager {
 
 class ZanpakutoFormatter {
   static formatBasic(zanpakuto: Zanpakuto): string {
-    // TODO: 実装
     // 例: "Zangetsu (Kurosaki Ichigo) - Melee Type [Released]"
     return `${zanpakuto.name} (${zanpakuto.owner}) - ${zanpakuto.type} Type [${zanpakuto.isReleased ? "Released" : "Not Released"}]`;
   }
