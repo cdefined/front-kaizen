@@ -166,9 +166,17 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .quiz-options.small {
+            font-size: 0.65em;
+        }
+
         .fragment.correct-answer.visible {
             border-left: 4px solid #2ecc71;
             background: rgba(46, 204, 113, 0.3);
+        }
+
+        .reveal pre {
+            width: 100%;
         }
 
         .reveal pre code {
@@ -245,6 +253,34 @@
                     </ul>
                 </section>
 
+                <!-- DOM -->
+                <section>
+                    <h2>DOM【Document Object Model】とは？</h2>
+                    <p>ブラウザがHTMLを解釈して作る、JavaScriptで操作可能なオブジェクト</p>
+                    <div class="comparison">
+                        <img src="./images/dom.svg" height="620" alt="DOM" />
+                        <div class="example">
+                            <h4>JavaScript（Reactなし）</h4>
+                            <pre><code data-lang="js">// 要素の取得と内容変更
+document.getElementById('count').textContent = '1';
+
+// CSSクラスの追加
+document.querySelector('div').classList.add('highlighted');
+
+// 新しい要素の作成と追加
+const newButton = document.createElement('button');
+newButton.textContent = 'クリック';
+document.body.appendChild(newButton);
+
+// イベントリスナーの追加
+newButton.addEventListener('click', handleClick);</code></pre>
+                        </div>
+                    </div>
+                    <div class="note">
+                        問題：アプリが大きくなると手動更新が地獄になる
+                    </div>
+                </section>
+
                 <!-- DOM vs React Comparison -->
                 <section>
                     <h2>コード比較：DOM操作 vs React</h2>
@@ -319,12 +355,13 @@ button.addEventListener('click', () => {
                 <section>
                     <h2>仮想DOMの動作プロセス</h2>
 
-                    <div class="comparison">
-                        <img src="https://i.imgur.com/dIejeNk.png" />
+                    <div class="fragment comparison">
+                        <img src="./images/virtual-dom.svg" height="700" alt="Virtual DOM Process" />
+
                         <div class="process-steps">
                             <div class="fragment">
                                 <h4>1. 状態変更</h4>
-                                <p>setStateやsetCountなどで状態を更新</p>
+                                <p>状態またはpropsの変更</p>
                             </div>
 
                             <div class="fragment">
@@ -343,11 +380,6 @@ button.addEventListener('click', () => {
                             </div>
                         </div>
                     </div>
-                </section>
-
-                <section>
-                    <h2>仮想DOMの動作プロセス</h2>
-
                 </section>
 
                 <!-- Why Virtual DOM is Fast -->
@@ -421,130 +453,16 @@ button.addEventListener('click', () => {
                         <li>Lit</li>
                     </ul>
                 </section>
-            </section>
-
-            <!-- Core Concepts -->
-            <section>
                 <section>
-                    <h2>Reactの核となる概念</h2>
-                    <dl>
-                        <dt>単方向データバインディング
-                        </dt>
-                        <dd>データ（State / Props） → UI（View）</dd>
-
-                        <dt><strong>コンポーネント</strong></dt>
-                        <dd>UIを独立した再利用可能な部品として作成</dd>
-
-                        <dt><strong>JSX</strong></dt>
-                        <dd>JavaScriptの中にHTMLライクな構文を書ける</dd>
-
-                        <dt><strong>State（状態）</strong></dt>
-                        <dd>コンポーネントが持つ変更可能なデータ</dd>
-
-                        <dt><strong>Props</strong></dt>
-                        <dd>親コンポーネントから子へ渡すデータ</dd>
-
-                        <dt><strong>仮想DOM</strong></dt>
-                        <dd>メモリ上でDOM操作を計算し、効率的に更新</dd>
-                    </dl>
+                    <h2>なぜReactを学ぶのか？</h2>
+                    <ul>
+                        <li>手動DOM操作の複雑さを解決</li>
+                        <li>状態とUIの同期を自動化</li>
+                        <li>再利用可能なコンポーネント設計</li>
+                        <li>現代的なWeb開発の標準</li>
+                    </ul>
                 </section>
             </section>
-
-            <section>
-                <!-- SPA Introduction -->
-                <section>
-                    <h1>SPA【Single Page Application】</h1>
-                </section>
-                <section>
-                    <h2>SPA【Single Page Application】とは？</h2>
-
-                    <h3>従来のWebサイト【Multi Page Application】</h3>
-                    <ul>
-                        <li>ページ遷移のたびにサーバーから新しいHTMLを取得</li>
-                        <li>画面全体がリロードされる</li>
-                        <li>ページ遷移が遅い</li>
-                    </ul>
-
-                    <h3>SPA</h3>
-                    <ul>
-                        <li>初回ロード後、JavaScriptでページ遷移を制御</li>
-                        <li>必要なデータのみAPIで取得</li>
-                        <li>高速なページ遷移が可能</li>
-                    </ul>
-                </section>
-                <section>
-                    <h2>SPA【Single Page Application】とは？</h2>
-                    <div class="comparison">
-                        <div class="pros">
-                            <h4>メリット</h4>
-                            <ul>
-                                <li>高速なページ遷移</li>
-                                <li>アプリライクなUX</li>
-                                <li>サーバー負荷軽減</li>
-                            </ul>
-                        </div>
-                        <div class="cons">
-                            <h4>課題</h4>
-                            <ul>
-                                <li>初回ロードが重い</li>
-                                <li>SEOが困難</li>
-                                <li>JavaScriptが必須</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- The SPA Problem -->
-                <section>
-                    <h2>SPAの根本的な問題</h2>
-                    <div class="warning">
-                        <p><strong>純粋なSPAは多くの問題を抱えており現在は「呪われた」技術とされることも</strong></p>
-                    </div>
-
-                    <h3>主な問題点</h3>
-                    <ul>
-                        <li><strong>SEO</strong> : 検索エンジンがJavaScriptを実行しないと内容が見えない</li>
-                        <li><strong>初回ロード</strong> : すべてのJavaScriptをダウンロードするまで何も表示されない</li>
-                        <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
-                        <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
-                    </ul>
-                </section>
-
-                <!-- Slide 9: SPA Solutions -->
-                <section>
-                    <h2>現実的な解決策</h2>
-                    <ul>
-                        <li><strong>SSR【Server Side Rendering】</strong><br>サーバーでHTMLを生成</li>
-                        <li><strong>SSG【Static Site Generation】</strong><br>ビルド時に静的HTMLを生成</li>
-                        <li><strong>ISR【Incremental Static Regeneration】</strong><br>必要に応じて静的ページを再生成</li>
-                    </ul>
-
-                    <div class="note">
-                        これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix等のフレームワーク）
-                    </div>
-                </section>
-
-                <!-- Ecosystem Overview -->
-                <section>
-                    <h2>Reactエコシステム（参考）</h2>
-                    <h3>フルスタックフレームワーク</h3>
-                    <ul>
-                        <li><strong>Next.js</strong>：SSR/SSG対応・本格的なWebアプリ開発</li>
-                        <li><strong>React Router/Remix</strong>：フルスタック・Web標準重視</li>
-                        <li><strong>Astro、Gatsby</strong>：静的サイト生成特化</li>
-                    </ul>
-                    <br><br>
-                    <h3>ネイティブアプリ</h3>
-                    <ul>
-                        <li><strong>React Native</strong>：iOS・Androidアプリ開発</li>
-                        <li><strong>Expo</strong>：React Nativeの開発環境</li>
-                    </ul>
-                    <div class="note">
-                        本コースでは基本的なSPAから始めますが、実際のプロダクションでは上記のフレームワークを使用することが多い
-                    </div>
-                </section>
-            </section>
-
 
             <!-- Section 1: JSX Basics -->
             <section>
@@ -648,6 +566,46 @@ return (
                         </div>
                     </div>
                 </section>
+                <section>
+                    <h4>理解度チェック①【JSXルール】</h4>
+                    <div class="quiz">
+                        <h3>どれが正しいJSX？</h3>
+                        <div class="comparison">
+                            <pre><code data-lang="jsx">{ /* A */ }
+&lt;div&gt;
+  &lt;h1&gt;Title&lt;/h1&gt;
+  &lt;p&gt;Text&lt;/p&gt;
+&lt;/div&gt;
+
+{ /* B */ }
+&lt;h1&gt;Title&lt;/h1&gt;
+&lt;p&gt;Text&lt;/p&gt;</code></pre>
+                            <pre><code data-lang="jsx">{ /* C */ }
+&lt;&gt;
+  &lt;h1&gt;Title&lt;/h1&gt;
+  &lt;p&gt;Text&lt;/p&gt;
+&lt;/&gt;</code></pre>
+                        </div>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A)
+                                <code>&lt;div&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Text&lt;/p&gt;&lt;/div&gt;</code>
+                            </div>
+                            <div class="quiz-option">B)
+                                <code>&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Text&lt;/p&gt;</code>
+                            </div>
+                            <div class="quiz-option">C)
+                                <code>&lt;&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Text&lt;/p&gt;&lt;/&gt;</code>
+                            </div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">D) AとC両方
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> D) 単一の親要素またはFragment必須
+                        </div>
+                    </div>
+                </section>
             </section>
 
             <!-- Section 2: JavaScript in JSX -->
@@ -681,7 +639,7 @@ return (
       {isLoggedIn ? (
         &lt;h1&gt;Welcome {user.name}!&lt;/h1&gt;  {/* trueの場合 */}
       ) : (
-        &lt;h1&gt;Please log in&lt;/h1&gt;          {/* falseの場合 */}
+        &lt;h1&gt;Please log in&lt;/h1&gt;         {/* falseの場合 */}
       )}
     &lt;/div&gt;
   );
@@ -763,6 +721,30 @@ return (
 }</code></pre>
                     <div class="note">
                         <code>key</code>は必須！Reactが効率的に更新するため
+                    </div>
+                </section>
+                <section>
+                    <h4>理解度チェック②【条件レンダリング】</h4>
+                    <div class="quiz">
+                        <h3>何が表示される？</h3>
+                        <pre><code data-lang="jsx">function AdminPanel() {
+    const user = { name: "Ichigo", isAdmin: false };
+
+    return &lt;&gt;{user.isAdmin && &lt;div&gt;Admin Panel&lt;/div&gt;}&lt;/&gt;;
+}
+</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>&lt;div&gt;Admin Panel&lt;/div&gt;</code></div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B) 何も表示されない
+                            </div>
+                            <div class="quiz-option">C) <code>false</code></div>
+                            <div class="quiz-option">D) エラー</div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) &&の左側がfalseなので右側は評価されない
+                        </div>
                     </div>
                 </section>
             </section>
@@ -917,7 +899,6 @@ function App() {
   );
 }</code></pre>
                 </section>
-
                 <section>
                     <h2>Props vs Rails partials</h2>
                     <div class="comparison">
@@ -937,63 +918,164 @@ function App() {
                     </div>
                     <div class="note">props = partial variables みたいなもの</div>
                 </section>
-            </section>
-
-            <section>
                 <section>
-                    <h4>理解度チェック①</h4>
+                    <h4>理解度チェック③【Props】</h4>
                     <div class="quiz">
-                        <h3>どちらがエラーになる？</h3>
-                        <pre><code data-lang="typescript">let mysteryA: any = "梨花";
-let mysteryB: unknown = "梨花";
-
-mysteryA.toUpperCase(); // A
-mysteryB.toUpperCase(); // B</code></pre>
-                        <div class="quiz-options">
-                            <div class="quiz-option">A) mysteryA.toUpperCase()</div>
-                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
-                                mysteryB.toUpperCase()</div>
-                            <div class="quiz-option">C) 両方エラー</div>
-                            <div class="quiz-option">D) 両方エラーなし</div>
+                        <h3>childrenには何が入る?</h3>
+                        <pre><code data-lang="jsx">function Card({ title, children }) {
+    return (
+        &lt;div&gt;
+            &lt;h2&gt;{title}&lt;/h2&gt;
+            {children}
+        &lt;/div&gt;
+    );
+}</code></pre>
+                        <pre><code data-lang="jsx">
+&lt;Card title="Profile"&gt;
+    &lt;p&gt;Content here&lt;/p&gt;
+&lt;/Card&gt;
+</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) <code>Content here</code></div>
+                            <div class="quiz-option">B)
+                                <code>&lt;div&gt;&lt;h2&gt;{title}&lt;/h2&gt;Content here&lt;/div&gt;</code>
+                            </div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
+                                <code>&lt;p&gt;Content here&lt;/p&gt;</code>
+                            </div>
+                            <div class="quiz-option">D) <code>&lt;h2&gt;Profile&lt;/h2&gt;Content here</code></div>
                         </div>
                     </div>
                     <div class="fragment" data-fragment-index="1">
                         <div class="note">
-                            <strong>答え:</strong> B) <code>unknown</code>は型ガードが必要。<code>any</code>は何でもOK（危険）
+                            <strong>答え:</strong> C) <code>children</code>はコンポーネントの開始・終了タグの間の要素
                         </div>
                     </div>
                 </section>
             </section>
 
             <section>
-                <!-- Practice -->
+                <!-- SPA Introduction -->
+                <section>
+                    <h1>SPA【Single Page Application】</h1>
+                </section>
+                <section>
+                    <h2>SPA【Single Page Application】とは？</h2>
+
+                    <h3>従来のWebサイト【Multi Page Application】</h3>
+                    <ul>
+                        <li>ページ遷移のたびにサーバーから新しいHTMLを取得</li>
+                        <li>画面全体がリロードされる</li>
+                        <li>ページ遷移が遅い</li>
+                    </ul>
+
+                    <h3>SPA</h3>
+                    <ul>
+                        <li>初回ロード後、JavaScriptでページ遷移を制御</li>
+                        <li>必要なデータのみAPIで取得</li>
+                        <li>高速なページ遷移が可能</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>SPA【Single Page Application】とは？</h2>
+                    <div class="comparison">
+                        <div class="pros">
+                            <h4>メリット</h4>
+                            <ul>
+                                <li>高速なページ遷移</li>
+                                <li>アプリライクなUX</li>
+                                <li>サーバー負荷軽減</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>課題</h4>
+                            <ul>
+                                <li>初回ロードが重い</li>
+                                <li>SEOが困難</li>
+                                <li>JavaScriptが必須</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- The SPA Problem -->
+                <section>
+                    <h2>SPAの根本的な問題</h2>
+                    <div class="warning">
+                        <p><strong>純粋なSPAは多くの問題を抱えており現在は「呪われた」技術とされることも</strong></p>
+                    </div>
+
+                    <h3>主な問題点</h3>
+                    <ul>
+                        <li><strong>SEO</strong> : 検索エンジンがJavaScriptを実行しないと内容が見えない</li>
+                        <li><strong>初回ロード</strong> : すべてのJavaScriptをダウンロードするまで何も表示されない</li>
+                        <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
+                        <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
+                    </ul>
+                </section>
+
+                <!-- Slide 9: SPA Solutions -->
+                <section>
+                    <h2>現実的な解決策</h2>
+                    <ul>
+                        <li><strong>SSR【Server Side Rendering】</strong><br>サーバーでHTMLを生成</li>
+                        <li><strong>SSG【Static Site Generation】</strong><br>ビルド時に静的HTMLを生成</li>
+                        <li><strong>ISR【Incremental Static Regeneration】</strong><br>必要に応じて静的ページを再生成</li>
+                    </ul>
+
+                    <div class="note">
+                        これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix等のフレームワーク）
+                    </div>
+                </section>
+
+                <!-- Ecosystem Overview -->
+                <section>
+                    <h2>Reactエコシステム（参考）</h2>
+                    <h3>フルスタックフレームワーク</h3>
+                    <ul>
+                        <li><strong>Next.js</strong>：SSR/SSG対応・本格的なWebアプリ開発</li>
+                        <li><strong>React Router/Remix</strong>：フルスタック・Web標準重視</li>
+                        <li><strong>Astro、Gatsby</strong>：静的サイト生成特化</li>
+                    </ul>
+                    <br><br>
+                    <h3>ネイティブアプリ</h3>
+                    <ul>
+                        <li><strong>React Native</strong>：iOS・Androidアプリ開発</li>
+                        <li><strong>Expo</strong>：React Nativeの開発環境</li>
+                    </ul>
+                    <div class="note">
+                        本コースでは基本的なSPAから始めますが、実際のプロダクションでは上記のフレームワークを使用することが多い
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice -->
+            <section>
                 <section>
                     <h1>React 実践演習</h1>
                     <h3>1つの課題 (15-20分)</h3>
 
                     <p>今日学んだ内容を実際に使ってみよう！</p>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_1/task.md">react-lessons/lesson_1/task.md</a>
+                    <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
                     </div>
                 </section>
                 <section>
                     <h3>セットアップ手順</h3>
                     <ol>
                         <li>masterブランチに切り替え、更新を取得する
-                            <pre><code>git switch master
+                            <pre><code data-lang="bash">git switch master
 git pull origin main</code></pre>
                         </li>
                         <li>パッケージをインストールする
-                            <pre><code>cd react-lessons/
+                            <pre><code data-lang="bash">cd react-lessons/
 npm install</code></pre>
                         </li>
                         <li>開発サーバーを起動する
-                            <pre><code>npm run dev</code></pre>
+                            <pre><code data-lang="bash">npm run dev</code></pre>
                         </li>
                         <li>ブラウザで「<a href="http://localhost:5173/">http://localhost:5173/</a>」を開く</li>
                     </ol>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_1/task.md">react-lessons/lesson_1/task.md</a>
+                    <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
                     </div>
                 </section>
 
@@ -1056,7 +1138,11 @@ npm install</code></pre>
 
                     <h2>今日学んだこと</h2>
                     <ul>
-                        <li><strong>TypeScript の基本:</strong> tsc コンパイラーと型システム</li>
+                        <li><strong>Reactとは</strong> UIライブラリ、仮想DOM、宣言的プログラミング</li>
+                        <li><strong>JSX</strong> JavaScript + XML、{}で動的コンテンツ</li>
+                        <li><strong>コンポーネント</strong> 再利用可能なUI部品（関数）</li>
+                        <li><strong>Props</strong> コンポーネント間のデータ受け渡し</li>
+                        <li><strong>条件レンダリング</strong> 三項演算子、&&演算子</li>
                     </ul>
                 </section>
 

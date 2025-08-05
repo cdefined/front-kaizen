@@ -92,7 +92,7 @@ function Stub(): JSX.Element {
   const [student, setStudent] = useState<string>("");
   const [selectedLesson, setSelectedLesson] = useState<string>("lesson_1");
 
-  const isValidStudentName = /^[a-zA-Z0-9-_]+$/.test(student);
+  const isValidStudentName = /^[a-zA-Z0-9_-]+$/.test(student);
   const canViewHomework = student.trim() && isValidStudentName;
 
   return (
@@ -162,7 +162,7 @@ function Stub(): JSX.Element {
           placeholder="受講者名を入力"
           value={student}
           onChange={(e) => setStudent(e.target.value)}
-          pattern="[a-zA-Z0-9_-]+"
+          pattern="[a-zA-Z0-9_\-]+"
           title="英数字、アンダースコア、ハイフンのみ使用可能"
           required
           aria-label="student name input"
