@@ -105,9 +105,16 @@ class ZanpakutoFormatter {
   }
 
   static formatDetailed(zanpakuto: Zanpakuto): string {
-    // TODO: 実装
-    // 例: "Zangetsu (Kurosaki Ichigo) - Melee [Released] - Power: 8500 - Bankai: Tensa Zangetsu"
-    throw new Error("Not implemented");
+    const releasedStatus = zanpakuto.isReleased ? "Released" : "Sealed";
+    const typeCapitalized = zanpakuto.type.charAt(0).toUpperCase() + zanpakuto.type.slice(1);
+    
+    let result = `${zanpakuto.name} (${zanpakuto.owner}) - ${typeCapitalized} [${releasedStatus}] - Power: ${zanpakuto.powerLevel}`;
+    
+    if (zanpakuto.bankai) {
+      result += ` - Bankai: ${zanpakuto.bankai}`;
+    }
+    
+    return result;
   }
 
   static formatStats(stats: ZanpakutoStats): string {
