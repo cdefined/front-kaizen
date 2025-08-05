@@ -39,7 +39,18 @@ class ZanpakutoManager {
   // 条件で検索
   search(filters: SearchFilters): Zanpakuto[] {
     // TODO: 実装
-    throw new Error("Not imssplemented");
+    return this.zanpakutos.filter((z) => {
+      if (filters.type && z.type !== filters.type) {
+        return false;
+      }
+      if (filters.minPowerLevel && z.powerLevel < filters.minPowerLevel) {
+        return false;
+      }
+      if (filters.hasBankai !== undefined && (z.bankai !== undefined) !== filters.hasBankai) {
+        return false;
+      }
+      return true;
+    });
   }
 
   // 統計情報を取得
