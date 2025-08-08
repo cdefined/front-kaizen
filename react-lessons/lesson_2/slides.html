@@ -84,7 +84,7 @@
             border-radius: 10px;
         }
 
-        .lifecycle .arrow {
+        .arrow {
             background: none;
             font-size: 100px;
             color: #667eea;
@@ -106,19 +106,22 @@
             margin: 20px 0;
         }
 
-        .js-side,
-        .ts-side {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
+        .triptych {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 20px;
         }
 
-        .js-side h4 {
-            color: #f39c12;
+        .triptych-transformation {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 20px;
         }
 
-        .ts-side h4 {
-            color: #3498db;
+        .muted {
+            color: #666;
         }
 
         .note {
@@ -234,12 +237,13 @@
                     <div class="syntax-review">
                         <pre><code data-lang="jsx">// 変数の表示
 const name = "Ichigo";
-&lt;h1&gt;Hello, {name}!&lt;/h1&gt;
-
+&lt;h1&gt;Hello, {name}!&lt;/h1&gt;</code></pre>
+                        <pre><code data-lang="jsx">
 // 条件表示
 {isLoggedIn ? &lt;Profile /&gt; : &lt;Login /&gt;}
 {user.isAdmin && &lt;AdminPanel /&gt;}
-
+</code></pre>
+                        <pre><code data-lang="jsx">
 // リスト表示  
 {todos.map(todo =&gt; 
   &lt;li key={todo.id}&gt;{todo.text}&lt;/li&gt;
@@ -283,6 +287,725 @@ function UserCard({ name, email, children }) {
                         コンポーネントは大文字(おおもじ)で始(はじ)めます。propsでデータを渡(わた)します
                     </aside>
                 </section>
+                <section>
+                    <h2>コンポーネント合成</h2>
+                    <div class="triptych-transformation">
+                        <pre><code data-lang="jsx">// 小さいコンポーネント
+function Header() { return &lt;h1&gt;ジョジョファンサイト&lt;/h1&gt;; }
+
+function Navigation() {
+  return (
+    &lt;nav&gt;
+      &lt;a href="#home"&gt;ホーム&lt;/a&gt;
+      &lt;a href="#stands"&gt;スタンド&lt;/a&gt;
+    &lt;/nav&gt;
+  );
+}
+
+function Footer() { return &lt;p&gt;© 2025 ジョジョファンサイト&lt;/p&gt;; }</code></pre>
+                        <div class="arrow">→</div>
+                        <pre><code data-lang="jsx">// 合成して大きいコンポーネント  
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Header /&gt;
+      &lt;Navigation /&gt;
+      &lt;main&gt;メインコンテンツ&lt;/main&gt;
+      &lt;Footer /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    </div>
+                    <aside class="notes">
+                        小（ちい）さいコンポーネントを組（く）み合わせて、大（おお）きなものを作（つく）ります。<br>
+                        これをコンポーネント合成（ごうせい）といいます。
+                    </aside>
+                </section>
+            </section>
+
+            <!-- Event Handling -->
+            <section>
+                <section>
+                    <h1>イベント処理</h1>
+                    <h3>ユーザーの操作に反応する</h3>
+                    <p>クリック、入力などの操作を処理する方法</p>
+                </section>
+
+                <!-- イベントとは -->
+                <section>
+                    <h2>イベントとは？</h2>
+                    <ul>
+                        <li>ユーザーの操作（クリック、入力など）</li>
+                        <li>Reactでは<strong>イベントハンドラー</strong>で処理</li>
+                    </ul>
+                    <div class="note">
+                        HTML: onclick="doSomething()" → React: onClick={handleClick}
+                    </div>
+                </section>
+
+                <!-- Basic click events -->
+                <section>
+                    <h2>基本：onClickイベント</h2>
+                    <pre><code data-lang="jsx">
+function GreetButton() {
+  const handleClick = () => {
+    alert('こんにちは！');
+  };
+
+  return (
+    &lt;button onClick={handleClick}&gt;
+      挨拶する
+    &lt;/button&gt;
+  );
+}
+        </code></pre>
+                    <div class="note">
+                        関数を{ }内で参照、実行しない（handleClick vs handleClick()）
+                    </div>
+                </section>
+
+                <!-- Inline functions -->
+                <section>
+                    <h2>インライン関数</h2>
+                    <pre><code data-lang="jsx">
+function QuickButton() {
+  return (
+    &lt;button onClick={() => alert('クイック挨拶')}&gt;
+      クリック
+    &lt;/button&gt;
+  );
+}
+        </code></pre>
+                    <div class="note">
+                        短い処理ならインラインでもOK
+                    </div>
+                </section>
+
+                <!-- Event ovject -->
+                <section>
+                    <h2>イベントオブジェクト</h2>
+                    <pre><code data-lang="jsx">
+function InfoButton() {
+  const handleClick = (event) => {
+    console.log('クリック位置:', event.clientX, event.clientY);
+    console.log('ボタンテキスト:', event.target.textContent);
+  };
+
+  return &lt;button onClick={handleClick}&gt;情報&lt;/button&gt;;
+}
+        </code></pre>
+                    <div class="note">
+                        <code>event</code>オブジェクトにはクリック位置、要素情報などが含まれる
+                    </div>
+                </section>
+
+                <!-- Passing data -->
+                <section>
+                    <h2>データを渡す</h2>
+                    <pre><code data-lang="jsx">
+function CharacterButton({ name }) {
+  const handleClick = (characterName) => {
+    alert(`選択: ${characterName}`);
+  };
+
+  return (
+    &lt;button onClick={() => handleClick(name)}&gt;
+      {name}
+    &lt;/button&gt;
+  );
+}
+        </code></pre>
+                    <div class="note">
+                        アロー関数でデータを包んで渡す
+                    </div>
+                </section>
+
+                <!-- Multiple buttons -->
+                <section>
+                    <h2>複数ボタンの処理</h2>
+                    <pre><code data-lang="jsx">
+function CharacterList() {
+  const characters = ['黒崎一護', '朽木ルキア', '阿散井恋次'];  
+  const handleSelect = (name) => console.log(`選択: ${name}`);
+
+  return (
+    &lt;div&gt;
+      {characters.map(name => (
+        &lt;button key={name} onClick={() => handleSelect(name)}&gt;
+          {name}
+        &lt;/button&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+        </code></pre>
+                </section>
+
+                <!-- Input events -->
+                <section>
+                    <h2>入力イベント：onChange</h2>
+                    <pre><code data-lang="jsx">
+function NameInput() {
+  const handleChange = (event) => {
+    console.log('入力値:', event.target.value);
+  };
+
+  return (
+    &lt;input 
+      type="text" 
+      placeholder="名前を入力"
+      onChange={handleChange}
+    />
+  );
+}
+        </code></pre>
+                    <div class="note">
+                        <code>event.target.value</code>で入力値を取得
+                    </div>
+                </section>
+
+                <!-- Other events -->
+                <section>
+                    <h2>その他のよく使うイベント</h2>
+                    <pre><code data-lang="jsx">
+function EventDemo() {
+  return (
+    &lt;div&gt;
+      &lt;input 
+        onFocus={() => console.log('フォーカス')}
+        onBlur={() => console.log('フォーカス外れ')}
+      />
+
+      &lt;div onMouseEnter={() => console.log('マウス入')}&gt;ホバーエリア&lt;/div&gt;
+
+      &lt;button onDoubleClick={() => console.log('ダブルクリック')}&gt;ダブルクリック&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+        </code></pre>
+                </section>
+
+                <!-- Summary -->
+                <section>
+                    <h2>イベント処理 まとめ</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>基本パターン</h4>
+                            <ul>
+                                <li><code>onClick</code> クリック処理</li>
+                                <li><code>onChange</code> 入力値変更</li>
+                                <li><code>onFocus/onBlur</code> フォーカス</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>重要ポイント</h4>
+                            <ul>
+                                <li>関数参照を渡す（実行しない）</li>
+                                <li>データ渡しにはアロー関数</li>
+                                <li><code>event.target.value</code>で値取得</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- useState hook -->
+            <section>
+                <section>
+                    <h1>useState フック</h1>
+                    <h3>状態管理の基礎</h3>
+                    <p>Reactで動的なUIを作る第一歩</p>
+                </section>
+
+                <section>
+                    <h2>なぜ状態が必要？</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>静的（前回まで）</h4>
+                            <pre><code data-lang="jsx">
+function WelcomeMessage() {
+  return &lt;h1&gt;こんにちは！&lt;/h1&gt;;
+}
+                        </code></pre>
+                            <p>→ 常に同じ表示</p>
+                            <p class="muted">名刺、看板、固定メニュー</p>
+                        </div>
+                        <div>
+                            <h4>動的（今回）</h4>
+                            <pre><code data-lang="jsx">
+function LikeButton() {
+  const [likes, setLikes] = useState(0);
+  return &lt;button&gt;♡ {likes}&lt;/button&gt;;
+}
+                        </code></pre>
+                            <p>→ ユーザー操作で変化</p>
+                            <p class="muted">SNS、ショッピングカート、フォーム</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- useStateとは -->
+                <section>
+                    <h2>useStateとは？</h2>
+                    <ul>
+                        <li>Reactの<strong>フック</strong>の一つ</li>
+                        <li>コンポーネントに<strong>状態</strong>を持たせる</li>
+                        <li>状態が変わると→コンポーネントが<strong>再レンダリング</strong></li>
+                    </ul>
+                    <br>
+                    <br>
+                    <div class="fragment">
+                        <h4>基本構文</h4>
+                        <pre><code data-lang="jsx">
+const [状態変数, 更新関数] = useState(初期値);
+                    </code></pre>
+                    </div>
+                </section>
+
+                <!-- Example: like button -->
+                <section>
+                    <h2>基本例：いいねボタン</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/hp2249?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+                        style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Like Button"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+import React, { useState } from 'react';
+
+function LikeButton() {
+  // [現在の値, セッター関数] = useState(初期値)
+  const [likes, setLikes] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setLikes(likes + 1)}&gt;
+        ♡ {likes}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre> -->
+                </section>
+
+                <!-- Flow -->
+                <section>
+                    <h2>動作の流れ</h2>
+                    <ol>
+                        <li class="fragment"><code>useState(0)</code> → 初期値0でいいね数を作成</li>
+                        <li class="fragment">ボタンクリック → <code>setLikes(likes + 1)</code></li>
+                        <li class="fragment">状態更新 → コンポーネント再レンダリング</li>
+                        <li class="fragment">新しい値でUI更新</li>
+                    </ol>
+                    <br>
+                    <div class="fragment note">
+                        <strong>重要：</strong>状態が変わるたびに関数コンポーネント全体が再実行される
+                    </div>
+                </section>
+
+                <section>
+                    <h2>基本例：通知カウンター</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/f9pk78?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+                        style="width:100%; height: 600px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Notification Counter"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+import React, { useState } from 'react';
+
+function NotificationBadge() {
+  const [count, setCount] = useState(0);
+
+  const addNotification = () => {
+    setCount(count + 1);
+  };
+
+  const clearAll = () => {
+    setCount(0);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;div className="notification-badge"&gt;
+        通知 {count &gt; 0 && &lt;span className="count"&gt;{count}&lt;/span&gt;}
+      &lt;/div&gt;
+      &lt;button onClick={addNotification}&gt;新着メッセージ&lt;/button&gt;
+      &lt;button onClick={clearAll}&gt;全て既読&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+    </code></pre> -->
+                </section>
+                <section>
+                    <h2>動作の流れ</h2>
+                    <ol>
+                        <li class="fragment"><code>useState(0)</code> → 初期値0で通知数を作成</li>
+                        <li class="fragment">ボタンクリック → <code>setCount(count + 1)</code></li>
+                        <li class="fragment">状態更新 → コンポーネント再レンダリング</li>
+                        <li class="fragment">新しい値でUI更新</li>
+                    </ol>
+                    <br>
+                    <div class="fragment note">
+                        <strong>重要：</strong>状態が変わるたびに関数コンポーネント全体が再実行される
+                    </div>
+                </section>
+
+                <!-- Quiz 1 -->
+                <section>
+                    <h4>理解度チェック①【useState基礎】</h4>
+                    <div class="quiz">
+                        <h3>useState(10)の戻り値は？</h3>
+                        <pre><code data-lang="jsx">
+const result = useState(10);
+console.log(result);
+        </code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>10</code></div>
+                            <div class="quiz-option">B) <code>{value: 10, setValue: function}</code></div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
+                                <code>[10, function]</code>
+                            </div>
+                            <div class="quiz-option">D) <code>function</code></div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> C) useStateは配列を返す [現在の値, セッター関数]
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Multiple states -->
+                <section>
+                    <h2>複数の状態管理</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/5qld3g?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+                        style="width:100%; height: 600px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="User Profile"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+function UserProfile() {
+  const [name, setName] = useState('黒崎一護');
+  const [age, setAge] = useState(15);
+  const [isOnline, setIsOnline] = useState(false);
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;年齢: {age}歳&lt;/p&gt;
+      &lt;p&gt;状態: {isOnline ? 'オンライン' : 'オフライン'}&lt;/p&gt;
+      
+      &lt;button onClick={() =&gt; setAge(age + 1)}&gt;
+        誕生日
+      &lt;/button&gt;
+      &lt;button onClick={() =&gt; setIsOnline(!isOnline)}&gt;
+        {isOnline ? 'ログアウト' : 'ログイン'}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre> -->
+                </section>
+
+                <!-- Object state -->
+                <section>
+                    <h2>オブジェクト状態の管理</h2>
+                    <iframe src="https://codesandbox.io/embed/gr9n8x?view=editor&hidenavigation=1"
+                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Product Card"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+function ProductCard() {
+  const [product, setProduct] = useState({
+    name: '袖白雪',
+    price: 1200,
+    inStock: true
+  });
+
+  const updatePrice = () =&gt; {
+    // オブジェクト更新時は新しいオブジェクトを作成
+    setProduct({
+      ...product,  // スプレッド構文で既存データをコピー
+      price: 1500  // 特定のプロパティだけ更新
+    });
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;価格: ¥{product.price}&lt;/p&gt;
+      &lt;p&gt;在庫: {product.inStock ? 'あり' : 'なし'}&lt;/p&gt;
+      &lt;button onClick={updatePrice}&gt;値上げ&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre> -->
+                </section>
+
+                <!-- Quiz 2 -->
+                <section>
+                    <h4>理解度チェック②【オブジェクト更新】</h4>
+                    <div class="quiz">
+                        <h3>オブジェクト状態の更新、どれが正しい？</h3>
+                        <pre><code data-lang="jsx">
+const [user, setUser] = useState({name: '一護', age: 17});
+// ageを18に変更したい
+        </code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>user.age = 18;</code></div>
+                            <div class="quiz-option">B) <code>setUser({age: 18});</code></div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
+                                <code>setUser({...user, age: 18});</code>
+                            </div>
+                            <div class="quiz-option">D) <code>setUser(user.age = 18);</code></div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> C) スプレッド構文で既存データを保持しつつ特定の値だけ更新
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Array state -->
+                <section>
+                    <h2>配列状態の管理</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/fsjp56?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+                        style="width:100%; height: 850px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Shopping List"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+function ShoppingList() {
+  const [items, setItems] = useState([
+    '市丸ギンの茶',
+    '藍染惣右介の本',
+    '東仙要のサングラス'
+  ]);
+
+  const addItem = () =&gt; {
+    setItems([...items, '黒崎一護のバッジ']);
+  };
+
+  const removeItem = (index) =&gt; {
+    setItems(items.filter((_, i) =&gt; i !== index));
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;買い物リスト&lt;/h3&gt;
+      &lt;ul&gt;
+        {items.map((item, index) =&gt; (
+          &lt;li key={index}&gt;
+            {item}
+            &lt;button onClick={() =&gt; removeItem(index)}&gt;
+              削除
+            &lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      &lt;button onClick={addItem}&gt;アイテム追加&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre> -->
+                </section>
+
+                <section>
+                    <h2>配列状態：タスク管理アプリ</h2>
+                    <pre><code data-lang="jsx">
+function TaskManager() {
+  const [tasks, setTasks] = useState([
+    '虚を倒す',
+    '学校に行く',
+    'ルキアを助ける'
+  ]);
+
+  const addTask = () => {
+    const newTask = 'バンカイを習得する';
+    setTasks([...tasks, newTask]);  // 末尾に追加
+  };
+
+  const removeTask = (indexToRemove) => {
+    setTasks(tasks.filter((_, index) => index !== indexToRemove));
+  };
+
+  const completeFirstTask = () => {
+    setTasks(tasks.slice(1));  // 最初の要素を削除
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;今日のタスク ({tasks.length}件)&lt;/h3&gt;
+      &lt;ul&gt;
+        {tasks.map((task, index) => (
+          &lt;li key={index}&gt;
+            {task}
+            &lt;button onClick={() => removeTask(index)}&gt;完了&lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      &lt;button onClick={addTask}&gt;新しいタスク&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+    </code></pre>
+                </section>
+
+                <!-- Common mistakes -->
+                <section>
+                    <h2>よくある間違い</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>❌ ダメな例</h4>
+                            <pre><code data-lang="jsx">
+// 直接変更はNG
+count = count + 1;
+
+// オブジェクト直接変更もNG
+shinigami.squad = 6;
+
+// 配列直接変更もNG
+members.push('新メンバー');
+                        </code></pre>
+                        </div>
+                        <div>
+                            <h4>✅ 正しい例</h4>
+                            <pre><code data-lang="jsx">
+// セッター関数を使う
+setCount(count + 1);
+
+// 新しいオブジェクトを作る
+setShinigami({...shinigami, squad: 6});
+
+// 新しい配列を作る
+setMembers([...members, '新メンバー']);
+                        </code></pre>
+                        </div>
+                    </div>
+                    <p class="note">
+                        <strong>理由：</strong>Reactは参照が変わらないと再レンダリングしない
+                    </p>
+                </section>
+
+                <!-- Practical tips -->
+                <section>
+                    <h2>実践のコツ</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>連続更新が心配な時</h4>
+                            <pre><code data-lang="jsx">
+// こうすると2回実行されても安心
+const increment = () => {
+  setCount(prev => prev + 1);
+  setCount(prev => prev + 1);  // +2される
+};
+            </code></pre>
+                        </div>
+                        <div>
+                            <h4>複雑な条件でオブジェクト更新</h4>
+                            <pre><code data-lang="jsx">
+const toggleOnlineStatus = () => {
+  setUser(prevUser => ({
+    ...prevUser,
+    isOnline: !prevUser.isOnline,
+    lastSeen: prevUser.isOnline ? new Date() : null
+  }));
+};
+            </code></pre>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <code>prev =></code> を使うと前の状態に確実にアクセスできる
+                    </div>
+                </section>
+
+                <!-- Quiz 3 -->
+                <section>
+                    <h4>理解度チェック③【配列操作】</h4>
+                    <div class="quiz">
+                        <h3>配列の最初の要素を削除するには？</h3>
+                        <pre><code data-lang="jsx">
+const [items, setItems] = useState(['A', 'B', 'C']);
+// ['B', 'C'] にしたい
+        </code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>items.shift();</code></div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">B)
+                                <code>setItems(items.slice(1));</code>
+                            </div>
+                            <div class="quiz-option">C) <code>setItems(items.pop());</code></div>
+                            <div class="quiz-option">D) <code>setItems([...items.slice(1)]);</code></div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> B) <code>slice(1)</code>で1番目以降の要素で新配列作成（DもOKだけど冗長）
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dark Mode Toggle -->
+                <section>
+                    <h2>真偽値の切り替え：ダークモードのトグル</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/w96wyk?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Dark Mode Toggle"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <!-- <pre><code data-lang="jsx">
+function AppTheme() {
+  const [isDark, setIsDark] = useState(false);
+  const [userName, setUserName] = useState('黒崎一護');
+
+  const toggleTheme = () =&gt; {
+    setIsDark(prev =&gt; !prev);
+    setUserName(isDark ? '黒崎一護' : '虚化一護');
+  };
+
+  return (
+    &lt;div className={isDark ? "dark" : "light"}&gt;
+      &lt;h2&gt;Welcome, {userName}!&lt;/h2&gt;
+      &lt;p&gt;テーマ: {isDark ? 'ダーク' : 'ライト'}&lt;/p&gt;
+      &lt;button onClick={toggleTheme}&gt;
+        {isDark ? 'ライトモード' : 'ダークモード'}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre> -->
+                </section>
+
+                <!-- まとめ -->
+                <section>
+                    <h2>useState まとめ</h2>
+                    <div class="comparison">
+                        <div>
+                            <h4>できるようになったこと</h4>
+                            <ul>
+                                <li>コンポーネントに状態を持たせる</li>
+                                <li>ユーザーの操作で画面を更新</li>
+                                <li>複数の状態を管理</li>
+                                <li>オブジェクト・配列の状態更新</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>重要ポイント</h4>
+                            <ul>
+                                <li>必ずセッター関数を使う</li>
+                                <li>オブジェクト・配列は新しく作る</li>
+                                <li>関数型更新を活用</li>
+                                <li>状態更新 → 再レンダリング</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
             </section>
 
             <section>
@@ -318,101 +1041,6 @@ function UserCard({ name, email, children }) {
                         <div class="note">
                             <strong>答え:</strong> C) <code>children</code>はコンポーネントの開始・終了タグの間の要素
                         </div>
-                    </div>
-                </section>
-            </section>
-
-            <!-- SPA Introduction -->
-            <section>
-                <section>
-                    <h1>SPA【Single Page Application】</h1>
-                </section>
-                <section>
-                    <h2>SPA【Single Page Application】とは？</h2>
-
-                    <h3>従来のWebサイト【Multi Page Application】</h3>
-                    <ul>
-                        <li>ページ遷移のたびにサーバーから新しいHTMLを取得</li>
-                        <li>画面全体がリロードされる</li>
-                        <li>ページ遷移が遅い</li>
-                    </ul>
-
-                    <h3>SPA</h3>
-                    <ul>
-                        <li>初回ロード後、JavaScriptでページ遷移を制御</li>
-                        <li>必要なデータのみAPIで取得</li>
-                        <li>高速なページ遷移が可能</li>
-                    </ul>
-                </section>
-                <section>
-                    <h2>SPA【Single Page Application】とは？</h2>
-                    <div class="comparison">
-                        <div class="pros">
-                            <h4>メリット</h4>
-                            <ul>
-                                <li>高速なページ遷移</li>
-                                <li>アプリライクなUX</li>
-                                <li>サーバー負荷軽減</li>
-                            </ul>
-                        </div>
-                        <div class="cons">
-                            <h4>課題</h4>
-                            <ul>
-                                <li>初回ロードが重い</li>
-                                <li>SEOが困難</li>
-                                <li>JavaScriptが必須</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- The SPA Problem -->
-                <section>
-                    <h2>SPAの根本的な問題</h2>
-                    <div class="warning">
-                        <p><strong>純粋なSPAは多くの問題を抱えており現在は「呪われた」技術とされることも</strong></p>
-                    </div>
-
-                    <h3>主な問題点</h3>
-                    <ul>
-                        <li><strong>SEO</strong> : 検索エンジンがJavaScriptを実行しないと内容が見えない</li>
-                        <li><strong>初回ロード</strong> : すべてのJavaScriptをダウンロードするまで何も表示されない</li>
-                        <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
-                        <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
-                    </ul>
-                </section>
-
-                <!-- Slide 9: SPA Solutions -->
-                <section>
-                    <h2>現実的な解決策</h2>
-                    <ul>
-                        <li><strong>SSR【Server Side Rendering】</strong><br>サーバーでHTMLを生成</li>
-                        <li><strong>SSG【Static Site Generation】</strong><br>ビルド時に静的HTMLを生成</li>
-                        <li><strong>ISR【Incremental Static Regeneration】</strong><br>必要に応じて静的ページを再生成</li>
-                    </ul>
-
-                    <div class="note">
-                        これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix等のフレームワーク）
-                    </div>
-                </section>
-
-                <!-- Ecosystem Overview -->
-                <section>
-                    <h2>Reactエコシステム（参考）</h2>
-                    <h3>フルスタックフレームワーク</h3>
-                    <ul>
-                        <li><strong>Next.js</strong>：SSR/SSG対応・本格的なWebアプリ開発</li>
-                        <li><strong>React Router/Remix</strong>：フルスタック・Web標準重視</li>
-                        <li><strong>Astro、Gatsby</strong>：静的サイト生成特化</li>
-                    </ul>
-                    <br><br>
-                    <h3>ネイティブアプリ</h3>
-                    <ul>
-                        <li><strong>React Native</strong>：iOS・Androidアプリ開発</li>
-                        <li><strong>Expo</strong>：React Nativeの開発環境</li>
-                    </ul>
-                    <div class="note">
-                        本コースでは基本的なSPAから始めますが、実際のプロダクションでは上記のフレームワークを使用することが多い
                     </div>
                 </section>
             </section>
