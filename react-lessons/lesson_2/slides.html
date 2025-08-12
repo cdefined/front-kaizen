@@ -922,6 +922,53 @@ const [user, setUser] = useState({
         </section>
       </section>
 
+      <!-- Forms -->
+      <section>
+        <section>
+          <h1>フォームと入力</h1>
+          <h3>ユーザーからのデータ入力を受け取る</h3>
+          <p>Reactでフォームを扱う基本を学ぶ</p>
+        </section>
+
+        <!-- Form basics -->
+        <section>
+          <h2>フォームの基本</h2>
+          <ul>
+            <li>ユーザーからの入力を受け取るためのUI部品</li>
+            <li>テキストボックス、チェックボックス、ラジオボタンなど</li>
+            <li>Reactでは状態管理と組み合わせて使う</li>
+          </ul>
+        </section>
+
+        <!-- Controlled components -->
+        <section>
+          <h2>コントロールされたコンポーネント</h2>
+          <p>Reactではフォーム要素を状態で制御する</p>
+          <pre><code data-lang="jsx">
+function NameForm() {
+  const [name, setName] = useState(''); // 状態で入力値を管理  
+  const handleChange = (event) => {
+    setName(event.target.value); // 入力値を状態に保存
+  };
+  return (
+    &lt;form&gt;
+      &lt;label&gt;名前:&lt;/label&gt;
+      &lt;input
+        type="text"
+        value={name} // 状態をvalueに設定
+        onChange={handleChange} // 入力変更時に状態更新
+      /&gt;
+      &lt;button type="submit"&gt;送信&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+          </code></pre>
+          <div class="note">
+            <strong>ポイント:</strong> <code>value</code>属性に状態を設定し、<code>onChange</code>で状態を更新する
+          </div>
+        </section>
+      </section>
+
       <section>
         <section>
           <h4>理解度チェック③【Props】</h4>
@@ -935,11 +982,6 @@ const [user, setUser] = useState({
         &lt;/div&gt;
     );
 }</code></pre>
-            <pre><code data-lang="jsx">
-&lt;Card title="Profile"&gt;
-    &lt;p&gt;Content here&lt;/p&gt;
-&lt;/Card&gt;
-</code></pre>
             <div class="quiz-options small">
               <div class="quiz-option">A) <code>Content here</code></div>
               <div class="quiz-option">B)
