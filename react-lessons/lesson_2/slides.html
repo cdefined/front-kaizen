@@ -922,12 +922,28 @@ const [user, setUser] = useState({
         </section>
       </section>
 
-      <!-- Forms -->
+      <!-- Forms and Input -->
       <section>
         <section>
           <h1>フォームと入力</h1>
           <h3>ユーザーからのデータ入力を受け取る</h3>
           <p>Reactでフォームを扱う基本を学ぶ</p>
+        </section>
+
+        <!-- Why forms are special in React -->
+        <section>
+          <h2>Reactでフォームが特別な理由</h2>
+          <ul>
+            <li>普通のhtml: DOM が状態を管理</li>
+            <li>React: コンポーネントが状態を管理したい</li>
+            <li>問題: どちらが正しい状態？</li>
+          </ul>
+
+          <pre><code data-lang="jsx">// uncontrolled - Reactが状態を知らない
+&lt;input type="text" /&gt;
+
+// controlled - Reactがすべて管理
+&lt;input value={state} onChange={setState} /&gt;</code></pre>
         </section>
 
         <!-- Form basics -->
@@ -937,67 +953,524 @@ const [user, setUser] = useState({
             <li>ユーザーからの入力を受け取るためのUI部品</li>
             <li>テキストボックス、チェックボックス、ラジオボタンなど</li>
             <li>Reactでは状態管理と組み合わせて使う</li>
+            <li>web標準のform要素をそのまま活用</li>
           </ul>
         </section>
 
-        <!-- Controlled components -->
+        <!-- Single input controlled component -->
         <section>
-          <h2>コントロールされたコンポーネント</h2>
-          <p>Reactではフォーム要素を状態で制御する</p>
-          <pre><code data-lang="jsx">
-function NameForm() {
-  const [name, setName] = useState(''); // 状態で入力値を管理  
-  const handleChange = (event) => {
-    setName(event.target.value); // 入力値を状態に保存
-  };
+          <h2>基本的な「Controlled Component」</h2>
+          <pre><code data-lang="jsx">function StandForm() {
+  const [standName, setStandName] = useState('');
+  
   return (
     &lt;form&gt;
-      &lt;label&gt;名前:&lt;/label&gt;
-      &lt;input
+      &lt;label htmlFor="stand-input"&gt;スタンド名:&lt;/label&gt;
+      &lt;input 
+        id="stand-input"
         type="text"
-        value={name} // 状態をvalueに設定
-        onChange={handleChange} // 入力変更時に状態更新
+        value={standName} // Reactが管理する値
+        onChange={(e) =&gt; setStandName(e.target.value)}
+        placeholder="ザ・ワールド"
       /&gt;
-      &lt;button type="submit"&gt;送信&lt;/button&gt;
+      &lt;p&gt;入力中: {standName}&lt;/p&gt;
     &lt;/form&gt;
   );
-}
-          </code></pre>
+}</code></pre>
           <div class="note">
-            <strong>ポイント:</strong> <code>value</code>属性に状態を設定し、<code>onChange</code>で状態を更新する
+            <strong>ポイント:</strong> value + onChange でReactが完全に状態管理
           </div>
         </section>
-      </section>
 
-      <section>
+        <!-- Form submission and preventDefault -->
         <section>
-          <h4>理解度チェック③【Props】</h4>
-          <div class="quiz">
-            <h3>childrenには何が入る?</h3>
-            <pre><code data-lang="jsx">function Card({ title, children }) {
-    return (
-        &lt;div&gt;
-            &lt;h2&gt;{title}&lt;/h2&gt;
-            {children}
-        &lt;/div&gt;
-    );
+          <h2>フォーム送信とpreventDefault</h2>
+          <pre><code data-lang="jsx">function StandRegistration() {
+  const [standName, setStandName] = useState('');
+  
+  const handleSubmit = (event) => {
+    event.preventDefault(); // デフォルトのページリロードを防ぐ
+    console.log('スタンド登録:', standName);
+    
+    // ここでapi送信やデータ処理を行う
+    // setStandName(''); // フォームリセット
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;label htmlFor="stand-name"&gt;スタンド名:&lt;/label&gt;
+      &lt;input 
+        id="stand-name"
+        type="text"
+        value={standName}
+        onChange={(e) =&gt; setStandName(e.target.value)}
+        placeholder="ザ・ワールド"
+        required
+      /&gt;
+      &lt;button type="submit"&gt;登録&lt;/button&gt;
+    &lt;/form&gt;
+  );
 }</code></pre>
-            <div class="quiz-options small">
-              <div class="quiz-option">A) <code>Content here</code></div>
-              <div class="quiz-option">B)
-                <code>&lt;div&gt;&lt;h2&gt;{title}&lt;/h2&gt;Content here&lt;/div&gt;</code>
+          <div class="note">
+            <strong>重要:</strong> preventDefault()がないとページが勝手にリロードされる
+          </div>
+        </section>
+
+        <!-- Form submission patterns -->
+        <section>
+          <h2>送信処理の実践パターン</h2>
+          <pre><code data-lang="jsx">function UserRegistration() {
+  const [user, setUser] = useState({ name: '', email: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setMessage('');
+
+    try {
+      await registerUser(user);
+      setMessage('登録完了！');
+      setUser({ name: '', email: '' }); // フォームクリア
+    } catch (err) {
+      setMessage('エラー: ' + err.message);
+    }
+    
+    setSubmitting(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      {/* inputs here */}
+      &lt;button type="submit" disabled={submitting}&gt;
+        {submitting ? '送信中...' : '登録'}
+      &lt;/button&gt;
+      {message && &lt;p&gt;{message}&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+          <div class="note">
+            <strong>ポイント:</strong> submitting状態でボタン無効化、わかりやすいメッセージ
+          </div>
+        </section>
+
+        <!-- Multiple inputs -->
+        <section>
+          <h2>複数の入力フィールドを効率的に</h2>
+          <pre><code data-lang="jsx">function CharacterForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    village: '',
+    technique: ''
+  });
+  
+  // 汎用的なchange handler - name属性を活用
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prev =&gt; ({
+      ...prev,
+      [name]: value // 計算されたプロパティ名で動的更新
+    }));
+  };
+  
+  return (
+    &lt;form&gt;
+      &lt;input 
+        name="name" 
+        value={formData.name} 
+        onChange={handleChange} 
+        placeholder="古手梨花" 
+      /&gt;
+      &lt;input 
+        name="village" 
+        value={formData.village} 
+        onChange={handleChange} 
+        placeholder="雛見沢" 
+      /&gt;
+      &lt;input 
+        name="technique" 
+        value={formData.technique} 
+        onChange={handleChange} 
+        placeholder="ループ" 
+      /&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+          <div class="note">
+            <strong>効率化:</strong> 1つのhandlerで複数input管理、name属性が重要
+          </div>
+        </section>
+
+        <!-- Different input types -->
+        <section>
+          <h2>様々な入力タイプの統一的な扱い</h2>
+          <pre><code data-lang="jsx">function ComprehensiveForm() {
+  const [data, setData] = useState({
+    name: '',
+    attending: false,
+    meal: '',
+    weapon: '',
+    notes: ''
+  });
+  
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setData(prev =&gt; ({
+      ...prev,
+      // checkboxは checked、他は value を使用
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+  
+  return (
+    &lt;form&gt;
+      &lt;input 
+        type="text" 
+        name="name" 
+        value={data.name}
+        placeholder="竜宮レナ" 
+        onChange={handleChange} 
+      /&gt;
+      
+      &lt;label&gt;
+        &lt;input 
+          type="checkbox" 
+          name="attending" 
+          checked={data.attending}
+          onChange={handleChange} 
+        /&gt;
+        参加する
+      &lt;/label&gt;
+      
+      &lt;fieldset&gt;
+        &lt;legend&gt;食事&lt;/legend&gt;
+        &lt;label&gt;
+          &lt;input 
+            type="radio" 
+            name="meal" 
+            value="curry"
+            checked={data.meal === 'curry'}
+            onChange={handleChange} 
+          /&gt;
+          カレー
+        &lt;/label&gt;
+        &lt;label&gt;
+          &lt;input 
+            type="radio" 
+            name="meal" 
+            value="bento"
+            checked={data.meal === 'bento'}
+            onChange={handleChange} 
+          /&gt;
+          弁当
+        &lt;/label&gt;
+      &lt;/fieldset&gt;
+      
+      &lt;select name="weapon" value={data.weapon} onChange={handleChange}&gt;
+        &lt;option value=""&gt;武器を選択&lt;/option&gt;
+        &lt;option value="nata"&gt;鉈&lt;/option&gt;
+        &lt;option value="bat"&gt;バット&lt;/option&gt;
+      &lt;/select&gt;
+      
+      &lt;textarea 
+        name="notes"
+        value={data.notes}
+        onChange={handleChange}
+        placeholder="備考"
+        rows="3"
+      /&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+          <div class="note">
+            <strong>web標準活用:</strong> fieldset, legend, labelで意味的なマークアップ
+          </div>
+        </section>
+
+        <!-- Uncontrolled components -->
+        <section>
+          <h2>「Uncontrolled Component」</h2>
+          <p>refを使って直接DOM要素にアクセスする方法</p>
+          <pre><code data-lang="jsx">function SimpleForm() {
+  const nameRef = useRef(null);
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // DOM要素から直接値を取得
+    console.log('卍解:', nameRef.current.value);
+    
+    // フォームリセット
+    nameRef.current.value = '';
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;label htmlFor="bankai-input"&gt;卍解名:&lt;/label&gt;
+      &lt;input 
+        id="bankai-input"
+        type="text" 
+        ref={nameRef} 
+        defaultValue="千本桜景厳" // valueではなくdefaultValue
+        placeholder="卍解名を入力"
+      /&gt;
+      &lt;button type="submit"&gt;解放&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+          <div class="note">
+            <strong>使い分け:</strong> 簡単なフォーム→「Uncontrolled」、リアルタイム処理→「Controlled」
+          </div>
+        </section>
+
+        <!-- Form validation -->
+        <section>
+          <h2>フォーム検証の種類</h2>
+          <ul>
+            <li><strong>組み込み検証</strong>
+              HTML属性で必須・形式・範囲などを定義
+            </li>
+            <li><strong>JavaScript検証</strong>
+              HTML検証の強化・カスタマイズ用
+            </li>
+          </ul>
+          <div class="note">
+            HTML検証 → 高速・低カスタマイズ<br>
+            JS検証 → 柔軟・追加機能向け<br>
+            基本はHTML＋必要に応じてJS
+          </div>
+        </section>
+
+        <section>
+          <h2>組み込み検証の主な属性</h2>
+          <ul>
+            <li><code>required</code> 必須入力</li>
+            <li><code>minlength</code>/<code>maxlength</code> 文字数制限</li>
+            <li><code>min</code>/<code>max</code>/<code>step</code> 数値の範囲・刻み</li>
+            <li><code>type</code> 入力型（email, number等）</li>
+            <li><code>pattern</code> 正規表現マッチ</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>基本的なバリデーション</h2>
+          <pre><code data-lang="jsx">function ValidatedForm() {
+  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [errors, setErrors] = useState({});
+  
+  const validateForm = (data) => {
+    const newErrors = {};
+    
+    if (!data.name.trim()) {
+      newErrors.name = '名前は必須です';
+    } else if (data.name.length &lt; 2) {
+      newErrors.name = '名前は2文字以上で入力してください';
+    }
+    
+    if (!data.email.trim()) {
+      newErrors.email = 'メールアドレスは必須です';
+    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+      newErrors.email = '有効なメールアドレスを入力してください';
+    }
+    
+    return newErrors;
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validateForm(formData);
+    
+    if (Object.keys(validationErrors).length &gt; 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    
+    setErrors({});
+    console.log('死神登録:', formData);
+  };
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev =&gt; ({ ...prev, [name]: value }));
+    
+    // リアルタイムエラークリア
+    if (errors[name]) {
+      setErrors(prev =&gt; ({ ...prev, [name]: '' }));
+    }
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;名前:&lt;/label&gt;
+        &lt;input 
+          id="name"
+          type="text" 
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="黒崎一護"
+          aria-invalid={errors.name ? 'true' : 'false'}
+        /&gt;
+        {errors.name && &lt;p role="alert" style={{ color: 'red' }}&gt;{errors.name}&lt;/p&gt;}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;メール:&lt;/label&gt;
+        &lt;input 
+          id="email"
+          type="email" 
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="ichigo@soul-society.jp"
+          aria-invalid={errors.email ? 'true' : 'false'}
+        /&gt;
+        {errors.email && &lt;p role="alert" style={{ color: 'red' }}&gt;{errors.email}&lt;/p&gt;}
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;登録&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+        </section>
+
+        <!-- Form accessibility -->
+        <section>
+          <h2>フォームのアクセシビリティ</h2>
+          <ul>
+            <li><strong>label要素:</strong> すべての入力フィールドに適切なlabel</li>
+            <li><strong>htmlFor/id:</strong> labelとinputを関連付け</li>
+            <li><strong>fieldset/legend:</strong> 関連する入力項目をグループ化</li>
+            <li><strong>aria-invalid:</strong> バリデーションエラー時の状態表示</li>
+            <li><strong>role="alert":</strong> エラーメッセージをスクリーンリーダーに通知</li>
+          </ul>
+
+          <pre><code data-lang="jsx">// 良いアクセシビリティの例
+&lt;fieldset&gt;
+  &lt;legend&gt;個人情報&lt;/legend&gt;
+  &lt;label htmlFor="user-name"&gt;名前 (必須)&lt;/label&gt;
+  &lt;input 
+    id="user-name"
+    type="text"
+    required
+    aria-describedby="name-error"
+    aria-invalid={hasError ? 'true' : 'false'}
+  /&gt;
+  &lt;div id="name-error" role="alert"&gt;
+    {error && error}
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+        </section>
+
+        <!-- Form best practices -->
+        <section>
+          <h2>フォームのベストプラクティス</h2>
+          <ul>
+            <li><strong>web標準重視:</strong> HTML5のtype属性を活用（email、tel、url等）</li>
+            <li><strong>適切なsemantic markup:</strong> form、fieldset、legend要素</li>
+            <li><strong>Controlled vs Uncontrolled:</strong> 用途に応じて選択</li>
+            <li><strong>パフォーマンス:</strong> 不要な再レンダリングを避ける</li>
+            <li><strong>UX重視:</strong> リアルタイムフィードバック、明確なエラー表示</li>
+            <li><strong>セキュリティ:</strong> サーバーサイドでも必ずバリデーション</li>
+          </ul>
+          <div class="note">
+            <strong>基本思想:</strong> ReactはHTML formを拡張するもの、完全に置き換えるものではない
+          </div>
+        </section>
+
+        <!-- Quiz 1: Controlled components -->
+        <section>
+          <h4>理解度チェック④【フォーム基本】</h4>
+          <div class="quiz">
+            <h3>このコードの問題点は？</h3>
+            <pre><code data-lang="jsx">function BrokenForm() {
+  const [name, setName] = useState('');
+
+  return (
+    &lt;input 
+      type="text" 
+      onChange={(e) =&gt; setName(e.target.value)}
+    /&gt;
+  );
+}</code></pre>
+            <div class="quiz-options">
+              <div class="quiz-option">A) onChangeが間違っている</div>
+              <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">
+                B) value属性がない
               </div>
-              <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
-                <code>&lt;p&gt;Content here&lt;/p&gt;</code>
-              </div>
-              <div class="quiz-option">D) <code>&lt;h2&gt;Profile&lt;/h2&gt;Content here</code></div>
+              <div class="quiz-option">C) setNameの書き方が間違い</div>
+              <div class="quiz-option">D) 問題ない</div>
             </div>
           </div>
           <div class="fragment" data-fragment-index="1">
             <div class="note">
-              <strong>答え:</strong> C) <code>children</code>はコンポーネントの開始・終了タグの間の要素
+              <strong>答え:</strong> B) Controlled Componentにはvalue属性が必須
             </div>
           </div>
+        </section>
+
+        <!-- Quiz 2: Multiple inputs -->
+        <section>
+          <h4>理解度チェック⑤【複数入力管理】</h4>
+          <div class="quiz">
+            <h3>name="character"のinputに「圭一」を入力した時、stateはどうなる？</h3>
+            <pre><code data-lang="jsx">const [data, setData] = useState({ character: '', role: 'student' });
+
+const handleChange = (e) => {
+  setData(prev =&gt; ({ 
+    ...prev, 
+    [e.target.name]: e.target.value 
+  }));
+};</code></pre>
+            <div class="quiz-options">
+              <div class="quiz-option">A) { character: '圭一' }</div>
+              <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">
+                B) { character: '圭一', role: 'student' }
+              </div>
+              <div class="quiz-option">C) { 圭一: true, role: 'student' }</div>
+              <div class="quiz-option">D) エラーになる</div>
+            </div>
+          </div>
+          <div class="fragment" data-fragment-index="1">
+            <div class="note">
+              <strong>答え:</strong> B) スプレッド構文で既存プロパティを保持しつつ更新
+            </div>
+          </div>
+        </section>
+
+        <!-- Summary -->
+        <section>
+          <h3>重要な概念</h3>
+          <ul>
+            <li><strong>Controlled Component:</strong> Reactが状態管理、リアルタイム処理向け</li>
+            <li><strong>Uncontrolled Component:</strong> DOM直接操作、シンプル送信向け</li>
+            <li><strong>preventDefault():</strong> form送信でのpage reload回避</li>
+            <li><strong>統一的なhandleChange:</strong> name属性 + 計算プロパティで効率化</li>
+          </ul>
+        </section>
+        <section>
+          <h3>実装パターン</h3>
+          <ul>
+            <li>複数inputは1つのobject stateで管理</li>
+            <li>validation logic分離、エラー状態管理</li>
+            <li>loading/success/error statesでUX向上</li>
+            <li>web標準のsemantic markup活用</li>
+          </ul>
+
+        </section>
+        <section>
+          <h3>設計思想</h3>
+          <ul>
+            <li>ReactはHTMLを拡張、置換ではない</li>
+            <li>アクセシビリティファースト</li>
+            <li>Progressive Enhancement思考</li>
+          </ul>
         </section>
       </section>
 
