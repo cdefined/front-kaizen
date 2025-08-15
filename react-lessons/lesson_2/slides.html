@@ -67,6 +67,15 @@
       line-height: 2em;
     }
 
+    ul.compact-list>li,
+    dl.compact-list>dd {
+      line-height: 1.5em;
+    }
+
+    dd {
+      margin-bottom: 0.5em;
+    }
+
     .lifecycle {
       display: flex;
       justify-content: space-between;
@@ -933,17 +942,24 @@ const [user, setUser] = useState({
         <!-- Why forms are special in React -->
         <section>
           <h2>Reactでフォームが特別な理由</h2>
-          <ul>
-            <li>普通のhtml: DOM が状態を管理</li>
-            <li>React: コンポーネントが状態を管理したい</li>
-            <li>問題: どちらが正しい状態？</li>
-          </ul>
+          <dl class="compact-list">
+            <dt class="fragment" data-fragment-index="0">普通のHTML</dt>
+            <dd class="fragment" data-fragment-index="0">DOM が状態を管理</dd>
 
-          <pre><code data-lang="jsx">// uncontrolled - Reactが状態を知らない
+            <dt class="fragment" data-fragment-index="2">React</dt>
+            <dd class="fragment" data-fragment-index="2">コンポーネントが状態を管理したい</dd>
+
+            <dt class="fragment" data-fragment-index="3">問題</dt>
+            <dd class="fragment" data-fragment-index="3">どちらが正しい状態？</dd>
+          </dl>
+
+          <div class="fragment" data-fragment-index="3">
+            <pre><code data-lang="jsx">// uncontrolled - Reactが状態を知らない
 &lt;input type="text" /&gt;
 
 // controlled - Reactがすべて管理
 &lt;input value={state} onChange={setState} /&gt;</code></pre>
+          </div>
         </section>
 
         <!-- Form basics -->
@@ -953,7 +969,7 @@ const [user, setUser] = useState({
             <li>ユーザーからの入力を受け取るためのUI部品</li>
             <li>テキストボックス、チェックボックス、ラジオボタンなど</li>
             <li>Reactでは状態管理と組み合わせて使う</li>
-            <li>web標準のform要素をそのまま活用</li>
+            <li>Web標準の<code>form</code>要素をそのまま活用</li>
           </ul>
         </section>
 
@@ -978,7 +994,7 @@ const [user, setUser] = useState({
   );
 }</code></pre>
           <div class="note">
-            <strong>ポイント:</strong> value + onChange でReactが完全に状態管理
+            <strong>ポイント:</strong> <code>value</code> + <code>onChange</code> でReactが完全に状態管理
           </div>
         </section>
 
@@ -1012,51 +1028,7 @@ const [user, setUser] = useState({
   );
 }</code></pre>
           <div class="note">
-            <strong>重要:</strong> preventDefault()がないとページが勝手にリロードされる
-          </div>
-        </section>
-
-        <!-- Form submission patterns -->
-        <section>
-          <h2>送信処理の実践パターン</h2>
-          <pre><code data-lang="jsx">function UserRegistration() {
-  const [user, setUser] = useState({ name: '', email: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setMessage('');
-
-    try {
-      await registerUser(user);
-      setMessage('登録完了！');
-      setUser({ name: '', email: '' }); // フォームクリア
-    } catch (err) {
-      setMessage('エラー: ' + err.message);
-    }
-    
-    setSubmitting(false);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser(prev => ({ ...prev, [name]: value }));
-  };
-
-  return (
-    &lt;form onSubmit={handleSubmit}&gt;
-      {/* inputs here */}
-      &lt;button type="submit" disabled={submitting}&gt;
-        {submitting ? '送信中...' : '登録'}
-      &lt;/button&gt;
-      {message && &lt;p&gt;{message}&lt;/p&gt;}
-    &lt;/form&gt;
-  );
-}</code></pre>
-          <div class="note">
-            <strong>ポイント:</strong> submitting状態でボタン無効化、わかりやすいメッセージ
+            <strong>重要:</strong> <code>preventDefault()</code>がないとページが勝手にリロードされる
           </div>
         </section>
 
@@ -1109,87 +1081,51 @@ const [user, setUser] = useState({
 
         <!-- Different input types -->
         <section>
-          <h2>様々な入力タイプの統一的な扱い</h2>
-          <pre><code data-lang="jsx">function ComprehensiveForm() {
-  const [data, setData] = useState({
-    name: '',
-    attending: false,
-    meal: '',
-    weapon: '',
-    notes: ''
-  });
+          <h2>ラジオボタンの正しい扱い方</h2>
+          <p>選択肢から1つだけ選ぶUIパターン</p>
+
+          <pre><code data-lang="jsx">function WeaponSelector() {
+  const [selectedWeapon, setSelectedWeapon] = useState(''); // 初期値は空文字
   
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setData(prev =&gt; ({
-      ...prev,
-      // checkboxは checked、他は value を使用
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  // ラジオボタン専用のhandler（分かりやすさ重視）
+  const handleWeaponChange = (event) => {
+    setSelectedWeapon(event.target.value); // 選択されたvalue
   };
+  
+  const weapons = [
+    { value: 'nata', label: '鉈', character: 'レナ' },
+    { value: 'bat', label: 'バット', character: '魅音' },
+    { value: 'syringe', label: '注射器', character: '沙都子' }
+  ];
   
   return (
     &lt;form&gt;
-      &lt;input 
-        type="text" 
-        name="name" 
-        value={data.name}
-        placeholder="竜宮レナ" 
-        onChange={handleChange} 
-      /&gt;
-      
-      &lt;label&gt;
-        &lt;input 
-          type="checkbox" 
-          name="attending" 
-          checked={data.attending}
-          onChange={handleChange} 
-        /&gt;
-        参加する
-      &lt;/label&gt;
-      
       &lt;fieldset&gt;
-        &lt;legend&gt;食事&lt;/legend&gt;
-        &lt;label&gt;
-          &lt;input 
-            type="radio" 
-            name="meal" 
-            value="curry"
-            checked={data.meal === 'curry'}
-            onChange={handleChange} 
-          /&gt;
-          カレー
-        &lt;/label&gt;
-        &lt;label&gt;
-          &lt;input 
-            type="radio" 
-            name="meal" 
-            value="bento"
-            checked={data.meal === 'bento'}
-            onChange={handleChange} 
-          /&gt;
-          弁当
-        &lt;/label&gt;
+        &lt;legend&gt;得意武器を選択:&lt;/legend&gt;
+        
+        {weapons.map(weapon =&gt; (
+          &lt;label key={weapon.value}&gt;
+            &lt;input 
+              type="radio"
+              name="weapon" // 同じname属性でグループ化
+              value={weapon.value}
+              checked={selectedWeapon === weapon.value} // 現在の状態と比較
+              onChange={handleWeaponChange}
+            /&gt;
+            {weapon.label} ({weapon.character}の得意技)
+          &lt;/label&gt;
+        ))}
       &lt;/fieldset&gt;
       
-      &lt;select name="weapon" value={data.weapon} onChange={handleChange}&gt;
-        &lt;option value=""&gt;武器を選択&lt;/option&gt;
-        &lt;option value="nata"&gt;鉈&lt;/option&gt;
-        &lt;option value="bat"&gt;バット&lt;/option&gt;
-      &lt;/select&gt;
-      
-      &lt;textarea 
-        name="notes"
-        value={data.notes}
-        onChange={handleChange}
-        placeholder="備考"
-        rows="3"
-      /&gt;
+      &lt;p&gt;選択中: {selectedWeapon || '未選択'}&lt;/p&gt;
     &lt;/form&gt;
   );
 }</code></pre>
+
           <div class="note">
-            <strong>web標準活用:</strong> fieldset, legend, labelで意味的なマークアップ
+            <strong>重要:</strong> checked属性は現在の状態値との比較で決まる
+            <br><strong>name属性:</strong> 同じグループのラジオボタンは同じname
+            <br><strong>fieldset/legend:</strong> 関連する選択肢をまとめる意味的マークアップ
           </div>
         </section>
 
@@ -1228,6 +1164,91 @@ const [user, setUser] = useState({
           </div>
         </section>
 
+        <!-- FormData API -->
+        <section>
+          <h2>FormData APIでかんたんデータ取得</h2>
+          <p>React stateを使わずに、送信時だけデータを取る方法</p>
+
+          <pre><code data-lang="jsx">function SimpleFormData() {
+  const [result, setResult] = useState('');
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    // フォーム全体のデータを一括取得
+    const formData = new FormData(event.target);
+    
+    const name = formData.get('name');      // 1つの値
+    const email = formData.get('email');    // 1つの値
+    
+    console.log('取得:', { name, email });
+    setResult(`登録完了: ${name}`);
+    
+    // フォームをリセット
+    event.target.reset();
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input name="name" placeholder="竜宮レナ" required /&gt;
+      &lt;input name="email" type="email" placeholder="rena@oya.jp" required /&gt;
+      &lt;button type="submit"&gt;送信&lt;/button&gt;
+      
+      {result && &lt;p&gt;{result}&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+          <div class="note">
+            <strong>いつ使う？</strong> 送信時だけデータが必要な場合<br>
+            <strong>メリット:</strong> stateいらず、シンプル<br>
+            <strong>注意:</strong> リアルタイム表示には不向き
+            <br><strong>使い分け:</strong> 送信時のみデータ必要→FormData、リアルタイム処理→state管理
+          </div>
+        </section>
+
+        <!-- Controlled vs Uncontrolled -->
+        <section>
+          <h2>どのパターンを使うべき？</h2>
+
+          <table style="width: 100%; font-size: 0.8em;">
+            <tr>
+              <th>状況</th>
+              <th>推奨パターン</th>
+              <th>理由</th>
+            </tr>
+            <tr>
+              <td>リアルタイム表示<br>（文字数カウンター、プレビューなど）</td>
+              <td><strong>Controlled</strong></td>
+              <td>stateが即座に反映</td>
+            </tr>
+            <tr>
+              <td>送信のみ<br>（入力中は何もしない）</td>
+              <td><strong>FormData API</strong></td>
+              <td>シンプル、高パフォーマンス</td>
+            </tr>
+            <tr>
+              <td>バリデーション<br>（入力チェック）</td>
+              <td><strong>Controlled</strong></td>
+              <td>リアルタイムエラー表示</td>
+            </tr>
+            <tr>
+              <td>ファイルアップロード</td>
+              <td><strong>Uncontrolled</strong></td>
+              <td>ファイルはstateに入らない</td>
+            </tr>
+            <tr>
+              <td>既存のライブラリ使用</td>
+              <td><strong>Uncontrolled</strong></td>
+              <td>ライブラリがDOM操作</td>
+            </tr>
+          </table>
+
+          <div class="note">
+            <strong>基本方針:</strong> 迷ったらControlled、シンプルならFormData API
+          </div>
+        </section>
+
         <!-- Form validation -->
         <section>
           <h2>フォーム検証の種類</h2>
@@ -1259,91 +1280,64 @@ const [user, setUser] = useState({
 
         <section>
           <h2>基本的なバリデーション</h2>
-          <pre><code data-lang="jsx">function ValidatedForm() {
-  const [formData, setFormData] = useState({ name: '', email: '' });
-  const [errors, setErrors] = useState({});
-  
-  const validateForm = (data) => {
-    const newErrors = {};
-    
-    if (!data.name.trim()) {
-      newErrors.name = '名前は必須です';
-    } else if (data.name.length &lt; 2) {
-      newErrors.name = '名前は2文字以上で入力してください';
-    }
-    
-    if (!data.email.trim()) {
-      newErrors.email = 'メールアドレスは必須です';
-    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
-      newErrors.email = '有効なメールアドレスを入力してください';
-    }
-    
-    return newErrors;
-  };
+          <p>まずはHTML標準機能を使った基本的な検証から</p>
+
+          <pre><code data-lang="jsx">function SimpleValidationForm() {
+  const [message, setMessage] = useState('');
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validateForm(formData);
     
-    if (Object.keys(validationErrors).length &gt; 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    // HTMLバリデーションが通った場合のみここが実行される
+    const formData = new FormData(e.target);
+    const email = formData.get('email');
     
-    setErrors({});
-    console.log('死神登録:', formData);
-  };
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev =&gt; ({ ...prev, [name]: value }));
-    
-    // リアルタイムエラークリア
-    if (errors[name]) {
-      setErrors(prev =&gt; ({ ...prev, [name]: '' }));
-    }
+    setMessage(`登録完了: ${email}`);
   };
   
   return (
-    &lt;form onSubmit={handleSubmit}&gt;
-      &lt;div&gt;
-        &lt;label htmlFor="name"&gt;名前:&lt;/label&gt;
-        &lt;input 
-          id="name"
-          type="text" 
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="黒崎一護"
-          aria-invalid={errors.name ? 'true' : 'false'}
-        /&gt;
-        {errors.name && &lt;p role="alert" style={{ color: 'red' }}&gt;{errors.name}&lt;/p&gt;}
-      &lt;/div&gt;
-      
-      &lt;div&gt;
-        &lt;label htmlFor="email"&gt;メール:&lt;/label&gt;
+    &lt;div&gt;
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;label htmlFor="email"&gt;メールアドレス:&lt;/label&gt;
         &lt;input 
           id="email"
-          type="email" 
           name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="ichigo@soul-society.jp"
-          aria-invalid={errors.email ? 'true' : 'false'}
+          type="email" // 自動でメール形式チェック
+          required // 必須入力
+          minLength="5" // 最小文字数
+          placeholder="keiichi@hinamizawa.jp"
         /&gt;
-        {errors.email && &lt;p role="alert" style={{ color: 'red' }}&gt;{errors.email}&lt;/p&gt;}
-      &lt;/div&gt;
+        &lt;button type="submit"&gt;送信&lt;/button&gt;
+      &lt;/form&gt;
       
-      &lt;button type="submit"&gt;登録&lt;/button&gt;
-    &lt;/form&gt;
+      {message && &lt;p&gt;{message}&lt;/p&gt;}
+      
+      {/* CSSでバリデーション状態を視覚化 */}
+      &lt;style&gt;{`
+        input:invalid { 
+          border: 2px solid #ff6b6b; 
+          background: #ffe0e0; 
+        }
+        input:valid { 
+          border: 2px solid #51cf66; 
+          background: #e8f5e8; 
+        }
+      `}&lt;/style&gt;
+    &lt;/div&gt;
   );
 }</code></pre>
+
+          <div class="note">
+            <strong>ポイント:</strong> JavaScript不要、ブラウザが自動処理、CSSで見た目制御
+            <br><strong>メリット:</strong> 軽量・高速・アクセシブル
+            <br><strong>デメリット:</strong> カスタマイズ制限、ブラウザ依存
+          </div>
         </section>
 
         <!-- Form accessibility -->
         <section>
           <h2>フォームのアクセシビリティ</h2>
-          <ul>
+          <ul class="compact-list">
             <li><strong>label要素:</strong> すべての入力フィールドに適切なlabel</li>
             <li><strong>htmlFor/id:</strong> labelとinputを関連付け</li>
             <li><strong>fieldset/legend:</strong> 関連する入力項目をグループ化</li>
@@ -1351,7 +1345,7 @@ const [user, setUser] = useState({
             <li><strong>role="alert":</strong> エラーメッセージをスクリーンリーダーに通知</li>
           </ul>
 
-          <pre><code data-lang="jsx">// 良いアクセシビリティの例
+          <pre><code data-lang="jsx">
 &lt;fieldset&gt;
   &lt;legend&gt;個人情報&lt;/legend&gt;
   &lt;label htmlFor="user-name"&gt;名前 (必須)&lt;/label&gt;
@@ -1381,6 +1375,45 @@ const [user, setUser] = useState({
           </ul>
           <div class="note">
             <strong>基本思想:</strong> ReactはHTML formを拡張するもの、完全に置き換えるものではない
+          </div>
+        </section>
+
+        <section>
+          <h2>フォームでやりがちなミス</h2>
+
+          <div class="comparison">
+            <div>
+              <h3>❌ 動かないコード</h3>
+              <pre><code data-lang="jsx">// ミス1: name属性がない
+&lt;input value={state} onChange={handleChange} /&gt;
+
+// ミス2: value属性がない
+&lt;input name="text" onChange={handleChange} /&gt;
+
+// ミス3: preventDefault忘れ
+const handleSubmit = (e) => {
+  console.log('送信');
+};</code></pre>
+            </div>
+
+            <div class="fragment" data-fragment-index="1">
+              <h3>✅ 正しいコード</h3>
+              <pre><code data-lang="jsx">// 修正版
+&lt;input 
+  name="text"           // name必須
+  value={state.text}    // value必須
+  onChange={handleChange} 
+/&gt;
+
+const handleSubmit = (e) => {
+  e.preventDefault();   // これ忘れがち
+  console.log('送信');
+};</code></pre>
+            </div>
+          </div>
+
+          <div class="note fragment" data-fragment-index="1">
+            <strong>覚え方:</strong> Controlled Component = name + value + onChange の3点セット
           </div>
         </section>
 
@@ -1461,15 +1494,6 @@ const handleChange = (e) => {
             <li>validation logic分離、エラー状態管理</li>
             <li>loading/success/error statesでUX向上</li>
             <li>web標準のsemantic markup活用</li>
-          </ul>
-
-        </section>
-        <section>
-          <h3>設計思想</h3>
-          <ul>
-            <li>ReactはHTMLを拡張、置換ではない</li>
-            <li>アクセシビリティファースト</li>
-            <li>Progressive Enhancement思考</li>
           </ul>
         </section>
       </section>
