@@ -115,6 +115,14 @@
       margin: 20px 0;
     }
 
+    .side-code {
+      display: grid;
+      grid-template-columns: 4fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+      align-items: center;
+    }
+
     .triptych {
       display: flex;
       justify-content: space-between;
@@ -976,7 +984,12 @@ const [user, setUser] = useState({
         <!-- Single input controlled component -->
         <section>
           <h2>基本的な「Controlled Component」</h2>
-          <pre><code data-lang="jsx">function StandForm() {
+          <iframe
+            src="https://codesandbox.io/embed/jp8zy5?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+            style="width:100%; height: 650px; border:0; border-radius: 4px; overflow:hidden;" title="Stand Name Input"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">function StandForm() {
   const [standName, setStandName] = useState('');
   
   return (
@@ -992,50 +1005,62 @@ const [user, setUser] = useState({
       &lt;p&gt;入力中: {standName}&lt;/p&gt;
     &lt;/form&gt;
   );
-}</code></pre>
+}</code></pre> -->
           <div class="note">
             <strong>ポイント:</strong> <code>value</code> + <code>onChange</code> でReactが完全に状態管理
           </div>
         </section>
 
-        <!-- Form submission and preventDefault -->
+        <!-- Uncontrolled components -->
         <section>
-          <h2>フォーム送信とpreventDefault</h2>
-          <pre><code data-lang="jsx">function StandRegistration() {
-  const [standName, setStandName] = useState('');
-  
+          <h2>「Uncontrolled Component」</h2>
+          <p><code>useRef</code>でDOM要素への参照を作成、<code>ref.current</code>でアクセス</p>
+          <iframe
+            src="https://codesandbox.io/embed/9kxmwj?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
+            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Bankai Input"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">function BankaiInput() {
+  const nameRef = useRef(null); // DOM要素への参照を作成
+
   const handleSubmit = (event) => {
-    event.preventDefault(); // デフォルトのページリロードを防ぐ
-    console.log('スタンド登録:', standName);
-    
-    // ここでapi送信やデータ処理を行う
-    // setStandName(''); // フォームリセット
+    // DOM要素から直接値を取得
+    console.log("卍解:", nameRef.current.value);
+
+    nameRef.current.value = ""; // フォームリセット
   };
-  
+
   return (
-    &lt;form onSubmit={handleSubmit}&gt;
-      &lt;label htmlFor="stand-name"&gt;スタンド名:&lt;/label&gt;
-      &lt;input 
-        id="stand-name"
+    <>
+      <label htmlFor="bankai-input">卍解名:</label>
+      <input
+        id="bankai-input"
         type="text"
-        value={standName}
-        onChange={(e) =&gt; setStandName(e.target.value)}
-        placeholder="ザ・ワールド"
-        required
-      /&gt;
-      &lt;button type="submit"&gt;登録&lt;/button&gt;
-    &lt;/form&gt;
+        ref={nameRef} // input要素をrefに接続
+        defaultValue="千本桜景厳"  // Uncontrolledでは初期値のみ設定
+        placeholder="卍解名を入力"
+      />
+      <button onClick={handleSubmit}>解放</button>
+    </>
   );
-}</code></pre>
+          }</code></pre> -->
           <div class="note">
-            <strong>重要:</strong> <code>preventDefault()</code>がないとページが勝手にリロードされる
+            <code>useState</code>と違って値が変わっても再レンダリングしない
+          </div>
+          <div class="note">
+            <strong>使い分け:</strong> 簡単なフォーム→「Uncontrolled」、リアルタイム処理→「Controlled」
           </div>
         </section>
 
         <!-- Multiple inputs -->
         <section>
           <h2>複数の入力フィールドを効率的に</h2>
-          <pre><code data-lang="jsx">function CharacterForm() {
+          <iframe
+            src="https://codesandbox.io/embed/qh5wnj?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+            style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;" title="Character Form"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">function CharacterForm() {
   const [formData, setFormData] = useState({
     name: '',
     village: '',
@@ -1073,7 +1098,7 @@ const [user, setUser] = useState({
       /&gt;
     &lt;/form&gt;
   );
-}</code></pre>
+}</code></pre> -->
           <div class="note">
             <strong>効率化:</strong> 1つのhandlerで複数input管理、name属性が重要
           </div>
@@ -1081,86 +1106,50 @@ const [user, setUser] = useState({
 
         <!-- Different input types -->
         <section>
-          <h2>ラジオボタンの正しい扱い方</h2>
-          <p>選択肢から1つだけ選ぶUIパターン</p>
+          <h2>様々な入力タイプを一つの<code>state</code>で管理するパターン</h2>
 
-          <pre><code data-lang="jsx">function WeaponSelector() {
-  const [selectedWeapon, setSelectedWeapon] = useState(''); // 初期値は空文字
-  
-  // ラジオボタン専用のhandler（分かりやすさ重視）
-  const handleWeaponChange = (event) => {
-    setSelectedWeapon(event.target.value); // 選択されたvalue
-  };
-  
-  const weapons = [
-    { value: 'nata', label: '鉈', character: 'レナ' },
-    { value: 'bat', label: 'バット', character: '魅音' },
-    { value: 'syringe', label: '注射器', character: '沙都子' }
-  ];
-  
-  return (
-    &lt;form&gt;
-      &lt;fieldset&gt;
-        &lt;legend&gt;得意武器を選択:&lt;/legend&gt;
-        
-        {weapons.map(weapon =&gt; (
-          &lt;label key={weapon.value}&gt;
-            &lt;input 
-              type="radio"
-              name="weapon" // 同じname属性でグループ化
-              value={weapon.value}
-              checked={selectedWeapon === weapon.value} // 現在の状態と比較
-              onChange={handleWeaponChange}
-            /&gt;
-            {weapon.label} ({weapon.character}の得意技)
-          &lt;/label&gt;
-        ))}
-      &lt;/fieldset&gt;
-      
-      &lt;p&gt;選択中: {selectedWeapon || '未選択'}&lt;/p&gt;
-    &lt;/form&gt;
-  );
-}</code></pre>
-
-          <div class="note">
-            <strong>重要:</strong> checked属性は現在の状態値との比較で決まる
-            <br><strong>name属性:</strong> 同じグループのラジオボタンは同じname
-            <br><strong>fieldset/legend:</strong> 関連する選択肢をまとめる意味的マークアップ
-          </div>
+          <iframe src="https://codesandbox.io/embed/zmwghl?view=editor+%2B+preview&hidenavigation=1"
+            style="width:100%; height: 780px; border:0; border-radius: 4px; overflow:hidden;" title="Comprehensive Form"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
         </section>
 
-        <!-- Uncontrolled components -->
+        <!-- Form submission and preventDefault -->
         <section>
-          <h2>「Uncontrolled Component」</h2>
-          <p>refを使って直接DOM要素にアクセスする方法</p>
-          <pre><code data-lang="jsx">function SimpleForm() {
-  const nameRef = useRef(null);
+          <h2>フォーム送信と<code>preventDefault</code></h2>
+          <iframe
+            src="https://codesandbox.io/embed/psp5v4?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
+            style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;" title="Stand Form"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">function StandRegistration() {
+  const [standName, setStandName] = useState('');
   
   const handleSubmit = (event) => {
-    event.preventDefault();
-    // DOM要素から直接値を取得
-    console.log('卍解:', nameRef.current.value);
+    event.preventDefault(); // デフォルトのページリロードを防ぐ
+    console.log('スタンド登録:', standName);
     
-    // フォームリセット
-    nameRef.current.value = '';
+    // ここでapi送信やデータ処理を行う
+    // setStandName(''); // フォームリセット
   };
   
   return (
     &lt;form onSubmit={handleSubmit}&gt;
-      &lt;label htmlFor="bankai-input"&gt;卍解名:&lt;/label&gt;
+      &lt;label htmlFor="stand-name"&gt;スタンド名:&lt;/label&gt;
       &lt;input 
-        id="bankai-input"
-        type="text" 
-        ref={nameRef} 
-        defaultValue="千本桜景厳" // valueではなくdefaultValue
-        placeholder="卍解名を入力"
+        id="stand-name"
+        type="text"
+        value={standName}
+        onChange={(e) =&gt; setStandName(e.target.value)}
+        placeholder="ザ・ワールド"
+        required
       /&gt;
-      &lt;button type="submit"&gt;解放&lt;/button&gt;
+      &lt;button type="submit"&gt;登録&lt;/button&gt;
     &lt;/form&gt;
   );
-}</code></pre>
+}</code></pre> -->
           <div class="note">
-            <strong>使い分け:</strong> 簡単なフォーム→「Uncontrolled」、リアルタイム処理→「Controlled」
+            <strong>重要:</strong> <code>preventDefault()</code>がないとページが勝手にリロードされる
           </div>
         </section>
 
@@ -1168,8 +1157,13 @@ const [user, setUser] = useState({
         <section>
           <h2>FormData APIでかんたんデータ取得</h2>
           <p>React stateを使わずに、送信時だけデータを取る方法</p>
+          <iframe
+            src="https://codesandbox.io/embed/ygqwl6?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&expanddevtools=1"
+            style="width:100%; height: 600px; border:0; border-radius: 4px; overflow:hidden;" title="FormAPI"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-          <pre><code data-lang="jsx">function SimpleFormData() {
+          <!-- <pre><code data-lang="jsx">function SimpleFormData() {
   const [result, setResult] = useState('');
   
   const handleSubmit = (event) => {
@@ -1197,13 +1191,11 @@ const [user, setUser] = useState({
       {result && &lt;p&gt;{result}&lt;/p&gt;}
     &lt;/form&gt;
   );
-}</code></pre>
+}</code></pre> -->
 
           <div class="note">
             <strong>いつ使う？</strong> 送信時だけデータが必要な場合<br>
-            <strong>メリット:</strong> stateいらず、シンプル<br>
-            <strong>注意:</strong> リアルタイム表示には不向き
-            <br><strong>使い分け:</strong> 送信時のみデータ必要→FormData、リアルタイム処理→state管理
+            <strong>メリット:</strong> stateいらず、シンプル
           </div>
         </section>
 
@@ -1281,23 +1273,17 @@ const [user, setUser] = useState({
         <section>
           <h2>基本的なバリデーション</h2>
           <p>まずはHTML標準機能を使った基本的な検証から</p>
+          <iframe
+            src="https://codesandbox.io/embed/8zh88m?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
+            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;"
+            title="HTML Form Validation"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-          <pre><code data-lang="jsx">function SimpleValidationForm() {
-  const [message, setMessage] = useState('');
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // HTMLバリデーションが通った場合のみここが実行される
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    
-    setMessage(`登録完了: ${email}`);
-  };
-  
+          <!-- <pre><code data-lang="jsx">function SimpleValidationForm() {
   return (
     &lt;div&gt;
-      &lt;form onSubmit={handleSubmit}&gt;
+      &lt;&gt;
         &lt;label htmlFor="email"&gt;メールアドレス:&lt;/label&gt;
         &lt;input 
           id="email"
@@ -1307,10 +1293,7 @@ const [user, setUser] = useState({
           minLength="5" // 最小文字数
           placeholder="keiichi@hinamizawa.jp"
         /&gt;
-        &lt;button type="submit"&gt;送信&lt;/button&gt;
-      &lt;/form&gt;
-      
-      {message && &lt;p&gt;{message}&lt;/p&gt;}
+      &lt;/&gt;
       
       {/* CSSでバリデーション状態を視覚化 */}
       &lt;style&gt;{`
@@ -1325,7 +1308,7 @@ const [user, setUser] = useState({
       `}&lt;/style&gt;
     &lt;/div&gt;
   );
-}</code></pre>
+}</code></pre> -->
 
           <div class="note">
             <strong>ポイント:</strong> JavaScript不要、ブラウザが自動処理、CSSで見た目制御
@@ -1384,36 +1367,43 @@ const [user, setUser] = useState({
           <div class="comparison">
             <div>
               <h3>❌ 動かないコード</h3>
-              <pre><code data-lang="jsx">// ミス1: name属性がない
-&lt;input value={state} onChange={handleChange} /&gt;
+              <pre><code data-lang="jsx">// ミス1: 複数input管理でname属性がない（単一inputなら不要）
+&lt;input value={email} onChange={handleChange} /&gt;
 
-// ミス2: value属性がない
+// ミス2: value属性がない  
 &lt;input name="text" onChange={handleChange} /&gt;
 
-// ミス3: preventDefault忘れ
+// ミス3: checkboxでvalue使用
+&lt;input type="checkbox" 
+  onChange={(e) => setState(e.target.value)} /&gt;
+
+// ミス4: preventDefault忘れ
 const handleSubmit = (e) => {
-  console.log('送信');
+  console.log('送信'); // ページリロード
 };</code></pre>
             </div>
 
-            <div class="fragment" data-fragment-index="1">
+            <div class="fragment">
               <h3>✅ 正しいコード</h3>
-              <pre><code data-lang="jsx">// 修正版
-&lt;input 
-  name="text"           // name必須
-  value={state.text}    // value必須
-  onChange={handleChange} 
-/&gt;
+              <pre><code data-lang="jsx">// name属性で識別
+&lt;input name="email" value={email} onChange={handleChange} /&gt;
 
+// valueでcontrolled component
+&lt;input name="text" value={text || ""} onChange={handleChange} /&gt;
+
+// checkboxはchecked
+&lt;input type="checkbox" checked={agree}
+  onChange={(e) => setState(e.target.checked)} /&gt;
+
+// リロード防止
 const handleSubmit = (e) => {
-  e.preventDefault();   // これ忘れがち
-  console.log('送信');
+  e.preventDefault();
 };</code></pre>
             </div>
           </div>
 
-          <div class="note fragment" data-fragment-index="1">
-            <strong>覚え方:</strong> Controlled Component = name + value + onChange の3点セット
+          <div class="note">
+            <strong>覚え方:</strong> name + value + onChange セット、checkboxはchecked、submitはpreventDefault
           </div>
         </section>
 
@@ -1479,21 +1469,12 @@ const handleChange = (e) => {
 
         <!-- Summary -->
         <section>
-          <h3>重要な概念</h3>
+          <h3>まとめ</h3>
           <ul>
             <li><strong>Controlled Component:</strong> Reactが状態管理、リアルタイム処理向け</li>
             <li><strong>Uncontrolled Component:</strong> DOM直接操作、シンプル送信向け</li>
             <li><strong>preventDefault():</strong> form送信でのpage reload回避</li>
             <li><strong>統一的なhandleChange:</strong> name属性 + 計算プロパティで効率化</li>
-          </ul>
-        </section>
-        <section>
-          <h3>実装パターン</h3>
-          <ul>
-            <li>複数inputは1つのobject stateで管理</li>
-            <li>validation logic分離、エラー状態管理</li>
-            <li>loading/success/error statesでUX向上</li>
-            <li>web標準のsemantic markup活用</li>
           </ul>
         </section>
       </section>
@@ -1508,75 +1489,48 @@ const handleChange = (e) => {
           <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
           </div>
         </section>
-        <section>
-          <h3>セットアップ手順</h3>
-          <ol>
-            <li>masterブランチに切り替え、更新を取得する
-              <pre><code data-lang="bash">git switch master
-git pull origin main</code></pre>
-            </li>
-            <li>パッケージをインストールする
-              <pre><code data-lang="bash">cd react-lessons/
-npm install</code></pre>
-            </li>
-            <li>開発サーバーを起動する
-              <pre><code data-lang="bash">npm run dev</code></pre>
-            </li>
-            <li>ブラウザで「<a href="http://localhost:5173/">http://localhost:5173/</a>」を開く</li>
-          </ol>
-          <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
-          </div>
-        </section>
 
         <!-- Task 1 -->
         <section>
           <div class="timer"></div>
 
-          <h2><span class="task-number">課題1</span> Props付きのコンポーネント</h2>
+          <h2><span class="task-number">課題2</span> 斬魄刀ステータス エディター</h2>
 
-          <p><strong><code>&lt;ZanpakutoCard&gt;</code> コンポーネントを作成してください</strong></p>
-          <ul>
-            <li><code>zanpakuto</code> オブジェクトを <strong>Props</strong> として受け取る</li>
-            <li>以下のプロパティをすべて表示すること:
-              <ul>
-                <li><code>name</code>, <code>owner</code>, <code>type</code>, <code>bankai</code>,
-                  <code>shikaiAbility</code>, <code>powerLevel</code>, <code>isReleased</code>
-                </li>
-              </ul>
-            </li>
-            <li><code>bankai</code> は存在する場合のみ表示</li>
-          </ul>
+          <p><strong>斬魄刀の情報を編集できるフォームを作成してください</strong></p>
+          <div class="side-code">
+            <ul class="compact-list">
+              <li>以下のフィールドをすべて含むこと:
+                <ul>
+                  <li><code>name</code> (テキスト), <code>owner</code> (テキスト)</li>
+                  <li><code>type</code> (セレクト: melee/kido/elemental/illusion)</li>
+                  <li><code>powerLevel</code> (数値: 1-10000)</li>
+                  <li><code>isReleased</code> (チェックボックス)</li>
+                </ul>
+              </li>
+              <li>入力中の値をリアルタイムで下に表示すること</li>
+              <li>「登録」ボタンでコンソールに全データを出力</li>
+              <li>登録後、フォームをリセット</li>
+            </ul>
 
-          <pre><code data-lang="typescript">export interface Zanpakuto {
-  name: string;
-  owner: string;
-  type: "melee" | "kido" | "elemental" | "illusion";
-  bankai?: string;
-  shikaiAbility: string;
-  powerLevel: number;
-  isReleased: boolean;
-}
-    </code></pre>
+            <pre><code data-lang="jsx">// 初期状態例
+const [zanpakuto, setZanpakuto] = useState({
+  name: '',
+  owner: '',
+  type: 'melee',
+  powerLevel: 1,
+  isReleased: false
+});</code></pre>
+          </div>
 
-          <div class="note"><a href="task.md">react-lessons/lesson_1/task.md</a></div>
+          <div class="note"><a href="task.md">react-lessons/lesson_2/task.md</a></div>
         </section>
         <section>
-          <h2><span class="task-number">課題1</span> 解答例</h2>
-          <p><code>props</code> を受け取って全てのプロパティを表示する</p>
-          <pre><code data-lang="tsx">function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
-  const { name, owner, type, bankai, shikaiAbility, powerLevel, isReleased } = zanpakuto;  // 分割代入でプロパティを展開
-  
-  return (
-    &lt;div&gt;
-      &lt;h2&gt;{name}（{owner}の斬魄刀）&lt;/h2&gt; {/* JSXでは{}内にJavaScript式を書ける */}
-      &lt;p&gt;タイプ: {type}&lt;/p&gt;
-      {bankai && &lt;p&gt;卍解: {bankai}&lt;/p&gt;} {/* 条件付きレンダリングの&&演算子：左側がtruthyの場合、右側を実行 */}
-      &lt;p&gt;始解能力: {shikaiAbility}&lt;/p&gt;
-      &lt;p&gt;霊圧レベル: {powerLevel}&lt;/p&gt;
-      &lt;p&gt;解放済み: {isReleased ? "はい" : "いいえ"}&lt;/p&gt; {/* 三項演算子 - 条件 ? 真の場合 : 偽の場合 */}
-    &lt;/div&gt;
-  );
-}</code></pre>
+          <h2><span class="task-number">課題2</span> 斬魄刀ステータス エディター</h2>
+          <iframe src="https://codesandbox.io/embed/7nt8kh?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx"
+            style="width:100%; height: 800px; border:0; border-radius: 4px; overflow:hidden;"
+            title="charming-banzai-7nt8kh"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
         </section>
       </section>
 
@@ -1587,18 +1541,14 @@ npm install</code></pre>
 
           <h2>今日学んだこと</h2>
           <ul>
-            <li><strong>Reactとは</strong> UIライブラリ、仮想DOM、宣言的プログラミング</li>
-            <li><strong>JSX</strong> JavaScript + XML、{}で動的コンテンツ</li>
-            <li><strong>コンポーネント</strong> 再利用可能なUI部品（関数）</li>
-            <li><strong>Props</strong> コンポーネント間のデータ受け渡し</li>
-            <li><strong>条件レンダリング</strong> 三項演算子、&&演算子</li>
+            <li><strong>???</strong> ???</li>
           </ul>
         </section>
 
         <!-- In next episode -->
         <section>
           <h1>次回予告</h1>
-          <p><strong>React②:</strong> useState、イベント処理、フォーム</p>
+          <p><strong>React 応用①：</strong> useEffect、リスト表示、key の概念、条件レンダリング</p>
         </section>
       </section>
     </div>

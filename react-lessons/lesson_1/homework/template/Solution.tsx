@@ -1,4 +1,7 @@
-import { Zanpakuto, zanpakutoCollection } from "../data";
+import {
+  Zanpakuto,
+  zanpakutoCollection,
+} from "../../../data/zanpakutoCollection";
 
 function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
   return (
