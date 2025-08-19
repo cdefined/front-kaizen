@@ -25,6 +25,14 @@ React とは、JSX、コンポーネント、Props の使い方
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_1/slides.html)
 - [プレゼンテーションの演習課題・実践課題](/react-lessons/lesson_1/task.md)
 
+## 4. React 基礎 ②
+
+useState、イベント処理、フォーム
+
+- [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_2/slides.html)
+- [プレゼンテーションの演習課題](/react-lessons/lesson_2/task.md)
+- [宿題・実践課題](/react-lessons/lesson_2/homework/README.md)
+
 ## コードレビューと提出
 
 ### 準備
