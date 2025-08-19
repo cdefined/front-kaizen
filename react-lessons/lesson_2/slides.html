@@ -346,6 +346,7 @@ function App() {
           <h1>イベント処理</h1>
           <h3>ユーザーの操作に反応する</h3>
           <p>クリック、入力などの操作を処理する方法</p>
+          <aside class="notes">ユーザーがクリックしたり、文字(もじ)を入力(にゅうりょく)したりする操作(そうさ)を処理(しょり)します。</aside>
         </section>
 
         <!-- イベントとは -->
@@ -358,6 +359,7 @@ function App() {
           <div class="note">
             HTML: onclick="doSomething()" → React: onClick={handleClick}
           </div>
+          <aside class="notes">イベントはユーザーの操作(そうさ)です。イベントハンドラーという関数(かんすう)で処理(しょり)します。</aside>
         </section>
 
         <!-- Basic click events -->
@@ -379,6 +381,7 @@ function GreetButton() {
           <div class="note">
             関数を{ }内で参照、実行しない（handleClick vs handleClick()）
           </div>
+          <aside class="notes">onClickでクリックを処理(しょり)します。関数(かんすう)の名前(なまえ)だけ書(か)きます。まるかっこは書(か)きません。</aside>
         </section>
 
         <!-- Inline functions -->
@@ -396,51 +399,42 @@ function QuickButton() {
           <div class="note">
             短い処理ならインラインでもOK
           </div>
+          <aside class="notes">短(みじか)い処理(しょり)はインラインで書(か)けます。でも長(なが)い処理(しょり)は別(べつ)の関数(かんすう)にします。</aside>
         </section>
 
         <!-- Event ovject -->
+        <!-- Event object -->
         <section>
           <h2>イベントオブジェクト</h2>
           <pre><code data-lang="jsx">
 function InfoButton() {
   const handleClick = (event) => {
-    console.log('クリック位置:', event.clientX, event.clientY);
-    console.log('ボタンテキスト:', event.target.textContent);
+    console.log('クリック位置：', event.clientX, event.clientY);
+    console.log('ボタンテキスト：', event.target.textContent);
+    console.log('イベント種類：', event.type);
   };
 
   return &lt;button onClick={handleClick}&gt;情報&lt;/button&gt;;
 }
         </code></pre>
           <div class="note">
-            <code>event</code>オブジェクトにはクリック位置、要素情報などが含まれる
+            <code>event</code>オブジェクトの内容はイベント種類により異なる<br>
+            <strong>マウス</strong>: <code>clientX/Y</code>、<strong>キーボード</strong>: <code>key</code>、入力:
+            <code>target.value</code> など<br>
+            詳細: <a href="https://developer.mozilla.org/ja/docs/Web/API/Event" target="_blank">MDN Event API</a>
           </div>
-        </section>
-
-        <!-- Passing data -->
-        <section>
-          <h2>データを渡す</h2>
-          <pre><code data-lang="jsx">
-function CharacterButton({ name }) {
-  const handleClick = (characterName) => {
-    alert(`選択: ${characterName}`);
-  };
-
-  return (
-    &lt;button onClick={() => handleClick(name)}&gt;
-      {name}
-    &lt;/button&gt;
-  );
-}
-        </code></pre>
-          <div class="note">
-            アロー関数でデータを包んで渡す
-          </div>
+          <aside class="notes">eventオブジェクトには操作(そうさ)の情報(じょうほう)が入(はい)っています。マウスイベントとキーボードイベントで違(ちが)う情報(じょうほう)があります。</aside>
         </section>
 
         <!-- Multiple buttons -->
         <section>
           <h2>複数ボタンの処理</h2>
-          <pre><code data-lang="jsx">
+          <iframe
+            src="https://codesandbox.io/embed/hvwcxs?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
+            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Character List"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">
 function CharacterList() {
   const characters = ['黒崎一護', '朽木ルキア', '阿散井恋次'];  
   const handleSelect = (name) => console.log(`選択: ${name}`);
@@ -455,13 +449,25 @@ function CharacterList() {
     &lt;/div&gt;
   );
 }
-        </code></pre>
+        </code></pre> -->
+          <div class="note">
+            アロー関数でデータを包んで渡す
+          </div>
+          <aside class="notes">
+            アロー関数(かんすう)を使(つか)ってデータを渡(わた)します。mapでたくさんのボタンを作(つく)れます。
+          </aside>
         </section>
 
         <!-- Input events -->
         <section>
           <h2>入力イベント：onChange</h2>
-          <pre><code data-lang="jsx">
+          <iframe
+            src="https://codesandbox.io/embed/wfp657?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
+            style="width:100%; height: 400px; border:0; border-radius: 4px; overflow:hidden;"
+            title="Name Input (Event Handling)"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">
 function NameInput() {
   const handleChange = (event) => {
     console.log('入力値:', event.target.value);
@@ -475,31 +481,40 @@ function NameInput() {
     />
   );
 }
-        </code></pre>
+        </code></pre> -->
           <div class="note">
             <code>event.target.value</code>で入力値を取得
           </div>
+          <aside class="notes">
+            onChangeで入力(にゅうりょく)の変化(へんか)を見(み)ます。event.targetはイベントが発生(はっせい)したDOM要素(ようそ)で、event.target.valueで入力(にゅうりょく)した文字(もじ)がわかります。
+          </aside>
         </section>
 
         <!-- Other events -->
         <section>
           <h2>その他のよく使うイベント</h2>
-          <pre><code data-lang="jsx">
+          <iframe
+            src="https://codesandbox.io/embed/gz7gmn?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&expanddevtools=1"
+            style="width:100%; height: 600px; border:0; border-radius: 4px; overflow:hidden;" title="Event Demo"
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <!-- <pre><code data-lang="jsx">
 function EventDemo() {
   return (
-    &lt;div&gt;
+    &lt;&gt;
       &lt;input 
         onFocus={() => console.log('フォーカス')}
         onBlur={() => console.log('フォーカス外れ')}
       />
 
       &lt;div onMouseEnter={() => console.log('マウス入')}&gt;ホバーエリア&lt;/div&gt;
-
+      &lt;div onMouseLeave={() => console.log('マウス外れ')}&gt;ホバーエリア&lt;/div&gt;
       &lt;button onDoubleClick={() => console.log('ダブルクリック')}&gt;ダブルクリック&lt;/button&gt;
-    &lt;/div&gt;
+    &lt;/&gt;
   );
 }
-        </code></pre>
+        </code></pre> -->
+          <aside class="notes">他(ほか)にもいろいろなイベントがあります。マウスやキーボードの操作(そうさ)も処理(しょり)できます。</aside>
         </section>
 
         <!-- Summary -->
@@ -523,6 +538,7 @@ function EventDemo() {
               </ul>
             </div>
           </div>
+          <aside class="notes">イベント処理(しょり)の基本(きほん)を覚(おぼ)えました。一番(いちばん)大切(たいせつ)なのはonClickとonChangeです。</aside>
         </section>
       </section>
 
@@ -532,6 +548,8 @@ function EventDemo() {
           <h1>useState フック</h1>
           <h3>状態管理の基礎</h3>
           <p>Reactで動的なUIを作る第一歩</p>
+          <aside class="notes">useState フック（ゆーずすてーとふっく）は、React（りあくと）で いちばん 大事（だいじ）な 基本（きほん）です。これを 覚（おぼ）えると、画面（がめん）が
+            動（うご）く アプリを 作（つく）れます。</aside>
         </section>
 
         <section>
@@ -559,6 +577,8 @@ function LikeButton() {
               <p class="muted">SNS、ショッピングカート、フォーム</p>
             </div>
           </div>
+          <aside class="notes">静的（せいてき）な コンポーネントは、いつも 同（おな）じです。<br>
+            でも、動的（どうてき）な コンポーネントは、ユーザーが 何（なに）か すると、画面（がめん）が変（か）わります。例（たと）えば、ボタンを 押（お）すと、数（かず）が 増（ふ）えます。</aside>
         </section>
 
         <!-- useStateとは -->
@@ -577,6 +597,9 @@ function LikeButton() {
 const [状態変数, 更新関数] = useState(初期値);
                     </code></pre>
           </div>
+          <aside class="notes">フック（hook）は、React の 特別（とくべつ）な 機能（きのう）です。<br>
+            useState（ゆーずすてーと）を 使（つか）うと、コンポーネントに 状態（じょうたい）を持（も）たせることが できます。<br>
+            状態（じょうたい）が 変（か）わると、画面（がめん）が 新（あたら）しく なります。これを 再（さい）レンダリングと 言（い）います。</aside>
         </section>
 
         <!-- Example: like button -->
@@ -584,7 +607,7 @@ const [状態変数, 更新関数] = useState(初期値);
           <h2>基本例：いいねボタン</h2>
           <iframe
             src="https://codesandbox.io/embed/hp2249?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
-            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Like Button"
+            style="width:100%; height: 320px; border:0; border-radius: 4px; overflow:hidden;" title="Like Button"
             allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
           <!-- <pre><code data-lang="jsx">
@@ -603,11 +626,8 @@ function LikeButton() {
   );
 }
                 </code></pre> -->
-        </section>
-
-        <!-- Flow -->
-        <section>
-          <h2>動作の流れ</h2>
+          <br>
+          <h4 class="fragment">動作の流れ</h4>
           <ol>
             <li class="fragment"><code>useState(0)</code> → 初期値0でいいね数を作成</li>
             <li class="fragment">ボタンクリック → <code>setLikes(likes + 1)</code></li>
@@ -618,6 +638,9 @@ function LikeButton() {
           <div class="fragment note">
             <strong>重要：</strong>状態が変わるたびに関数コンポーネント全体が再実行される
           </div>
+          <aside class="notes">この 例（れい）では、likes（らいくす）という 名前（なまえ）で 数（かず）を 覚（おぼ）えています。<br>
+            ボタンを 押（お）すと、setLikes（せっとらいくす）で 数（かず）が ひとつ 増（ふ）えます。<br>
+            そうすると、画面（がめん）の 数字（すうじ）も 変（か）わります。</aside>
         </section>
 
         <!-- Dark Mode Toggle -->
@@ -652,6 +675,9 @@ function AppTheme() {
           <div class="note">
             <strong>ポイント:</strong> <code>prev =></code> を使うと前の状態に確実にアクセスできる
           </div>
+          <aside class="notes">ブール値（ぶーるち）は、true（とぅるー）か false（ふぉるす）だけの 値（あたい）です。<br>
+            isDark（いずだーく）が true なら ダークモード、false ならライトモードです。<br>
+            トグル（toggle）は、on/off を 切（き）り替（か）えることです。</aside>
         </section>
 
         <!-- Quiz 1 -->
@@ -677,6 +703,11 @@ console.log(result);
               <strong>答え:</strong> C) useStateは配列を返す [現在の値, セッター関数]
             </div>
           </div>
+          <aside class="notes">
+            useState（ゆーずすてーと）は、配列（はいれつ）を 返（かえ）します。<br>
+            最初（さいしょ）は 現在（げんざい）の 値（あたい）、次（つぎ）は 新（あたら）しい 値（あたい）をセットする 関数（かんすう）です。<br>
+            これを デコンストラクチャ（destructuring）で 別（べつ）の 変数（へんすう）に 入（い）れます。
+          </aside>
         </section>
 
         <!-- Object state -->
@@ -717,6 +748,11 @@ function Character() {
   );
 }
                 </code></pre> -->
+          <aside class="notes">
+            オブジェクト（object）を 更新（こうしん）するときは、新（あたら）しい オブジェクトを作（つく）ります。<br>
+            スプレッド構文（すぷれっどこうぶん）…（すぷれっどこうぶん/てんてんてん）を使（つか）うと、前（まえ）の データを コピーして、一部（いちぶ）だけ 変（か）えることが できます。<br>
+            直接（ちょくせつ）変更（へんこう）は だめです。
+          </aside>
         </section>
 
         <!-- Array state -->
@@ -757,6 +793,11 @@ function TaskManager() {
   );
 }
     </code></pre> -->
+          <aside class="notes">
+            配列（はいれつ）も オブジェクトと 同（おな）じです。<br>
+            前（まえ）の 配列（はいれつ）を コピーして、新（あたら）しい 要素（ようそ）を 足（た）します。<br>
+            filter（ふぃるたー）は、条件（じょうけん）に 合（あ）う 要素（ようそ）だけ 残（のこ）す 関数（かんすう）です。
+          </aside>
         </section>
 
         <!-- Quiz 2 -->
@@ -782,6 +823,8 @@ const [user, setUser] = useState({name: '一護', age: 17});
               <strong>答え:</strong> C) スプレッド構文で既存データを保持しつつ特定の値だけ更新
             </div>
           </div>
+          <aside class="notes">オブジェクトを 更新（こうしん）するときは、必（かなら）ず スプレッド構文（すぷれっどこうぶん）…user（てんてんてんゆーざー）を 使（つか）います。これで 前（まえ）の
+            データを 保持（ほじ）して、変（か）えたい 部分（ぶぶん）だけ 新（あたら）しく します。</aside>
         </section>
 
         <!-- Quiz: Re-render -->
@@ -808,6 +851,9 @@ const [items, setItems] = useState(['りんご', 'みかん']);
               A、Cは配列を直接変更するため、Reactが変化を検知できない
             </div>
           </div>
+          <aside class="notes">React は、セッター関数（せったーかんすう）setItems（せっとあいてむず）を 使（つか）ったときだけ、画面（がめん）を 更新（こうしん）します。<br>
+            配列（はいれつ）を直接（ちょくせつ）変（か）えても、React は 気（き）づきません。<br>
+            だから、画面（がめん）は 変（か）わりません。</aside>
         </section>
 
         <!-- Common mistakes -->
@@ -845,6 +891,9 @@ setMembers([...members, '新メンバー']);
             <strong>理由：</strong>Reactは参照が変わらないと再レンダリングしない。
             pushやshift、popは元の配列を変更するため、Reactが変化を検知できない。
           </p>
+          <aside class="notes"> 一番（いちばん）多（おお）い 間違（まちが）いは、状態（じょうたい）を 直接（ちょくせつ）変（か）えることです。<br>
+            必（かなら）ず セッター関数（せったーかんすう）を使（つか）ってください。<br>
+            push（ぷっしゅ）や pop（ぽっぷ）は、元（もと）の 配列（はいれつ）を 変（か）えるので、使（つか）わないでください。</aside>
         </section>
 
         <!-- Practical tips: previous value -->
@@ -875,6 +924,8 @@ setIsDark(prev => !prev);
           <div class="note">
             <code>prev =></code> を使うと前の状態に確実にアクセスできる
           </div>
+          <aside class="notes">prev（ぷれゔ）は、前（まえ）の 状態（じょうたい）の ことです。<br>
+            これを 使（つか）うと、安全（あんぜん）に 更新（こうしん）できます。特（とく）に、早（はや）く二回（にかい）押（お）しても、正（ただ）しく 動（うご）きます。</aside>
         </section>
 
         <!-- Multiple useState vs single object -->
@@ -911,6 +962,8 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>目安:</strong> 関連する2-3個の値 → オブジェクト、独立した値 → 別々の<code>useState</code>
           </div>
+          <aside class="notes">関連（かんれん）する 状態（じょうたい）は、ひとつの オブジェクトに まとめると 便利（べんり）です。<br>
+            でも、独立（どくりつ）した 状態（じょうたい）は、別々（べつべつ）のuseState を 使（つか）った 方（ほう）が 簡単（かんたん）です。</aside>
         </section>
 
         <!-- まとめ -->
@@ -936,6 +989,8 @@ const [user, setUser] = useState({
               </ul>
             </div>
           </div>
+          <aside class="notes">useState（ゆーずすてーと）を 覚（おぼ）えると、ユーザーと やりとりする アプリが 作（つく）れます。<br>
+            一番（いちばん）大切（たいせつ）なのは、必（かなら）ずセッター関数（せったーかんすう）を 使（つか）うことです。</aside>
         </section>
       </section>
 
@@ -945,6 +1000,7 @@ const [user, setUser] = useState({
           <h1>フォームと入力</h1>
           <h3>ユーザーからのデータ入力を受け取る</h3>
           <p>Reactでフォームを扱う基本を学ぶ</p>
+          <aside class="notes"></aside>
         </section>
 
         <!-- Why forms are special in React -->
@@ -968,6 +1024,9 @@ const [user, setUser] = useState({
 // controlled - Reactがすべて管理
 &lt;input value={state} onChange={setState} /&gt;</code></pre>
           </div>
+          <aside class="notes">HTMLでは、input要素(ようそ)が自分(じぶん)で値(あたい)を覚(おぼ)えています。<br>
+            でもReactでは、コンポーネントが全部(ぜんぶ)の状態(じょうたい)を管理(かんり)したいです。<br>
+            どちらが正(ただ)しいデータか分(わ)からなくなります。</aside>
         </section>
 
         <!-- Form basics -->
@@ -979,6 +1038,10 @@ const [user, setUser] = useState({
             <li>Reactでは状態管理と組み合わせて使う</li>
             <li>Web標準の<code>form</code>要素をそのまま活用</li>
           </ul>
+          <aside class="notes">
+            フォームは、ユーザーとアプリがやりとりする大事(だいじ)なところです。<br>
+            Reactでは、入力(にゅうりょく)と状態(じょうたい)をつなげて、うごきをコントロールします。
+          </aside>
         </section>
 
         <!-- Single input controlled component -->
@@ -1009,6 +1072,12 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>ポイント:</strong> <code>value</code> + <code>onChange</code> でReactが完全に状態管理
           </div>
+          <aside class="notes">
+            このコードでは、入力(にゅうりょく)したスタンド名(めい)をReactがおぼえて、すぐに画面(がめん)に出します。<br>
+            これが「Controlled Component（コントロールド・コンポーネント）」です。<br><br>
+            value属性(ぞくせい)とonChange関数(かんすう)をセットで使(つか)います。<br>
+            Reactの状態(じょうたい)が変(か)わると、画面(がめん)もすぐに更新(こうしん)されます。<br>
+            リアルタイムで文字数(もじすう)を数(かぞ)えたい時(とき)に便利(べんり)です。</aside>
         </section>
 
         <!-- Uncontrolled components -->
@@ -1017,7 +1086,7 @@ const [user, setUser] = useState({
           <p><code>useRef</code>でDOM要素への参照を作成、<code>ref.current</code>でアクセス</p>
           <iframe
             src="https://codesandbox.io/embed/9kxmwj?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
-            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Bankai Input"
+            style="width:100%; height: 550px; border:0; border-radius: 4px; overflow:hidden;" title="Bankai Input"
             allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
           <!-- <pre><code data-lang="jsx">function BankaiInput() {
@@ -1050,6 +1119,9 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>使い分け:</strong> 簡単なフォーム→「Uncontrolled」、リアルタイム処理→「Controlled」
           </div>
+          <aside class="notes">useRefでDOM要素(ようそ)に直接(ちょくせつ)アクセスします。<br>
+            値(あたい)が変(か)わっても再(さい)レンダリングしません。<br>
+            簡単(かんたん)なフォームや、送信(そうしん)の時(とき)だけデータが必要(ひつよう)な時(とき)に使(つか)います。</aside>
         </section>
 
         <!-- Multiple inputs -->
@@ -1102,6 +1174,9 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>効率化:</strong> 1つのhandlerで複数input管理、name属性が重要
           </div>
+          <aside class="notes">name属性(ぞくせい)を使(つか)って、1つのhandlerで全部(ぜんぶ)管理(かんり)できます。<br>
+            計算(けいさん)されたプロパティ名([name])で動的(どうてき)に更新(こうしん)します。<br>
+            各(かく)inputごとにhandlerを作(つく)る必要(ひつよう)がありません。</aside>
         </section>
 
         <!-- Different input types -->
@@ -1112,6 +1187,71 @@ const [user, setUser] = useState({
             style="width:100%; height: 780px; border:0; border-radius: 4px; overflow:hidden;" title="Comprehensive Form"
             allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+          <aside class="notes">フォームには、いろいろな入力(にゅうりょく)のやり方があります。<br>
+            テキスト、チェック、ラジオ、スライダーなど、HTMLでたくさん使えます。ここにないタイプも、まだまだあります。</aside>
+        </section>
+
+        <section>
+          <h2>重要な罠：<code>input</code>の値は全部文字列！</h2>
+
+          <div class="problem-box">
+            <h3>問題：なぜこのコードは動かない？</h3>
+            <pre><code data-lang="jsx">// ❌ バグのあるコード 
+const [age, setAge] = useState(20);
+
+const handleChange = (e) => {
+ setAge(e.target.value); // value は常に文字列！
+};
+
+// 結果
+console.log(age + 1);        // "201"（文字列結合）
+console.log(age > 18);       // 文字列比較でバグる
+console.log(typeof age);     // "string"</code></pre>
+          </div>
+
+          <div class="note">
+            <strong>HTML仕様:</strong> すべての input の <code>value</code> は文字列として返される<br>
+            <code>&lt;input type="number"&gt;</code> でも例外なし！
+          </div>
+          <aside class="notes">これは多(おお)くの人(ひと)がひっかかる問題(もんだい)です。<br>
+            type="number"でも、e.target.valueは文字列(もじれつ)です。</aside>
+        </section>
+
+        <section>
+          <h2>解決策：型変換を明示的に行う</h2>
+
+          <div class="comparison">
+            <div>
+              <h4>個別変換パターン</h4>
+              <pre><code data-lang="jsx">const handleAgeChange = (e) => {
+ setAge(Number(e.target.value));
+};
+
+const handleNameChange = (e) => {
+ setName(e.target.value); // 文字列のまま
+};</code></pre>
+            </div>
+
+            <div>
+              <h4>統一ハンドラーパターン</h4>
+              <pre><code data-lang="jsx">const handleChange = (e) => {
+ const { name, value, type, checked } = e.target;
+
+ setData(prev => ({
+   ...prev,
+   [name]: type === 'checkbox' ? checked :
+           type === 'number' ? Number(value) :
+           value
+ }));
+};</code></pre>
+            </div>
+          </div>
+
+          <div class="note">
+            <strong>覚え方:</strong> 「input の value は常に string、数値が欲しいなら Number() で変換」
+          </div>
+          <aside class="notes">
+            数値(すうち)として使(つか)いたい時(とき)は、Number()で変換(へんかん)が必要(ひつよう)です。</aside>
         </section>
 
         <!-- Form submission and preventDefault -->
@@ -1151,6 +1291,9 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>重要:</strong> <code>preventDefault()</code>がないとページが勝手にリロードされる
           </div>
+          <aside class="notes">preventDefault()を忘(わす)れると、ページが勝手(かって)にリロードします。<br>
+            これはHTMLフォームのデフォルト動作(どうさ)です。<br>
+            SPAではページリロードは避(さ)けたいので、必(かなら)ず書(か)きます。</aside>
         </section>
 
         <!-- FormData API -->
@@ -1197,13 +1340,16 @@ const [user, setUser] = useState({
             <strong>いつ使う？</strong> 送信時だけデータが必要な場合<br>
             <strong>メリット:</strong> stateいらず、シンプル
           </div>
+          <aside class="notes">React stateを使(つか)わない方法(ほうほう)です。<br>
+            送信(そうしん)ボタンを押(お)した時(とき)だけデータを取(と)ります。<br>
+            シンプルなフォームなら、この方法(ほうほう)の方(ほう)が楽(らく)です。</aside>
         </section>
 
         <!-- Controlled vs Uncontrolled -->
         <section>
           <h2>どのパターンを使うべき？</h2>
 
-          <table style="width: 100%; font-size: 0.8em;">
+          <table style="width: 100%;">
             <tr>
               <th>状況</th>
               <th>推奨パターン</th>
@@ -1227,7 +1373,7 @@ const [user, setUser] = useState({
             <tr>
               <td>ファイルアップロード</td>
               <td><strong>Uncontrolled</strong></td>
-              <td>ファイルはstateに入らない</td>
+              <td>ファイルは<code>state</code>に入らない</td>
             </tr>
             <tr>
               <td>既存のライブラリ使用</td>
@@ -1239,6 +1385,10 @@ const [user, setUser] = useState({
           <div class="note">
             <strong>基本方針:</strong> 迷ったらControlled、シンプルならFormData API
           </div>
+          <aside class="notes">迷(まよ)った時(とき)は、まずControlledを試(ため)してください。<br>
+            リアルタイムで何(なに)かしたい → Controlled<br>
+            送信(そうしん)だけでいい → FormData API<br>
+            ファイルアップロード → 必(かなら)ずUncontrolled（ファイルはstateに入(はい)らないため）</aside>
         </section>
 
         <!-- Form validation -->
@@ -1257,6 +1407,9 @@ const [user, setUser] = useState({
             JS検証 → 柔軟・追加機能向け<br>
             基本はHTML＋必要に応じてJS
           </div>
+          <aside class="notes">HTML検証(けんしょう)は速(はや)くて簡単(かんたん)です。<br>
+            JavaScript検証(けんしょう)は自由(じゆう)にカスタマイズできます。<br>
+            まずはHTML属性(ぞくせい)を使(つか)って、足(た)りない部分(ぶぶん)だけJavaScriptを追加(ついか)します。</aside>
         </section>
 
         <section>
@@ -1268,6 +1421,11 @@ const [user, setUser] = useState({
             <li><code>type</code> 入力型（email, number等）</li>
             <li><code>pattern</code> 正規表現マッチ</li>
           </ul>
+          <aside class="notes">
+            これらの属性(ぞくせい)を使(つか)うと、HTMLだけで簡単(かんたん)な検証(けんしょう)ができます。<br>
+            ブラウザが自動(じどう)でエラー表示(ひょうじ)してくれます。<br>
+            でも、カスタマイズは大変です。</aside>
+          </aside>
         </section>
 
         <section>
@@ -1315,11 +1473,16 @@ const [user, setUser] = useState({
             <br><strong>メリット:</strong> 軽量・高速・アクセシブル
             <br><strong>デメリット:</strong> カスタマイズ制限、ブラウザ依存
           </div>
+          <aside class="notes">
+            HTML属性(ぞくせい)だけでかなりのことができます。<br>
+            CSSの:valid と :invalid で見(み)た目(め)も変(か)えられます。<br>
+            JavaScriptを書(か)かなくても、ブラウザが自動(じどう)でチェックしてくれます。
+          </aside>
         </section>
 
         <!-- Form accessibility -->
         <section>
-          <h2>フォームのアクセシビリティ</h2>
+          <h2>【念のため】フォームのアクセシビリティ</h2>
           <ul class="compact-list">
             <li><strong>label要素:</strong> すべての入力フィールドに適切なlabel</li>
             <li><strong>htmlFor/id:</strong> labelとinputを関連付け</li>
@@ -1331,7 +1494,7 @@ const [user, setUser] = useState({
           <pre><code data-lang="jsx">
 &lt;fieldset&gt;
   &lt;legend&gt;個人情報&lt;/legend&gt;
-  &lt;label htmlFor="user-name"&gt;名前 (必須)&lt;/label&gt;
+  &lt;label htmlFor="user-name"&gt;名前（必須）&lt;/label&gt;
   &lt;input 
     id="user-name"
     type="text"
@@ -1343,6 +1506,9 @@ const [user, setUser] = useState({
     {error && error}
   &lt;/div&gt;
 &lt;/fieldset&gt;</code></pre>
+          <aside class="notes">スクリーンリーダーを使(つか)う人(ひと)のための設定(せってい)です。<br>
+            label要素(ようそ)は必(かなら)ず付(つ)けてください。<br>
+            エラーメッセージもちゃんと読(よ)み上(あ)げられるようにします。</aside>
         </section>
 
         <!-- Form best practices -->
@@ -1357,8 +1523,11 @@ const [user, setUser] = useState({
             <li><strong>セキュリティ:</strong> サーバーサイドでも必ずバリデーション</li>
           </ul>
           <div class="note">
-            <strong>基本思想:</strong> ReactはHTML formを拡張するもの、完全に置き換えるものではない
+            <strong>基本思想:</strong> ReactはHTMLフォームを拡張するもの、完全に置き換えるものではない
           </div>
+          <aside class="notes">ReactはHTMLフォームを強化(きょうか)するものです。<br>
+            HTMLの基本(きほん)をしっかり使(つか)って、必要(ひつよう)な部分(ぶぶん)だけReactで拡張(かくちょう)します。<br>
+            セキュリティは必(かなら)ずサーバー側(がわ)でもチェックしてください。</aside>
         </section>
 
         <section>
@@ -1367,44 +1536,86 @@ const [user, setUser] = useState({
           <div class="comparison">
             <div>
               <h3>❌ 動かないコード</h3>
-              <pre><code data-lang="jsx">// ミス1: 複数input管理でname属性がない（単一inputなら不要）
+              <div class="fragment" data-fragment-index="0">
+                <pre><code data-lang="jsx">// ミス1: 複数input管理でname属性がない（単一inputなら不要）
 &lt;input value={email} onChange={handleChange} /&gt;
-
-// ミス2: value属性がない  
+&lt;input value={name} onChange={handleChange} /&gt;</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="1">
+                <pre><code data-lang="jsx">
+// ミス2: onChangeがある、value属性がない  
 &lt;input name="text" onChange={handleChange} /&gt;
-
-// ミス3: checkboxでvalue使用
-&lt;input type="checkbox" 
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="2">
+                <pre><code data-lang="jsx">
+// ミス3: input type="number"でvalueを使う
+const handleAgeChange = (e) => {
+ setAge(e.target.value); // 文字列のまま
+};
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="3">
+                <pre><code data-lang="jsx">
+// ミス4: checkboxでvalue使用
+&lt;input type="checkbox" checked={agree}
   onChange={(e) => setState(e.target.value)} /&gt;
-
-// ミス4: preventDefault忘れ
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="4">
+                <pre><code data-lang="jsx">
+// ミ5: preventDefault忘れ
 const handleSubmit = (e) => {
   console.log('送信'); // ページリロード
 };</code></pre>
+              </div>
             </div>
 
-            <div class="fragment">
+            <div>
               <h3>✅ 正しいコード</h3>
-              <pre><code data-lang="jsx">// name属性で識別
+              <div class="fragment" data-fragment-index="0">
+                <pre class="fragment" data-fragment-index="0"><code data-lang="jsx">// name属性で識別
+&lt;input name="name" value={name} onChange={handleChange} /&gt;
 &lt;input name="email" value={email} onChange={handleChange} /&gt;
-
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="1">
+                <pre><code data-lang="jsx">
 // valueでcontrolled component
-&lt;input name="text" value={text || ""} onChange={handleChange} /&gt;
-
+&lt;input name="text" value={text} onChange={handleChange} /&gt;
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="2">
+                <pre><code data-lang="jsx">
+// type="number"はNumber()で変換
+const handleAgeChange = (e) => {
+ setAge(Number(e.target.value)); // 数値に変換
+};
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="3">
+                <pre><code data-lang="jsx">
 // checkboxはchecked
 &lt;input type="checkbox" checked={agree}
   onChange={(e) => setState(e.target.checked)} /&gt;
-
+</code></pre>
+              </div>
+              <div class="fragment" data-fragment-index="4">
+                <pre><code data-lang="jsx">
 // リロード防止
 const handleSubmit = (e) => {
   e.preventDefault();
 };</code></pre>
+              </div>
             </div>
           </div>
 
-          <div class="note">
-            <strong>覚え方:</strong> name + value + onChange セット、checkboxはchecked、submitはpreventDefault
-          </div>
+          <aside class="notes">この5つのミスは本当(ほんとう)によく見(み)ます：<br>
+            1. name属性(ぞくせい)を忘(わす)れる<br>
+            2. value属性(ぞくせい)を忘(わす)れる <br>
+            3. input type="number"で文字列(もじれつ)のまま使(つか)う<br>
+            4. checkboxでcheckedじゃなくてvalueを使(つか)う<br>
+            5. preventDefault()を忘(わす)れてページがリロードする</aside>
         </section>
 
         <!-- Quiz 1: Controlled components -->
@@ -1423,11 +1634,11 @@ const handleSubmit = (e) => {
   );
 }</code></pre>
             <div class="quiz-options">
-              <div class="quiz-option">A) onChangeが間違っている</div>
+              <div class="quiz-option">A) <code>onChange</code>が間違っている</div>
               <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">
-                B) value属性がない
+                B) <code>value</code>属性がない
               </div>
-              <div class="quiz-option">C) setNameの書き方が間違い</div>
+              <div class="quiz-option">C) <code>setName</code>の書き方が間違い</div>
               <div class="quiz-option">D) 問題ない</div>
             </div>
           </div>
@@ -1436,6 +1647,9 @@ const handleSubmit = (e) => {
               <strong>答え:</strong> B) Controlled Componentにはvalue属性が必須
             </div>
           </div>
+          <aside class="notes">Controlled Componentでは、value属性(ぞくせい)が絶対(ぜったい)必要(ひつよう)です。<br>
+            onChangeだけあってもダメです。<br>
+            valueがないと、Reactが状態(じょうたい)を管理(かんり)できません。</aside>
         </section>
 
         <!-- Quiz 2: Multiple inputs -->
@@ -1465,6 +1679,9 @@ const handleChange = (e) => {
               <strong>答え:</strong> B) スプレッド構文で既存プロパティを保持しつつ更新
             </div>
           </div>
+          <aside class="notes">スプレッド構文(こうぶん)(...prev)で既存(きそん)のデータを保(たも)ちます。<br>
+            [e.target.name]で動的(どうてき)にプロパティ名を作(つく)ります。<br>
+            roleは'student'のまま残(のこ)って、characterだけ更新(こうしん)されます。</aside>
         </section>
 
         <!-- Summary -->
@@ -1473,10 +1690,11 @@ const handleChange = (e) => {
           <ul>
             <li><strong>Controlled Component:</strong> Reactが状態管理、リアルタイム処理向け</li>
             <li><strong>Uncontrolled Component:</strong> DOM直接操作、シンプル送信向け</li>
-            <li><strong>preventDefault():</strong> form送信でのpage reload回避</li>
-            <li><strong>統一的なhandleChange:</strong> name属性 + 計算プロパティで効率化</li>
+            <li><strong>preventDefault():</strong> フォーム送信でのページリロード回避</li>
+            <li><strong>統一的なhandleChange:</strong> <code>name</code>属性 + 計算プロパティで効率化</li>
           </ul>
         </section>
+        <aside class="notes">フォームは奥(おく)が深(ふか)いですが、基本(きほん)は3あのパターンです。</aside>
       </section>
 
       <!-- Practice -->
@@ -1537,7 +1755,7 @@ const handleChange = (e) => {
           <ul>
             <li><strong>イベント処理</strong><br><code>onClick={handleClick}</code> でユーザー操作をキャッチ、関数参照で渡す</li>
             <li><strong>useState</strong><br><code>[state, setState] = useState(初期値)</code> で状態管理、更新で自動再レンダリング</li>
-            <li><strong>フォーム</strong><br>controlled（React管理）vs uncontrolled（DOM直接）、<code>preventDefault()</code> でリロード回避
+            <li><strong>フォームと入力</strong><br>React管理「Controlled」vs DOM直接「Uncontrolled」、フォームの基本的な使い方
             </li>
           </ul>
         </section>
