@@ -1486,7 +1486,8 @@ const handleChange = (e) => {
           <h3>1つの課題 (15-20分)</h3>
 
           <p>今日学んだ内容を実際に使ってみよう！</p>
-          <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
+          <div class="note"><a
+              href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_2/task.md</a>
           </div>
         </section>
 
@@ -1496,33 +1497,26 @@ const handleChange = (e) => {
 
           <h2><span class="task-number">課題2</span> 斬魄刀ステータス エディター</h2>
 
-          <p><strong>斬魄刀の情報を編集できるフォームを作成してください</strong></p>
-          <div class="side-code">
-            <ul class="compact-list">
-              <li>以下のフィールドをすべて含むこと:
-                <ul>
-                  <li><code>name</code> (テキスト), <code>owner</code> (テキスト)</li>
-                  <li><code>type</code> (セレクト: melee/kido/elemental/illusion)</li>
-                  <li><code>powerLevel</code> (数値: 1-10000)</li>
-                  <li><code>isReleased</code> (チェックボックス)</li>
-                </ul>
-              </li>
-              <li>入力中の値をリアルタイムで下に表示すること</li>
-              <li>「登録」ボタンでコンソールに全データを出力</li>
-              <li>登録後、フォームをリセット</li>
-            </ul>
+          <p><strong>基本的なフォームを作成してください</strong></p>
+          <ul class="compact-list">
+            <li>2つの入力フィールド: <code>name</code>（テキスト） と <code>powerLevel</code>（数値, 1-10000）</li>
+            <li>両方とも必須項目</li>
+            <li>送信時： データを <code>console.log</code> して、フォームをクリア</li>
+            <li><code>useState</code> でフォーム状態を管理</li>
+          </ul>
 
-            <pre><code data-lang="jsx">// 初期状態例
-const [zanpakuto, setZanpakuto] = useState({
-  name: '',
-  owner: '',
-  type: 'melee',
-  powerLevel: 1,
-  isReleased: false
-});</code></pre>
+          <pre><code data-lang="jsx">function ZanpakutoForm() {
+  const [zanpakuto, setZanpakuto] = useState({
+    name: "",
+    powerLevel: 1,
+  });
+
+  return &lt;form&gt;{/* 入力フィールドと送信ボタンを追加 */}&lt;/form&gt;;
+}</code></pre>
+
+          <div class="note"><a
+              href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_2/task.md</a>
           </div>
-
-          <div class="note"><a href="task.md">react-lessons/lesson_2/task.md</a></div>
         </section>
         <section>
           <h2><span class="task-number">課題2</span> 斬魄刀ステータス エディター</h2>
@@ -1537,12 +1531,24 @@ const [zanpakuto, setZanpakuto] = useState({
       <section>
         <!-- Summary -->
         <section>
-          <h1>第1回まとめ</h1>
+          <h1>第2回まとめ</h1>
 
           <h2>今日学んだこと</h2>
           <ul>
-            <li><strong>???</strong> ???</li>
+            <li><strong>イベント処理</strong><br><code>onClick={handleClick}</code> でユーザー操作をキャッチ、関数参照で渡す</li>
+            <li><strong>useState</strong><br><code>[state, setState] = useState(初期値)</code> で状態管理、更新で自動再レンダリング</li>
+            <li><strong>フォーム</strong><br>controlled（React管理）vs uncontrolled（DOM直接）、<code>preventDefault()</code> でリロード回避
+            </li>
           </ul>
+        </section>
+
+        <section>
+          <h1>宿題・実践課題</h1>
+
+          <h3>完全な斬魄刀フォームを作成してください</h3>
+          <div class="note"><a
+              href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_2/homework"
+              target="_blank">react-lessons/lesson_2/homework</a></div>
         </section>
 
         <!-- In next episode -->

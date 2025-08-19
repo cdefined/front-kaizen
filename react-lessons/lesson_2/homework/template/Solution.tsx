@@ -8,6 +8,7 @@ function ZanpakutoForm() {
     type: "melee",
     powerLevel: 1,
     isReleased: false,
+    bankai: "",
   });
 
   return (
