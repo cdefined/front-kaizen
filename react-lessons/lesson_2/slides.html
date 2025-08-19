@@ -584,7 +584,7 @@ const [状態変数, 更新関数] = useState(初期値);
           <h2>基本例：いいねボタン</h2>
           <iframe
             src="https://codesandbox.io/embed/hp2249?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1"
-            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Like Button"
+            style="width:100%; height: 320px; border:0; border-radius: 4px; overflow:hidden;" title="Like Button"
             allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
           <!-- <pre><code data-lang="jsx">
@@ -603,11 +603,8 @@ function LikeButton() {
   );
 }
                 </code></pre> -->
-        </section>
-
-        <!-- Flow -->
-        <section>
-          <h2>動作の流れ</h2>
+          <br>
+          <h4 class="fragment">動作の流れ</h4>
           <ol>
             <li class="fragment"><code>useState(0)</code> → 初期値0でいいね数を作成</li>
             <li class="fragment">ボタンクリック → <code>setLikes(likes + 1)</code></li>
@@ -1017,7 +1014,7 @@ const [user, setUser] = useState({
           <p><code>useRef</code>でDOM要素への参照を作成、<code>ref.current</code>でアクセス</p>
           <iframe
             src="https://codesandbox.io/embed/9kxmwj?view=editor+%2B+preview&module=%2Fsrc%2FApp.js&hidenavigation=1&expanddevtools=1"
-            style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="Bankai Input"
+            style="width:100%; height: 550px; border:0; border-radius: 4px; overflow:hidden;" title="Bankai Input"
             allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
           <!-- <pre><code data-lang="jsx">function BankaiInput() {
@@ -1114,6 +1111,65 @@ const [user, setUser] = useState({
             sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
         </section>
 
+        <section>
+          <h2>重要な罠：<code>input</code>の値は全部文字列！</h2>
+
+          <div class="problem-box">
+            <h3>問題：なぜこのコードは動かない？</h3>
+            <pre><code data-lang="jsx">// ❌ バグのあるコード 
+const [age, setAge] = useState(20);
+
+const handleChange = (e) => {
+ setAge(e.target.value); // value は常に文字列！
+};
+
+// 結果
+console.log(age + 1);        // "201"（文字列結合）
+console.log(age > 18);       // 文字列比較でバグる
+console.log(typeof age);     // "string"</code></pre>
+          </div>
+
+          <div class="note">
+            <strong>HTML仕様:</strong> すべての input の <code>value</code> は文字列として返される<br>
+            <code>&lt;input type="number"&gt;</code> でも例外なし！
+          </div>
+        </section>
+
+        <section>
+          <h2>解決策：型変換を明示的に行う</h2>
+
+          <div class="comparison">
+            <div>
+              <h4>個別変換パターン</h4>
+              <pre><code data-lang="jsx">const handleAgeChange = (e) => {
+ setAge(Number(e.target.value));
+};
+
+const handleNameChange = (e) => {
+ setName(e.target.value); // 文字列のまま
+};</code></pre>
+            </div>
+
+            <div>
+              <h4>統一ハンドラーパターン</h4>
+              <pre><code data-lang="jsx">const handleChange = (e) => {
+ const { name, value, type, checked } = e.target;
+
+ setData(prev => ({
+   ...prev,
+   [name]: type === 'checkbox' ? checked :
+           type === 'number' ? Number(value) :
+           value
+ }));
+};</code></pre>
+            </div>
+          </div>
+
+          <div class="note">
+            <strong>覚え方:</strong> 「input の value は常に string、数値が欲しいなら Number() で変換」
+          </div>
+        </section>
+
         <!-- Form submission and preventDefault -->
         <section>
           <h2>フォーム送信と<code>preventDefault</code></h2>
@@ -1203,7 +1259,7 @@ const [user, setUser] = useState({
         <section>
           <h2>どのパターンを使うべき？</h2>
 
-          <table style="width: 100%; font-size: 0.8em;">
+          <table style="width: 100%;">
             <tr>
               <th>状況</th>
               <th>推奨パターン</th>
@@ -1227,7 +1283,7 @@ const [user, setUser] = useState({
             <tr>
               <td>ファイルアップロード</td>
               <td><strong>Uncontrolled</strong></td>
-              <td>ファイルはstateに入らない</td>
+              <td>ファイルは<code>state</code>に入らない</td>
             </tr>
             <tr>
               <td>既存のライブラリ使用</td>
@@ -1319,7 +1375,7 @@ const [user, setUser] = useState({
 
         <!-- Form accessibility -->
         <section>
-          <h2>フォームのアクセシビリティ</h2>
+          <h2>【念のため】フォームのアクセシビリティ</h2>
           <ul class="compact-list">
             <li><strong>label要素:</strong> すべての入力フィールドに適切なlabel</li>
             <li><strong>htmlFor/id:</strong> labelとinputを関連付け</li>
@@ -1331,7 +1387,7 @@ const [user, setUser] = useState({
           <pre><code data-lang="jsx">
 &lt;fieldset&gt;
   &lt;legend&gt;個人情報&lt;/legend&gt;
-  &lt;label htmlFor="user-name"&gt;名前 (必須)&lt;/label&gt;
+  &lt;label htmlFor="user-name"&gt;名前（必須）&lt;/label&gt;
   &lt;input 
     id="user-name"
     type="text"
