@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
     <style>
+        :root {
+            --main-header: #667eea;
+            --green: #27ae60;
+            --yellow: #f39c12;
+            --red: #fc5342;
+        }
+
         .reveal {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -18,7 +25,7 @@
         .reveal h2,
         .reveal h3,
         .reveal h4 {
-            color: #667eea;
+            color: var(--main-header);
             text-transform: none;
         }
 
@@ -79,7 +86,7 @@
         .arrow {
             background: none;
             font-size: 100px;
-            color: #667eea;
+            color: var(--main-header);
             flex: 0;
         }
 
@@ -122,7 +129,7 @@
 
         .warning {
             background: rgba(231, 76, 60, 0.2);
-            border-left: 4px solid #e74c3c;
+            border-left: 4px solid #fc5342;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
@@ -206,7 +213,7 @@
         .mpa-spa {
             border-radius: 8px;
             padding: 1.5rem;
-            border-top: 4px solid #667eea;
+            border-top: 4px solid var(--main-header);
             background: #f8f8f810;
 
             h3,
@@ -231,7 +238,7 @@
             }
         }
 
-        .lifecicle {
+        .lifecycle {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
@@ -250,28 +257,28 @@
             }
 
             .mount {
-                border-color: #27ae60;
+                border-color: var(--green);
 
                 h3 {
-                    color: #27ae60;
+                    color: var(--green);
                     text-align: center;
                 }
             }
 
             .update {
-                border-color: #f39c12;
+                border-color: var(--yellow);
 
                 h3 {
-                    color: #f39c12;
+                    color: var(--yellow);
                     text-align: center;
                 }
             }
 
             .unmount {
-                border-color: #e74c3c;
+                border-color: var(--red);
 
                 h3 {
-                    color: #e74c3c;
+                    color: var(--red);
                     text-align: center;
                 }
             }
@@ -586,7 +593,7 @@ const showAbout = () => {
                 </section>
             </section>
 
-            <!-- Lifecicle -->
+            <!-- lifecycle -->
             <section>
                 <section>
                     <h1>Reactのライフサイクル</h1>
@@ -596,35 +603,35 @@ const showAbout = () => {
                     <h1>コンポーネントのライフサイクル</h1>
                     <p>すべてのコンポーネントは3つの段階を経ます</p>
 
-                    <div class="lifecicle">
+                    <div class="lifecycle">
                         <div class="mount">
                             <h3>マウント</h3>
                             <p>コンポーネントが作成される</p>
-                            <ul style="text-align: left;">
+                            <ul>
                                 <li>createElement()</li>
                                 <li>render()</li>
                                 <li>DOMに追加</li>
-                                <li><strong>useEffectが実行</strong></li>
+                                <li>エフェクトが実行</li>
                             </ul>
                         </div>
 
                         <div class="update">
                             <h3>更新</h3>
                             <p>コンポーネントが変更される</p>
-                            <ul style="text-align: left;">
+                            <ul>
                                 <li>stateの変更</li>
                                 <li>propsの変更</li>
                                 <li>再レンダリング</li>
-                                <li><strong>useEffectが再実行</strong></li>
+                                <li>エフェクトが再実行</li>
                             </ul>
                         </div>
 
                         <div class="unmount">
                             <h3>アンマウント</h3>
                             <p>コンポーネントが破棄される</p>
-                            <ul style="text-align: left;">
+                            <ul>
                                 <li>DOMから削除</li>
-                                <li><strong>クリーンアップ関数が実行</strong></li>
+                                <li>クリーンアップ関数が実行</li>
                                 <li>メモリを解放</li>
                             </ul>
                         </div>
@@ -636,17 +643,54 @@ const showAbout = () => {
                     <div
                         style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin: 2rem 0;">
                         <button onclick="mountComponent()"
-                            style="background: #27ae60; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">マウント</button>
+                            style="background: var(--green); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">マウント</button>
                         <button onclick="updateComponent()"
-                            style="background: #f39c12; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">更新</button>
+                            style="background: var(--yellow); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">更新</button>
                         <button onclick="unmountComponent()"
-                            style="background: #e74c3c; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">アンマウント</button>
+                            style="background: var(--red); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">アンマウント</button>
                     </div>
 
                     <div id="lifecycle-status"
                         style="padding: 2rem; border-radius: 6px; min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 2px solid #ddd;">
                         ボタンをクリックしてライフサイクルを確認
                     </div>
+                    <script>
+                        let currentState = 'idle';
+                        let updateCount = 0;
+
+                        function mountComponent() {
+                            currentState = 'mounted';
+                            updateCount = 0;
+                            const status = document.getElementById('lifecycle-status');
+                            status.textContent = 'マウント完了：コンポーネントが作成され、useEffectが初回実行されました';
+                            status.style.borderColor = '#27ae60';
+                            status.style.color = '#27ae60';
+                        }
+
+                        function updateComponent() {
+                            if (currentState !== 'mounted') {
+                                alert('先にコンポーネントをマウントしてください！');
+                                return;
+                            }
+                            updateCount++;
+                            const status = document.getElementById('lifecycle-status');
+                            status.textContent = `更新 #${updateCount}：再レンダリングが実行され、useEffectが再実行されました（依存配列に変更がある場合）`;
+                            status.style.borderColor = '#f39c12';
+                            status.style.color = '#f39c12';
+                        }
+
+                        function unmountComponent() {
+                            if (currentState !== 'mounted') {
+                                alert('先にコンポーネントをマウントしてください！');
+                                return;
+                            }
+                            currentState = 'unmounted';
+                            const status = document.getElementById('lifecycle-status');
+                            status.textContent = 'アンマウント完了：コンポーネントが破棄され、クリーンアップ関数が実行されました';
+                            status.style.borderColor = '#fc5342';
+                            status.style.color = '#fc5342';
+                        }
+                    </script>
                 </section>
 
                 <section>
@@ -855,44 +899,6 @@ npm install</code></pre>
                 escapeHTML: true
             }
         });
-    </script>
-
-    <script>
-        let currentState = 'idle';
-        let updateCount = 0;
-
-        function mountComponent() {
-            currentState = 'mounted';
-            updateCount = 0;
-            const status = document.getElementById('lifecycle-status');
-            status.textContent = 'マウント完了：コンポーネントが作成され、useEffectが初回実行されました';
-            status.style.borderColor = '#27ae60';
-            status.style.color = '#27ae60';
-        }
-
-        function updateComponent() {
-            if (currentState !== 'mounted') {
-                alert('先にコンポーネントをマウントしてください！');
-                return;
-            }
-            updateCount++;
-            const status = document.getElementById('lifecycle-status');
-            status.textContent = `更新 #${updateCount}：再レンダリングが実行され、useEffectが再実行されました（依存配列に変更がある場合）`;
-            status.style.borderColor = '#f39c12';
-            status.style.color = '#f39c12';
-        }
-
-        function unmountComponent() {
-            if (currentState !== 'mounted') {
-                alert('先にコンポーネントをマウントしてください！');
-                return;
-            }
-            currentState = 'unmounted';
-            const status = document.getElementById('lifecycle-status');
-            status.textContent = 'アンマウント完了：コンポーネントが破棄され、クリーンアップ関数が実行されました';
-            status.style.borderColor = '#e74c3c';
-            status.style.color = '#e74c3c';
-        }
     </script>
 </body>
 
