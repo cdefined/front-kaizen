@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta lang="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React 応用①</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <style>
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            color: #667eea;
+            text-transform: none;
+        }
+
+        .reveal h4 {
+            margin-bottom: 0;
+        }
+
+        .reveal .pale {
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .code-wrapper code {
+            font-size: 1.3em;
+        }
+
+        .reveal .code-wrapper .code-medium {
+            font-size: 1.19em;
+        }
+
+        .reveal .code-wrapper .code-medium-small {
+            font-size: 1.1em;
+        }
+
+        .reveal .code-wrapper .code-small,
+        .code-small {
+            font-size: 0.9em;
+        }
+
+        .code-small .code-wrapper {
+            width: 100%;
+        }
+
+        .reveal .comparison .hljs {
+            max-height: 350px;
+            min-height: unset;
+            height: 100%;
+        }
+
+        ul>li,
+        dl>dd {
+            line-height: 2em;
+        }
+
+        ul.compact-list>li,
+        dl.compact-list>dd {
+            line-height: 1.5em;
+        }
+
+        .arrow {
+            background: none;
+            font-size: 100px;
+            color: #667eea;
+            flex: 0;
+        }
+
+        .down-arrow {
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            font-size: 50px;
+            flex: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .triptych {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 20px;
+        }
+
+        .triptych-transformation {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .note {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 8px 0;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .quiz-options.small {
+            font-size: 0.65em;
+        }
+
+        .fragment.correct-answer.visible {
+            border-left: 4px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.3);
+        }
+
+        .reveal pre {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .reveal pre code {
+            padding: 1em;
+        }
+
+        .timer {
+            position: absolute;
+            top: -30px;
+            right: 15px;
+        }
+
+        .comparison-table {
+            font-size: 0.75em;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+        }
+
+        .comparison-table thead th {
+            font-weight: bold;
+        }
+
+        .comparison-table .metric {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .mpa-spa {
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-top: 4px solid #667eea;
+            background: #f8f8f810;
+
+            h3 {
+                text-align: center;
+            }
+
+            li {
+                list-style-position: inside;
+                background: #667eea15;
+                color: white;
+                padding: 0.75rem 1.5rem;
+                margin: 0.5rem 0;
+                border-radius: 4px;
+            }
+        }
+
+        .lifecicle {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+
+            div {
+                border-radius: 8px;
+                padding: 1.5rem;
+                border-top: 4px solid;
+                background: #f8f8f810;
+            }
+
+            p,
+            ul {
+                font-size: 0.9em;
+            }
+
+            .mount {
+                border-color: #27ae60;
+
+                h3 {
+                    color: #27ae60;
+                    text-align: center;
+                }
+            }
+
+            .update {
+                border-color: #f39c12;
+
+                h3 {
+                    color: #f39c12;
+                    text-align: center;
+                }
+            }
+
+            .unmount {
+                border-color: #e74c3c;
+
+                h3 {
+                    color: #e74c3c;
+                    text-align: center;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section class="title-slide">
+                <h1>React 応用①</h1>
+                <h2>useEffect、SPA</h2>
+            </section>
+
+            <!-- In previous episode -->
+            <section>
+                <section>
+                    <h1>前回の復習</h1>
+                    <p>React基礎②のおさらい</p>
+                    <aside class="notes">前回(ぜんかい)学(まな)んだreactの基本(きほん)を復習(ふくしゅう)しましょう</aside>
+                </section>
+
+                <section>
+                    <h2>イベント処理</h2>
+                    <div class="syntax-review">
+                        <pre><code data-lang="jsx">// ボタンクリックの基本
+const handleClick = () => {
+  alert('押したよ！');
+};
+
+return &lt;button onClick={handleClick}&gt;押す&lt;/button&gt;;</code></pre>
+                        <pre><code data-lang="jsx">
+// 複数ボタン + データ渡し
+const characters = ['Rena', 'Satoko', 'Rika'];
+return (
+  &lt;div&gt;
+    {characters.map(name => (
+      &lt;button key={name} onClick={() => handleSelect(name)}&gt;
+        {name}
+      &lt;/button&gt;
+    ))}
+  &lt;/div&gt;
+);</code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>状態管理【useState】</h2>
+                    <div class="syntax-review">
+                        <div class="triptych-transformation">
+                            <pre><code data-lang="jsx">// 基本構文
+const [likes, setLikes] = useState(0); // 初期値は0
+
+// 数値の更新
+setLikes(likes + 1);           // 現在の値を使って直接更新
+setLikes(prev => prev + 1);    // 前の値を使って関数で安全に更新</code></pre>
+                            <div class="arrow">↔</div>
+                            <pre><code data-lang="jsx">// 配列の分割代入なし版
+const likesState = useState(0); 
+
+// likesState[0] = 現在値
+// likesState[1] = セッター関数
+likesState[1](likesState[0] + 1);</code></pre>
+                        </div>
+                        <pre><code data-lang="jsx">
+// オブジェクトの更新
+const [user, setUser] = useState({ name: 'Ichigo', age: 17 });
+setUser({...user, age: 18}); // スプレッド構文で既存保持
+
+// 配列の更新  
+const [items, setItems] = useState(['bat', 'knife']);
+setItems([...items, 'nata']); // 新しい配列を作成</code></pre>
+                    </div>
+
+                    <div class="note">
+                        必ずセッター関数を使用、オブジェクト/配列は新しく作成
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Controlledコンポネント</h2>
+
+                    <div class="comparison">
+                        <div>
+                            <h4>基本構造</h4>
+                            <pre><code data-lang="jsx">// 3つの要素が必須
+const [value, setValue] = useState('');         // 1. 状態
+
+return (
+  &lt;input 
+    value={value}                               // 2. input要素
+    onChange={(e) => setValue(e.target.value)}  // 3. ハンドラー関数
+  /&gt;
+);</code></pre>
+                        </div>
+
+                        <div>
+                            <h4>重要なポイント</h4>
+                            <ul class="compact-list">
+                                <li><code>value</code>は必ずstate由来</li>
+                                <li><code>onChange</code>でstateを更新</li>
+                                <li>状態変更 → 再レンダリング</li>
+                                <li>Reactが完全に制御</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        ・「Controlled」では、Reactが状態を管理します<br>
+                        ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
+                    </div>
+                </section>
+            </section>
+
+            <!-- SPA Introduction -->
+            <section>
+                <section>
+                    <h1>シングルページアプリ【SPA】</h1>
+                    <p>SPAとは、従来のWebアプリとの違い</p>
+                </section>
+                <section>
+                    <h2>従来のWebアプリ vs SPA</h2>
+                    <div class="comparison">
+                        <div class="mpa-spa">
+                            <h3>マルチページ</h3>
+                            <ol>
+                                <li>
+                                    ユーザーがリンクをクリック</li>
+                                <li>
+                                    ブラウザが新しいHTMLを要求</li>
+                                <li>
+                                    サーバーがページ全体を送信</li>
+                                <li>
+                                    ブラウザが古いページを破棄</li>
+                                <li>
+                                    新しいページを描画</li>
+                                <li>
+                                    画面のフラッシュ/再読み込み</li>
+                            </ol>
+                        </div>
+
+                        <div class="mpa-spa">
+                            <h3>シングルページアプリ</h3>
+                            <ol>
+                                <li>
+                                    ユーザーがリンクをクリック</li>
+                                <li>
+                                    JavaScriptがクリックを検知</li>
+                                <li>
+                                    必要なデータのみを取得</li>
+                                <li>
+                                    Reactが変更部分のみを更新</li>
+                                <li>高速なページ遷移が可能</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>コード例</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h4>従来のWebアプリ</h4>
+                            <p>ブラウザがすべてを処理</p>
+                            <pre><code data-lang="html">
+&lt;!-- 各クリックで新しいページ --&gt;
+&lt;a href="/about.html"&gt;概要&lt;/a&gt;</code></pre>
+                        </div>
+                        <div>
+                            <h4>SPA</h4>
+                            <p>JavaScriptがすべてを処理</p>
+                            <pre><code data-lang="jsx">
+const handleClick = () => {
+  navigate('/about') // アプリ内ルーティングでページ遷移
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>SPAの利点と注意点</h2>
+                    <div class="comparison">
+                        <div class="pros">
+                            <h4>メリット</h4>
+                            <ul>
+                                <li>高速なページ遷移</li>
+                                <li>アプリライクなUX</li>
+                                <li>サーバー負荷軽減</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>懸念点</h4>
+                            <ul>
+                                <li>初回ロードが重い</li>
+                                <li>SEOが困難</li>
+                                <li>JavaScriptが必須</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- The SPA Problem -->
+                <section>
+                    <h2>SPAの根本的な問題</h2>
+                    <div class="warning">
+                        <p><strong>純粋なSPAは多くの問題を抱えており現在は「呪われた」技術とされることも</strong></p>
+                    </div>
+
+                    <h3>主な問題点</h3>
+                    <ul>
+                        <li><strong>SEO</strong> : 検索エンジンがJavaScriptを実行しないと内容が見えない</li>
+                        <li><strong>初回ロード</strong> : すべてのJavaScriptをダウンロードするまで何も表示されない</li>
+                        <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
+                        <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
+                    </ul>
+                </section>
+
+                <!-- Slide 9: SPA Solutions -->
+                <section>
+                    <h2>【念のため】現実的な解決策</h2>
+                    <ul>
+                        <li><strong>SSR【Server Side Rendering】</strong><br>サーバーでHTMLを生成</li>
+                        <li><strong>SSG【Static Site Generation】</strong><br>ビルド時に静的HTMLを生成</li>
+                        <li><strong>ISR【Incremental Static Regeneration】</strong><br>必要に応じて静的ページを再生成</li>
+                    </ul>
+
+                    <div class="note">
+                        これらの手法で純粋SPAの問題を解決（Next.js、React Router/Remix、Astro、Gatsby等のフレームワーク）
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h1>Reactのライフサイクル</h1>
+                    <p>コンポーネントの状態管理と描画サイクルを理解する</p>
+                </section>
+                <section>
+                    <h1>コンポーネントのライフサイクル</h1>
+                    <p>すべてのコンポーネントは3つの段階を経ます</p>
+
+                    <div class="lifecicle">
+                        <div class="mount">
+                            <h3>マウント</h3>
+                            <p>コンポーネントが作成される</p>
+                            <ul style="text-align: left;">
+                                <li>createElement()</li>
+                                <li>render()</li>
+                                <li>DOMに追加</li>
+                                <li><strong>useEffectが実行</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="update">
+                            <h3>更新</h3>
+                            <p>コンポーネントが変更される</p>
+                            <ul style="text-align: left;">
+                                <li>stateの変更</li>
+                                <li>propsの変更</li>
+                                <li>再レンダリング</li>
+                                <li><strong>useEffectが再実行</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="unmount">
+                            <h3>アンマウント</h3>
+                            <p>コンポーネントが破棄される</p>
+                            <ul style="text-align: left;">
+                                <li>DOMから削除</li>
+                                <li><strong>クリーンアップ関数が実行</strong></li>
+                                <li>メモリを解放</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ライフサイクルのデモ</h2>
+                    <div
+                        style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin: 2rem 0;">
+                        <button onclick="mountComponent()"
+                            style="background: #27ae60; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">マウント</button>
+                        <button onclick="updateComponent()"
+                            style="background: #f39c12; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">更新</button>
+                        <button onclick="unmountComponent()"
+                            style="background: #e74c3c; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer;">アンマウント</button>
+                    </div>
+
+                    <div id="lifecycle-status"
+                        style="padding: 2rem; border-radius: 6px; min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 2px solid #ddd;">
+                        ボタンをクリックしてライフサイクルを確認
+                    </div>
+                </section>
+
+                <section>
+                    <h2>useEffectとライフサイクル</h2>
+                    <pre><code data-lang="jsx">useEffect(() => {
+  // マウント + 更新: 依存配列の値が変わった時に実行
+  console.log('コンポーネントが描画されました！')
+  
+  return () => {
+    // アンマウント: クリーンアップ処理
+    console.log('コンポーネントが破棄されます！')
+  }
+}, []) // 空の依存配列 = マウント時のみ実行</code></pre>
+                </section>
+
+                <section>
+                    <h1>重要な概念</h1>
+                    <div style="padding: 2rem; border-radius: 8px; font-family: 'Monaco', monospace;">
+                        <p><strong>SPA</strong> = 1つのHTMLファイル + JavaScriptがすべてを処理</p>
+                        <p><strong>ライフサイクル</strong> = 作成 → 変更 → 破棄</p>
+                        <p><strong>useEffect</strong> = Reactの描画サイクル外で処理を実行する仕組み</p>
+                    </div>
+                </section>
+
+                <script>
+                    let currentState = 'idle';
+                    let updateCount = 0;
+
+                    function mountComponent() {
+                        currentState = 'mounted';
+                        updateCount = 0;
+                        const status = document.getElementById('lifecycle-status');
+                        status.textContent = 'マウント完了：コンポーネントが作成され、useEffectが初回実行されました';
+                        status.style.borderColor = '#27ae60';
+                        status.style.color = '#27ae60';
+                    }
+
+                    function updateComponent() {
+                        if (currentState !== 'mounted') {
+                            alert('先にコンポーネントをマウントしてください！');
+                            return;
+                        }
+                        updateCount++;
+                        const status = document.getElementById('lifecycle-status');
+                        status.textContent = `更新 #${updateCount}：再レンダリングが実行され、useEffectが再実行されました（依存配列に変更がある場合）`;
+                        status.style.borderColor = '#f39c12';
+                        status.style.color = '#f39c12';
+                    }
+
+                    function unmountComponent() {
+                        if (currentState !== 'mounted') {
+                            alert('先にコンポーネントをマウントしてください！');
+                            return;
+                        }
+                        currentState = 'unmounted';
+                        const status = document.getElementById('lifecycle-status');
+                        status.textContent = 'アンマウント完了：コンポーネントが破棄され、クリーンアップ関数が実行されました';
+                        status.style.borderColor = '#e74c3c';
+                        status.style.color = '#e74c3c';
+                    }
+                </script>
+            </section>
+
+            <section>
+                <section>
+                    <h4>理解度チェック③【Props】</h4>
+                    <div class="quiz">
+                        <h3>childrenには何が入る?</h3>
+                        <pre><code data-lang="jsx">function Card({ title, children }) {
+    return (
+        &lt;div&gt;
+            &lt;h2&gt;{title}&lt;/h2&gt;
+            {children}
+        &lt;/div&gt;
+    );
+}</code></pre>
+                        <pre><code data-lang="jsx">
+&lt;Card title="Profile"&gt;
+    &lt;p&gt;Content here&lt;/p&gt;
+&lt;/Card&gt;
+</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) <code>Content here</code></div>
+                            <div class="quiz-option">B)
+                                <code>&lt;div&gt;&lt;h2&gt;{title}&lt;/h2&gt;Content here&lt;/div&gt;</code>
+                            </div>
+                            <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
+                                <code>&lt;p&gt;Content here&lt;/p&gt;</code>
+                            </div>
+                            <div class="quiz-option">D) <code>&lt;h2&gt;Profile&lt;/h2&gt;Content here</code></div>
+                        </div>
+                    </div>
+                    <div class="fragment" data-fragment-index="1">
+                        <div class="note">
+                            <strong>答え:</strong> C) <code>children</code>はコンポーネントの開始・終了タグの間の要素
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice -->
+            <section>
+                <section>
+                    <h1>React 実践演習</h1>
+                    <h3>1つの課題 (15-20分)</h3>
+
+                    <p>今日学んだ内容を実際に使ってみよう！</p>
+                    <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
+                    </div>
+                </section>
+                <section>
+                    <h3>セットアップ手順</h3>
+                    <ol>
+                        <li>masterブランチに切り替え、更新を取得する
+                            <pre><code data-lang="bash">git switch master
+git pull origin main</code></pre>
+                        </li>
+                        <li>パッケージをインストールする
+                            <pre><code data-lang="bash">cd react-lessons/
+npm install</code></pre>
+                        </li>
+                        <li>開発サーバーを起動する
+                            <pre><code data-lang="bash">npm run dev</code></pre>
+                        </li>
+                        <li>ブラウザで「<a href="http://localhost:5173/">http://localhost:5173/</a>」を開く</li>
+                    </ol>
+                    <div class="note"><a href="./task.md">react-lessons/lesson_1/task.md</a>
+                    </div>
+                </section>
+
+                <!-- Task 1 -->
+                <section>
+                    <div class="timer"></div>
+
+                    <h2><span class="task-number">課題1</span> Props付きのコンポーネント</h2>
+
+                    <p><strong><code>&lt;ZanpakutoCard&gt;</code> コンポーネントを作成してください</strong></p>
+                    <ul>
+                        <li><code>zanpakuto</code> オブジェクトを <strong>Props</strong> として受け取る</li>
+                        <li>以下のプロパティをすべて表示すること:
+                            <ul>
+                                <li><code>name</code>, <code>owner</code>, <code>type</code>, <code>bankai</code>,
+                                    <code>shikaiAbility</code>, <code>powerLevel</code>, <code>isReleased</code>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><code>bankai</code> は存在する場合のみ表示</li>
+                    </ul>
+
+                    <pre><code data-lang="typescript">export interface Zanpakuto {
+  name: string;
+  owner: string;
+  type: "melee" | "kido" | "elemental" | "illusion";
+  bankai?: string;
+  shikaiAbility: string;
+  powerLevel: number;
+  isReleased: boolean;
+}
+    </code></pre>
+
+                    <div class="note"><a href="task.md">react-lessons/lesson_1/task.md</a></div>
+                </section>
+                <section>
+                    <h2><span class="task-number">課題1</span> 解答例</h2>
+                    <p><code>props</code> を受け取って全てのプロパティを表示する</p>
+                    <pre><code data-lang="tsx">function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
+  const { name, owner, type, bankai, shikaiAbility, powerLevel, isReleased } = zanpakuto;  // 分割代入でプロパティを展開
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{name}（{owner}の斬魄刀）&lt;/h2&gt; {/* JSXでは{}内にJavaScript式を書ける */}
+      &lt;p&gt;タイプ: {type}&lt;/p&gt;
+      {bankai && &lt;p&gt;卍解: {bankai}&lt;/p&gt;} {/* 条件付きレンダリングの&&演算子：左側がtruthyの場合、右側を実行 */}
+      &lt;p&gt;始解能力: {shikaiAbility}&lt;/p&gt;
+      &lt;p&gt;霊圧レベル: {powerLevel}&lt;/p&gt;
+      &lt;p&gt;解放済み: {isReleased ? "はい" : "いいえ"}&lt;/p&gt; {/* 三項演算子 - 条件 ? 真の場合 : 偽の場合 */}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                </section>
+            </section>
+
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h1>第1回まとめ</h1>
+
+                    <h2>今日学んだこと</h2>
+                    <ul>
+                        <li><strong>Reactとは</strong> UIライブラリ、仮想DOM、宣言的プログラミング</li>
+                        <li><strong>JSX</strong> JavaScript + XML、{}で動的コンテンツ</li>
+                        <li><strong>コンポーネント</strong> 再利用可能なUI部品（関数）</li>
+                        <li><strong>Props</strong> コンポーネント間のデータ受け渡し</li>
+                        <li><strong>条件レンダリング</strong> 三項演算子、&&演算子</li>
+                    </ul>
+                </section>
+
+                <!-- In next episode -->
+                <section>
+                    <h1>次回予告</h1>
+                    <p><strong>React②:</strong> useState、イベント処理、フォーム</p>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.min.js"></script>
+    <script src="../../scripts/reveal-timer-plugin.js"></script>
+    <script type="module">
+        import { codeToHtml } from 'https://esm.sh/shiki@3.0.0';
+
+        const codeBlocks = document.querySelectorAll('pre code[data-lang]');
+
+        for (const block of codeBlocks) {
+            const lang = block.dataset.lang;
+            const theme = block.dataset.theme || 'night-owl'; // 'material-theme-darker'
+            const rawCode = block.textContent.trim();
+
+            const html = await codeToHtml(rawCode, { lang, theme });
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const shikiHTML = wrapper.firstElementChild;
+
+            const pre = block.closest('pre');
+            if (pre && shikiHTML) pre.replaceWith(shikiHTML);
+        }
+    </script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            width: 1800,
+            height: 900,
+            margin: 0.1,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealNotes, RevealTimer, RevealMarkdown],
+            highlight: {
+                escapeHTML: true
+            }
+        });
+    </script>
+</body>
+
+</html>
