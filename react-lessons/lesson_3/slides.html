@@ -114,7 +114,11 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            gap: 20px;
+            gap: 1em;
+        }
+
+        .triptych.centered {
+            justify-content: center;
         }
 
         .triptych-transformation {
@@ -342,6 +346,12 @@
             h3 {
                 text-align: center;
             }
+        }
+
+        .part {
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: var(--bg);
         }
     </style>
 </head>
@@ -994,7 +1004,7 @@ useEffect(() => {
   };
 }, [/* 依存配列 */]);</code></pre>
 
-                    <div class="effect-parts">
+                    <div class="triptych centered">
                         <div class="part">
                             <h3>エフェクト関数</h3>
                             <p>副作用を実行する関数</p>
