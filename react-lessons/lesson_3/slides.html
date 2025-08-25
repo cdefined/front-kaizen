@@ -130,7 +130,7 @@
 
         .note {
             background: rgba(52, 152, 219, 0.2);
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--main-header);
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
@@ -138,7 +138,7 @@
 
         .warning {
             background: rgba(231, 76, 60, 0.2);
-            border-left: 4px solid #fc5342;
+            border-left: 4px solid var(--red);
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
@@ -146,7 +146,7 @@
 
         .quiz {
             background: rgba(46, 204, 113, 0.1);
-            border-left: 4px solid #2ecc71;
+            border-left: 4px solid var(--green);
             padding: 20px;
             margin: 20px 0;
             border-radius: 8px;
@@ -270,6 +270,15 @@
                 font-size: 0.9em;
             }
 
+            ol {
+                font-size: 0.8em;
+                margin: 0 5px;
+            }
+
+            ol>li {
+                line-height: 2em;
+            }
+
             .mount {
                 position: relative;
                 border-color: var(--green);
@@ -285,9 +294,9 @@
                 content: "🡆";
                 position: absolute;
                 top: 50%;
-                right: -38px;
+                right: -36px;
                 color: #f8f8f8b0;
-                font-size: 47px;
+                font-size: 45px;
                 font-weight: bold;
             }
 
@@ -352,6 +361,36 @@
             border-radius: 8px;
             padding: 1.5rem;
             background: var(--bg);
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .pattern {
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: #f8f8f810;
+            margin-bottom: 1em;
+        }
+
+        .reveal .success {
+            color: #86ea9d;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .reveal .error {
+            color: #da5763;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .list-flow {
+            font-size: 0.75em;
         }
     </style>
 </head>
@@ -670,17 +709,18 @@ const showAbout = () => {
                     <p>コンポーネントの状態管理と描画サイクルを理解する</p>
                 </section>
 
+                <!-- Basic lifecycle -->
                 <section>
-                    <h1>コンポーネントのライフサイクル</h1>
+                    <h2>コンポーネントのライフサイクル</h2>
                     <p>すべてのコンポーネントは3つの段階を経ます</p>
 
                     <div class="lifecycle">
                         <div class="mount">
                             <h3>マウント</h3>
                             <p>コンポーネントが作成される</p>
-                            <ul>
+                            <ul class="compact">
                                 <li>初期state・propsの設定</li>
-                                <li>JSX → 仮想DOMの生成</li>
+                                <li>JSXから仮想DOMの生成</li>
                                 <li>実DOMへの挿入</li>
                                 <li>レイアウト・ペイント</li>
                             </ul>
@@ -689,7 +729,7 @@ const showAbout = () => {
                         <div class="update">
                             <h3>更新</h3>
                             <p>コンポーネントが変更される</p>
-                            <ul>
+                            <ul class="compact">
                                 <li>stateやpropsの変更検知</li>
                                 <li>仮想DOMの再生成</li>
                                 <li>差分計算（Reconciliation）</li>
@@ -700,7 +740,7 @@ const showAbout = () => {
                         <div class="unmount">
                             <h3>アンマウント</h3>
                             <p>コンポーネントが破棄される</p>
-                            <ul>
+                            <ul class="compact">
                                 <li>実DOMからの削除</li>
                                 <li>イベントリスナーの解除</li>
                                 <li>メモリの解放</li>
@@ -709,61 +749,45 @@ const showAbout = () => {
                     </div>
                 </section>
 
-                <!-- Pure Components Section -->
+                <!-- Why Pure components -->
                 <section>
-                    <h1>純粋コンポーネント</h1>
+                    <h2>純粋コンポーネント</h2>
                     <p>Reactの基本原則：同じ入力には同じ出力</p>
                     <br>
                     <h3>純粋関数の特徴</h3>
-                    <ul class="compact-list">
+                    <ul>
                         <li>同じ<code>props</code>で常に同じJSXを返す</li>
                         <li>レンダリング中に外部状態を変更しない</li>
                         <li>外部の変数に依存しない</li>
                     </ul>
-                    <div class="comparison">
-                        <div>
-                            <h4>純粋なコンポーネント ✅</h4>
-                            <pre><code data-lang="jsx">
-function PureComponent({ name }) {
-  return &lt;h1&gt;こんにちは、{name}さん！&lt;/h1&gt;;
-}}</code></pre>
-                        </div>
-                        <div>
-                            <h4>不純なコンポーネント ❌</h4>
-                            <pre><code data-lang="jsx">
-function ImpureComponent({ name }) {
-  document.title = `Welcome ${name}`; // 副作用
 
+                    <div class="comparison">
+                        <div class="pattern">
+                            <h4 class="success">純粋なコンポーネント</h4>
+                            <pre><code data-lang="jsx">function PureComponent({ name }) {
+  return &lt;h1&gt;こんにちは、{name}さん！&lt;/h1&gt;;
+}</code></pre>
+                        </div>
+                        <div class="pattern">
+                            <h4 class="error">不純なコンポーネント</h4>
+                            <pre><code data-lang="jsx">function ImpureComponent({ name }) {
+  document.title = `Welcome ${name}`; // 副作用
+  
   return &lt;h1&gt;こんにちは、{Math.random()}さん！&lt;/h1&gt;; // 非決定的
 }</code></pre>
                         </div>
                     </div>
                 </section>
 
-                <!-- Why Pure Components Matter -->
+                <!-- Side effects -->
                 <section>
-                    <h1>なぜ純粋性が重要なのか</h1>
-
-                    <dl>
-                        <dt>予測可能性</dt>
-                        <dd>同じpropsで常に同じ結果</dd>
-                        <dt>テスタビリティ</dt>
-                        <dd>副作用がないため単体テストが簡単</dd>
-                        <dt>最適化</dt>
-                        <dd>Reactが効率的に再レンダリングを判断</dd>
-                        <dt>デバッグしやすさ</dt>
-                        <dd>バグの原因を特定しやすい</dd>
-                    </dl>
-                </section>
-
-                <section>
-                    <h1>副作用【Side Effect】とは</h1>
+                    <h2>副作用（Side Effect）とは</h2>
                     <p>コンポーネントの純粋性を破る操作</p>
 
-                    <div class="four-square centered">
+                    <div class="four-square">
                         <div>
                             <h3>データ操作</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>API呼び出し</li>
                                 <li>ローカルストレージ</li>
                                 <li>データベース操作</li>
@@ -772,7 +796,7 @@ function ImpureComponent({ name }) {
 
                         <div>
                             <h3>DOM操作</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>要素への直接アクセス</li>
                                 <li>フォーカス制御</li>
                                 <li>スクロール操作</li>
@@ -781,7 +805,7 @@ function ImpureComponent({ name }) {
 
                         <div>
                             <h3>購読・解除</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>イベントリスナー</li>
                                 <li>WebSocket接続</li>
                                 <li>タイマー設定</li>
@@ -790,7 +814,7 @@ function ImpureComponent({ name }) {
 
                         <div>
                             <h3>外部ライブラリ</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>チャートライブラリ</li>
                                 <li>アニメーションライブラリ</li>
                                 <li>マップライブラリ</li>
@@ -799,98 +823,37 @@ function ImpureComponent({ name }) {
                     </div>
                 </section>
 
-                <!-- Side Effects Concept -->
+                <!-- Side effect necessety -->
                 <section>
-                    <h2>副作用とは何か</h2>
-                    <p>コンポーネントの純粋性を破る操作</p>
-                    <br>
-                    <div class="comparison centered">
-                        <div>
-                            <h3>副作用の例</h3>
-                            <ul class="compact-list">
-                                <li>DOM操作</li>
-                                <li>API呼び出し</li>
-                                <li>タイマーの設定</li>
-                                <li>イベントリスナーの登録</li>
-                                <li>ローカルストレージへの書き込み</li>
-                                <li>コンソールログ</li>
-                            </ul>
-                        </div>
-
-                        <pre><code data-lang="jsx">function ComponentWithSideEffects() {
-  document.title = '新しいタイトル'; // DOM操作
-  fetch('/api/data'); // API呼び出し
-  setTimeout(() => alert('タイマー完了'), 1000); // タイマー設定
-  document.addEventListener('click', () => {}); // イベントリスナー登録
-  localStorage.setItem('key', 'value'); // ローカルストレージ書き込み
-  console.log('レンダリング中'); // IO操作
-  
-  return &lt;&gt;これらは全て副作用&lt;/&gt;;
-}</code></pre>
-                    </div>
-                </section>
-
-                <!-- Why We Need Side Effects -->
-                <section>
-                    <h1>でも副作用は必要</h1>
-                    <p>現実的なアプリケーションでは避けられない</p>
-
-                    <div class="four-square">
-                        <div>
-                            <h3>データ取得</h3>
-                            <p>ユーザー情報やコンテンツをサーバーから取得</p>
-                        </div>
-
-                        <div>
-                            <h3>DOM操作</h3>
-                            <p>フォーカス制御やスクロール位置の調整</p>
-                        </div>
-
-                        <div>
-                            <h3>外部ライブラリ</h3>
-                            <p>チャートライブラリやマップライブラリとの連携</p>
-                        </div>
-
-                        <div>
-                            <h3>購読処理</h3>
-                            <p>WebSocketやイベントリスナーの管理</p>
-                        </div>
-                    </div>
-
-                    <p class="note">
-                        <strong>解決策：</strong>副作用を適切な場所とタイミングで実行する
-                    </p>
-                </section>
-
-
-                <section>
-                    <h1>なぜ副作用が必要なのか</h1>
+                    <h2>でも副作用は必要</h2>
                     <p>現実的なアプリケーションでは避けられない</p>
 
                     <pre><code data-lang="jsx">function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
   
-  // これらの操作はすべて副作用
-  // でもアプリには必要不可欠
+  // これらの操作はすべて副作用だが...
+  // アプリには必要不可欠
   
-  // ❌ レンダリング中に実行すると...
-  fetch(`/api/users/${userId}`)  // 無限ループの危険性
+  fetch(`/api/users/${userId}`)  // レンダリング中だと無限ループの危険性
     .then(data => setUser(data)); // 予期しない再レンダリング
   
   return <div>{user?.name}</div>;
 }</code></pre>
 
-                    <p class="warning">レンダリング中の副作用は予期しない動作を引き起こす</p>
+                    <div class="warning">
+                        レンダリング中の副作用は予期しない動作を引き起こす
+                    </div>
                 </section>
 
+                <!-- useEffect intro -->
                 <section>
-                    <h1>useEffect：副作用の安全な実行</h1>
+                    <h2>useEffect：副作用の安全な実行</h2>
                     <p>Reactが提供する副作用管理の仕組み</p>
                     <br>
                     <div class="comparison">
                         <div>
                             <h3>レンダーフェーズ</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>純粋である必要がある</li>
                                 <li>副作用は実行できない</li>
                                 <li>中断・再実行される可能性</li>
@@ -899,7 +862,7 @@ function ImpureComponent({ name }) {
 
                         <div>
                             <h3>コミットフェーズ</h3>
-                            <ul>
+                            <ul class="compact">
                                 <li>DOM更新後に実行</li>
                                 <li>副作用を安全に実行</li>
                                 <li>useEffectの実行タイミング</li>
@@ -908,89 +871,9 @@ function ImpureComponent({ name }) {
                     </div>
                 </section>
 
-                <!-- React's Solution -->
+                <!-- useEffect syntaxis -->
                 <section>
-                    <h1>Reactの解決策</h1>
-                    <p>副作用を安全に扱うための仕組み</p>
-                    <div class="comparison centered">
-                        <div>
-                            <h3>エフェクトシステム</h3>
-                            <ul>
-                                <li>レンダリング後に副作用を実行</li>
-                                <li>適切なタイミングでクリーンアップ</li>
-                                <li>依存関係による制御</li>
-                            </ul>
-                        </div>
-
-                        <pre><code data-lang="jsx">import { useEffect } from 'react';
-
-function UserProfile({ userId }) {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // 副作用：API呼び出し
-    fetchUser(userId).then(setUser);
-  }, [userId]); // 依存関係
-
-  return &lt;&gt;{user?.name}&lt;/&gt;;
-}</code></pre>
-                    </div>
-                </section>
-
-                <section>
-                    <h2>useEffectとライフサイクル</h2>
-                    <pre><code data-lang="jsx">useEffect(() => {
-  // マウント + 更新: 依存配列の値が変わった時に実行
-  console.log('コンポーネントが描画されました！')
-  
-  return () => {
-    // アンマウント: クリーンアップ処理
-    console.log('コンポーネントが破棄されます！')
-  }
-}, []) // 空の依存配列 = マウント時のみ実行</code></pre>
-                </section>
-
-                <section>
-                    <h1>コンポーネントのライフサイクル</h1>
-
-                    <div class="lifecycle">
-                        <div class="mount">
-                            <h3>マウント</h3>
-                            <p>コンポーネントが作成される</p>
-                            <ul>
-                                <li><code>createElement()</code></li>
-                                <li><code>render()</code></li>
-                                <li>DOMに追加</li>
-                                <li><strong>エフェクトが実行</strong></li>
-                            </ul>
-                        </div>
-
-                        <div class="update">
-                            <h3>更新</h3>
-                            <p>コンポーネントが変更される</p>
-                            <ul>
-                                <li><code>state</code>の変更</li>
-                                <li><code>props</code>の変更</li>
-                                <li>再レンダリング</li>
-                                <li><strong>エフェクトが再実行</strong></li>
-                            </ul>
-                        </div>
-
-                        <div class="unmount">
-                            <h3>アンマウント</h3>
-                            <p>コンポーネントが破棄される</p>
-                            <ul>
-                                <li>DOMから削除</li>
-                                <li><strong>クリーンアップ関数が実行</strong></li>
-                                <li>メモリを解放</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="note">更新フェーズは状態変更の度に繰り返されます</p>
-                </section>
-
-                <section>
-                    <h1>useEffectの基本構文</h1>
+                    <h2>useEffectの基本構文</h2>
 
                     <pre><code data-lang="jsx">import { useEffect } from 'react';
 
@@ -1000,47 +883,42 @@ useEffect(() => {
   
   return () => {
     // クリーンアップ関数：リソースの解放
-    console.log('次のエフェクト実行前 or アンマウント時');
+    console.log('次のエフェクト実行前またはアンマウント時');
   };
 }, [/* 依存配列 */]);</code></pre>
+                    <dl>
+                        <dt>エフェクト関数</dt>
+                        <dd>副作用を実行する関数</dd>
+                        <dt>クリーンアップ関数</dt>
+                        <dd>リソース解放（オプション）</dd>
+                    </dl>
 
-                    <div class="triptych centered">
-                        <div class="part">
-                            <h3>エフェクト関数</h3>
-                            <p>副作用を実行する関数</p>
-                        </div>
-                        <div class="part">
-                            <h3>クリーンアップ関数</h3>
-                            <p>リソース解放（オプション）</p>
-                        </div>
-                        <div class="part">
-                            <h3>依存配列</h3>
-                            <p>実行タイミングの制御</p>
-                        </div>
+                    <div class="note">
+                        依存配列で実行タイミングを制御
                     </div>
                 </section>
 
-                <!-- 依存配列のパターン -->
+                <!-- Dependency array patterns -->
                 <section>
-                    <h1>依存配列による実行制御</h1>
+                    <h2>依存配列による実行制御</h2>
 
                     <div class="dependency-patterns">
                         <div class="pattern">
-                            <h3>パターン1：毎回実行</h3>
+                            <h4>毎回実行</h4>
                             <pre><code data-lang="jsx">useEffect(() => {
   console.log('毎回のレンダリング後に実行');
 }); // 依存配列なし</code></pre>
                         </div>
 
                         <div class="pattern">
-                            <h3>パターン2：初回のみ実行</h3>
+                            <h4>初回のみ実行</h4>
                             <pre><code data-lang="jsx">useEffect(() => {
   console.log('マウント時のみ実行');
 }, []); // 空の依存配列</code></pre>
                         </div>
 
                         <div class="pattern">
-                            <h3>パターン3：条件付き実行</h3>
+                            <h4>条件付き実行</h4>
                             <pre><code data-lang="jsx">useEffect(() => {
   console.log('userIdが変わった時のみ実行');
 }, [userId]); // userIdに依存</code></pre>
@@ -1048,50 +926,66 @@ useEffect(() => {
                     </div>
                 </section>
 
-                <!-- 実践例：データ取得 -->
+                <!-- Practical example -->
                 <section>
-                    <h1>実践例：ユーザーデータの取得</h1>
+                    <h2>実践例：ポケットモンデータの取得</h2>
 
-                    <pre><code data-lang="jsx">function UserProfile({ userId }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    let cancelled = false; // クリーンアップフラグ
-    
-    const fetchUser = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/users/${userId}`);
-        const userData = await response.json();
-        
-        if (!cancelled) { // キャンセルされていない場合のみ更新
-          setUser(userData);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-    
-    fetchUser();
-    
-    return () => {
-      cancelled = true; // クリーンアップ
-    };
-  }, [userId]); // userIdが変わったら再実行
-  
-  if (loading) return <div>読み込み中...</div>;
-  return <div>{user?.name}</div>;
-}</code></pre>
+                    <iframe
+                        src="https://codesandbox.io/embed/twm23k?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1"
+                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="PokemonCard"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
                 </section>
 
-                <!-- useEffectとライフサイクルの関係 -->
                 <section>
-                    <h1>useEffectとライフサイクル</h1>
+                    <h2>useEffect の動作フロー</h2>
+                    <p>Pokemonデータ取得を例に詳細解説</p>
 
-                    <div class="lifecycle-with-effects">
+                    <ol class="list-flow">
+                        <li>
+                            <strong>コンポーネントマウント</strong>：
+                            コンポーネントが初回レンダリングされ、<code>useEffect</code>が実行される
+                            <pre><code data-lang="jsx">useEffect(() => { /* 副作用処理 */ }, [pokemonName])</code></pre>
+                        </li>
+
+                        <li>
+                            <strong>非同期データ取得開始</strong>：
+                            <code>loading</code>状態をtrueに設定し、APIからPokemonデータを取得開始
+                            <pre><code data-lang="jsx">setLoading(true);
+const response = await fetch(`/api/pokemon/${pokemonName}`)</code></pre>
+                        </li>
+
+                        <li>
+                            <strong>状態更新とUI再レンダリング</strong>：
+                            データ取得完了後、<code>pokemon</code>と<code>loading</code>の状態を更新しUIが再描画される
+                            <pre><code data-lang="jsx">if (!cancelled) {
+    setPokemon(pokemonData);
+    setLoading(false);
+}</code></pre>
+                        </li>
+
+                        <li>
+                            <strong>依存配列による再実行</strong>：
+                            <code>pokemonName</code>が変更されると、<code>useEffect</code>が再度実行される
+                            <pre><code data-lang="jsx">}, [pokemonName]); // 依存配列</code></pre>
+                        </li>
+
+                        <li>
+                            <strong>クリーンアップ処理</strong>：
+                            コンポーネントアンマウント時や再実行前にクリーンアップ関数が呼ばれる
+                            <pre><code data-lang="jsx">return () => {
+    cancelled = true; // 進行中のリクエストをキャンセル
+};</code></pre>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- Lifecycle with useEffect -->
+                <section>
+                    <h2>useEffectとライフサイクル</h2>
+
+                    <div class="lifecycle compact">
                         <div class="mount">
                             <h3>マウント</h3>
                             <ol>
@@ -1124,68 +1018,152 @@ useEffect(() => {
                     </div>
                 </section>
 
-                <!-- よくあるミスと対策 -->
+                <!-- Rule of Hooks -->
                 <section>
-                    <h1>よくあるミスと対策</h1>
+                    <h2>フックのルール</h2>
+                    <p>フックを正しく使用するための重要な制約</p>
 
-                    <div class="common-mistakes">
-                        <div class="mistake">
-                            <h3>❌ 依存配列の漏れ</h3>
+                    <div class="comparison">
+                        <div>
+                            <h3>ルール1：トップレベルでのみ呼び出し</h3>
+                            <ul class="compact">
+                                <li>ループ、条件分岐、ネストした関数内で呼び出してはいけない</li>
+                                <li>コンポーネントの最上位で呼び出す</li>
+                                <li>フックの実行順序を保証</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3>ルール2：React関数からのみ呼び出し</h3>
+                            <ul class="compact">
+                                <li>Reactコンポーネントから呼び出す</li>
+                                <li>カスタムフックから呼び出す</li>
+                                <li>通常のJavaScript関数からは呼び出してはいけない</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rule of Hooks Violations -->
+                <section>
+                    <h2>フックのルール違反例</h2>
+
+                    <div class="comparison">
+                        <div class="pattern">
+                            <h3 class="error">条件分岐内でのフック</h3>
+                            <pre><code data-lang="jsx">function Component({ condition }) {
+  if (condition) {
+    const [state, setState] = useState(0); // NG!
+    useEffect(() => {
+      // ...
+    }, []);
+  }
+  
+  return <div>...</div>;
+}</code></pre>
+                        </div>
+
+                        <div class="pattern">
+                            <h3 class="success">正しい書き方</h3>
+                            <pre><code data-lang="jsx">function Component({ condition }) {
+  const [state, setState] = useState(0); // OK!
+  
+  useEffect(() => {
+    if (condition) {
+      // 条件分岐はフック内部で
+    }
+  }, [condition]);
+  
+  return <div>...</div>;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="dependency-patterns">
+
+
+                        <div class="pattern">
+                            <h3 class="error">ループ内でのフック</h3>
+                            <pre><code data-lang="jsx">function Component({ items }) {
+  return items.map(item => {
+    const [state, setState] = useState(0); // NG!
+    return <div key={item.id}>{item.name}</div>;
+  });
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="warning">
+                        フックの実行順序が変わると、Reactの内部状態管理が破綻します
+                    </div>
+                </section>
+
+                <!-- Common mistakes -->
+                <section>
+                    <h2>よくあるミスと対策</h2>
+
+                    <div class="pattern">
+                        <h4 class="error">依存配列の漏れ</h4>
+                        <div class="split">
                             <pre><code data-lang="jsx">useEffect(() => {
   fetchData(userId); // userIdに依存しているが...
 }, []); // 依存配列に含まれていない</code></pre>
-                            <p class="solution">→ ESLint plugin-react-hooksを使用</p>
+                            <span><strong>対策：</strong> ESLint plugin-react-hooksを使用</span>
                         </div>
+                    </div>
 
-                        <div class="mistake">
-                            <h3>❌ クリーンアップ忘れ</h3>
+                    <div class="pattern">
+                        <h4 class="error">クリーンアップ忘れ</h4>
+                        <div class="split">
                             <pre><code data-lang="jsx">useEffect(() => {
   const timer = setInterval(updateData, 1000);
   // クリーンアップなし → メモリリーク
 }, []);</code></pre>
-                            <p class="solution">→ 必ずクリーンアップ関数でリソース解放</p>
+                            <p><strong>対策：</strong> 必ずクリーンアップ関数でリソース解放</p>
                         </div>
+                    </div>
 
-                        <div class="mistake">
-                            <h3>❌ 無限ループ</h3>
+                    <div class="pattern">
+                        <h4 class="error">無限ループ</h4>
+                        <div class="split">
                             <pre><code data-lang="jsx">useEffect(() => {
   setCount(count + 1); // countに依存
 }, [count]); // 無限ループ発生</code></pre>
-                            <p class="solution">→ 関数型更新を使用: setCount(c => c + 1)</p>
+                            <p><strong>対策：</strong> 関数型更新を使用: <code>setCount(c => c + 1)</code></p>
                         </div>
                     </div>
                 </section>
 
                 <!-- まとめ -->
                 <section>
-                    <h1>まとめ</h1>
+                    <h2>まとめ</h2>
 
-                    <div class="summary-grid">
-                        <div class="point">
+                    <div class="four-grid">
+                        <div>
                             <h3>純粋性を保つ</h3>
                             <p>レンダリング中は副作用を避ける</p>
                         </div>
 
-                        <div class="point">
+                        <div>
                             <h3>適切なタイミング</h3>
                             <p>useEffectで副作用を安全に実行</p>
                         </div>
 
-                        <div class="point">
+                        <div>
                             <h3>依存関係の管理</h3>
                             <p>依存配列で実行タイミングを制御</p>
                         </div>
 
-                        <div class="point">
+                        <div>
                             <h3>リソースの解放</h3>
                             <p>クリーンアップでメモリリーク防止</p>
                         </div>
                     </div>
 
-                    <p class="note">
+                    <div class="note">
                         ライフサイクルを理解し、適切にエフェクトを活用することで、<br>
                         安全で効率的なReactアプリケーションを構築できます
-                    </p>
+                    </div>
                 </section>
             </section>
 
