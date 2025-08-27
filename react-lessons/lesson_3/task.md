@@ -17,7 +17,7 @@
 - `useState` と `useEffect` を組み合わせて実装すること
 
 ```tsx
-function ZanpakutoSearch({ name }: { name: string }) {
+function ZanpakutoLoader({ name }: { name: string }) {
   const [result, setResult] = useState<Zanpakuto | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

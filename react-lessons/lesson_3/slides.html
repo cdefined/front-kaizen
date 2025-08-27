@@ -1542,7 +1542,7 @@ useEffect(() => {
 
                     <p>今日学んだ内容を実際に使ってみよう！</p>
                     <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_3/task.md</a>
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_3/task.md">react-lessons/lesson_3/task.md</a>
                     </div>
                 </section>
 
@@ -1551,36 +1551,32 @@ useEffect(() => {
 
                     <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
 
-                    <p><strong><code>&lt;ZanpakutoCard&gt;</code> コンポーネントを作成してください</strong></p>
-                    <ul>
-                        <li><code>zanpakuto</code> オブジェクトを <strong>Props</strong> として受け取る</li>
-                        <li>以下のプロパティをすべて表示すること:
-                            <ul>
-                                <li><code>name</code>, <code>owner</code>, <code>type</code>, <code>bankai</code>,
-                                    <code>shikaiAbility</code>, <code>powerLevel</code>, <code>isReleased</code>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><code>bankai</code> は存在する場合のみ表示</li>
+                    <p><strong><code>&lt;ZanpakutoLoader&gt;</code> コンポーネントを作成してください</strong></p>
+                    <ul class="compact-list">
+                        <li>ローディング中は「読み込み中...」と表示</li>
+                        <li>成功時は <code>name</code> と <code>powerLevel</code> を表示</li>
+                        <li>失敗時はエラーメッセージを表示</li>
+                        <li><code>useState</code> と <code>useEffect</code> を組み合わせて実装すること</li>
                     </ul>
 
-                    <pre><code data-lang="typescript">export interface Zanpakuto {
-  name: string;
-  owner: string;
-  type: "melee" | "kido" | "elemental" | "illusion";
-  bankai?: string;
-  shikaiAbility: string;
-  powerLevel: number;
-  isReleased: boolean;
-}
-    </code></pre>
+                    <pre><code data-lang="typescript">function ZanpakutoLoader({ name }: { name: string }) {
+  const [result, setResult] = useState<Zanpakuto | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // name が変更された時に loadZanpakto を呼び出す処理を書く
+  }, [name]);
+
+  return &lt;div&gt;{/* ローディング、結果、エラーの表示 */}&lt;/div&gt;;
+}</code></pre>
 
                     <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_3/task.md</a>
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_3/task.md">react-lessons/lesson_3/task.md</a>
                     </div>
                 </section>
                 <section>
-                    <h2><span class="task-number">課題</span> 斬魄刀ロアダー</h2>
+                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
                     <iframe
                         src="https://codesandbox.io/embed/mgy7j3?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1&expanddevtools=1"
                         style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
@@ -1597,6 +1593,10 @@ useEffect(() => {
 
                     <h2>今日学んだこと</h2>
                     <ul>
+                        <li>SPAとは、従来のWebアプリとの違い</li>
+                        <li>コンポーネントのライフサイクル</li>
+                        <li>副作用と純粋コンポーネントの概念</li>
+                        <li><code>useEffect</code>の基本的な使い方</li>
                     </ul>
                 </section>
 
