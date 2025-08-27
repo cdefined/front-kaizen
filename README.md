@@ -33,6 +33,13 @@ useState、イベント処理、フォーム
 - [プレゼンテーションの演習課題](/react-lessons/lesson_2/task.md)
 - [宿題・実践課題](/react-lessons/lesson_2/homework/README.md)
 
+## 5. React 応用 ①
+
+SPA とは、ライフサイクル、useEffect
+
+- [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_3/slides.html)
+- [プレゼンテーションの演習課題・実践課題](/react-lessons/lesson_3/task.md)
+
 ## コードレビューと提出
 
 ### 準備
