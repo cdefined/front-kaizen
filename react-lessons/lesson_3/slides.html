@@ -1541,14 +1541,15 @@ useEffect(() => {
                     <h3>1つの課題 (15-20分)</h3>
 
                     <p>今日学んだ内容を実際に使ってみよう！</p>
-                    <div class="note"><a href="./task.md">react-lessons/lesson_3/task.md</a>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_3/task.md</a>
                     </div>
                 </section>
 
                 <section>
                     <div class="timer"></div>
 
-                    <h2><span class="task-number">課題1</span> Props付きのコンポーネント</h2>
+                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
 
                     <p><strong><code>&lt;ZanpakutoCard&gt;</code> コンポーネントを作成してください</strong></p>
                     <ul>
@@ -1574,25 +1575,18 @@ useEffect(() => {
 }
     </code></pre>
 
-                    <div class="note"><a href="task.md">react-lessons/lesson_1/task.md</a></div>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_2/task.md">react-lessons/lesson_3/task.md</a>
+                    </div>
                 </section>
                 <section>
-                    <h2><span class="task-number">課題1</span> 解答例</h2>
-                    <p><code>props</code> を受け取って全てのプロパティを表示する</p>
-                    <pre><code data-lang="tsx">function ZanpakutoCard({ zanpakuto }: { zanpakuto: Zanpakuto }) {
-  const { name, owner, type, bankai, shikaiAbility, powerLevel, isReleased } = zanpakuto;  // 分割代入でプロパティを展開
-  
-  return (
-    &lt;div&gt;
-      &lt;h2&gt;{name}（{owner}の斬魄刀）&lt;/h2&gt; {/* JSXでは{}内にJavaScript式を書ける */}
-      &lt;p&gt;タイプ: {type}&lt;/p&gt;
-      {bankai && &lt;p&gt;卍解: {bankai}&lt;/p&gt;} {/* 条件付きレンダリングの&&演算子：左側がtruthyの場合、右側を実行 */}
-      &lt;p&gt;始解能力: {shikaiAbility}&lt;/p&gt;
-      &lt;p&gt;霊圧レベル: {powerLevel}&lt;/p&gt;
-      &lt;p&gt;解放済み: {isReleased ? "はい" : "いいえ"}&lt;/p&gt; {/* 三項演算子 - 条件 ? 真の場合 : 偽の場合 */}
-    &lt;/div&gt;
-  );
-}</code></pre>
+                    <h2><span class="task-number">課題</span> 斬魄刀ロアダー</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/mgy7j3?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1&expanddevtools=1"
+                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Zanpakuto Loader"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
                 </section>
             </section>
 
