@@ -403,10 +403,45 @@
 
         .list-flow {
             font-size: 0.8em;
+            padding: 0;
+        }
+
+        .flow-diagram {
+            font-size: 0.65em;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+
+            .part {
+                margin: 0;
+                text-align: center;
+            }
+
+            .flow-arrow::after {
+                content: "🡇";
+                position: relative;
+                top: 0;
+                left: 50%;
+                color: #f8f8f890;
+                font-size: 30px;
+            }
         }
 
         .font-smaller {
             font-size: 0.9em;
+        }
+
+        .muted {
+            color: #bebebe;
+            font-size: 0.8em;
+        }
+
+        .split-triptych {
+            display: grid;
+            align-items: center;
+            gap: 1em;
+            grid-template-columns: 1fr 3fr 3fr;
+            margin: 1.5em 0;
         }
     </style>
 </head>
@@ -800,12 +835,12 @@ const showAbout = () => {
                 <!-- Side effects -->
                 <section>
                     <h2>副作用（Side Effect）とは</h2>
-                    <p>コンポーネントの純粋性を破る操作</p>
+                    <p>コンポーネントの純粋性を破る操作、でも現実的なアプリには不可欠</p>
 
                     <div class="four-square">
                         <div>
                             <h3>データ操作</h3>
-                            <ul class="compact">
+                            <ul class="compact-list">
                                 <li>API呼び出し</li>
                                 <li>ローカルストレージ</li>
                                 <li>データベース操作</li>
@@ -814,7 +849,7 @@ const showAbout = () => {
 
                         <div>
                             <h3>DOM操作</h3>
-                            <ul class="compact">
+                            <ul class="compact-list">
                                 <li>要素への直接アクセス</li>
                                 <li>フォーカス制御</li>
                                 <li>スクロール操作</li>
@@ -823,7 +858,7 @@ const showAbout = () => {
 
                         <div>
                             <h3>購読・解除</h3>
-                            <ul class="compact">
+                            <ul class="compact-list">
                                 <li>イベントリスナー</li>
                                 <li>WebSocket接続</li>
                                 <li>タイマー設定</li>
@@ -832,33 +867,18 @@ const showAbout = () => {
 
                         <div>
                             <h3>外部ライブラリ</h3>
-                            <ul class="compact">
+                            <ul class="compact-list">
                                 <li>チャートライブラリ</li>
                                 <li>アニメーションライブラリ</li>
                                 <li>マップライブラリ</li>
                             </ul>
                         </div>
                     </div>
-                </section>
-
-                <!-- Side effect necessety -->
-                <section>
-                    <h2>でも副作用は必要</h2>
-                    <p>現実的なアプリケーションでは避けられない</p>
-
-                    <pre><code data-lang="jsx">function UserProfile({ userId }) {
-  const [user, setUser] = useState(null);
-  
-  // これらの操作はすべて副作用だがアプリには必要不可欠
-  
-  fetch(`/api/users/${userId}`)  // レンダリング中だと無限ループの危険性
-    .then(data => setUser(data)); // 予期しない再レンダリング
-  
-  return <div>{user?.name}</div>;
-}</code></pre>
 
                     <div class="warning">
                         レンダリング中の副作用は予期しない動作を引き起こす
+                        <br>
+                        例：無限ループ、予期しない再レンダリング
                     </div>
                 </section>
 
@@ -867,14 +887,15 @@ const showAbout = () => {
                     <h2>useEffect：副作用の安全な実行</h2>
                     <p>Reactが提供する副作用管理の仕組み</p>
                     <div class="comparison">
-                        <div>
-                            <div class="part">
+                        <div class="part fragment">
+                            <div>
                                 <h3 class="centered">レンダーフェーズ</h3>
-                                <div class="centered">JSX → 仮想DOM</div>
+                                <p class="centered">JSX → 仮想DOM</p>
+                                <p class="centered muted">コンポーネントが何を表示するかを「計算」する段階</p>
                             </div>
-                            <ul class="compact">
-                                <li>純粋である必要がある</li>
-                                <li>副作用は実行できない</li>
+                            <ul>
+                                <li>前回との差分を計算（reconciliation）</li>
+                                <li>実際のDOMはまだ変更されない</li>
                                 <li>中断・再実行される可能性</li>
                             </ul>
                             <div class="part error">
@@ -882,15 +903,16 @@ const showAbout = () => {
                             </div>
                         </div>
 
-                        <div>
-                            <div class="part">
+                        <div class="part fragment">
+                            <div>
                                 <h3 class="centered">コミットフェーズ</h3>
-                                <div class="centered">仮想DOM → 実DOM</div>
+                                <p class="centered">仮想DOM → 実DOM</p>
+                                <p class="centered muted">実際にDOMを「更新」する段階 </p>
                             </div>
-                            <ul class="compact">
-                                <li>DOM更新後に実行</li>
+                            <ul>
+                                <li>計算された差分を実DOMに適用</li>
                                 <li>副作用を安全に実行</li>
-                                <li>useEffectの実行タイミング</li>
+                                <li>useEffectが実行されるタイミング</li>
                             </ul>
                             <div class="part success">
                                 副作用OK
@@ -899,14 +921,12 @@ const showAbout = () => {
                     </div>
                 </section>
 
-                <!-- useEffect syntaxis -->
+                <!-- useEffect basic form -->
                 <section>
                     <h2><code>useEffect</code>の基本形</h2>
-
-                    <pre><code data-lang="jsx">useEffect(setup, dependencies?)</code></pre>
-
-                    <div class="comparison">
-                        <div>
+                    <div class="split-triptych">
+                        <pre><code data-lang="jsx">useEffect(setup, dependencies?)</code></pre>
+                        <div class="fragment">
                             <h4><code>setup</code>関数</h4>
                             <ul class="compact-list">
                                 <li>副作用を実行する関数</li>
@@ -914,8 +934,7 @@ const showAbout = () => {
                                 <li>クリーンアップ関数を返せる</li>
                             </ul>
                         </div>
-
-                        <div>
+                        <div class="fragment">
                             <h4><code>dependencies</code>配列</h4>
                             <ul class="compact-list">
                                 <li>再実行の条件を指定</li>
@@ -925,20 +944,87 @@ const showAbout = () => {
                         </div>
                     </div>
 
-                    <pre><code data-lang="jsx">import { useEffect } from 'react';
+                    <div class="fragment">
+                        <pre><code data-lang="jsx">import { useEffect } from 'react';
 
 function MyComponent() {
-  useEffect(() => {
+  function setup() {
     console.log('副作用を実行');
-  });
+  }
+
+  useEffect(setup);
 
   return &lt;div&gt;...&lt;/div&gt;;
 }</code></pre>
+                    </div>
                 </section>
-                <section>
-                    <h2>useEffectの基本構文</h2>
 
+                <!-- useEffect syntax -->
+                <section>
+                    <h2><code>useEffect</code>の基本構文</h2>
                     <div class="comparison">
+                        <div class="font-smaller">
+                            <pre><code data-lang="jsx">import { useEffect } from "react";
+
+function Component() {
+    function setup() { // エフェクト関数：副作用を実行
+        console.log("DOM更新後に実行される");
+        return cleanup;
+    }
+
+    function cleanup() { // クリーンアップ関数：リソースの解放
+        console.log("アンマウント時や次のエフェクト実行前");
+    }
+
+    useEffect(setup, [/* 依存配列 */]);
+
+    return &lt;div&gt;...&lt;/div&gt;;
+}</code></pre>
+                        </div>
+                        <dl>
+                            <dt>エフェクト関数</dt>
+                            <dd>副作用を実行する関数</dd>
+                            <dt>クリーンアップ関数</dt>
+                            <dd>リソース解放（オプション）</dd>
+                            <dt>依存配列</dt>
+                            <dd>参照する値の一覧（オプション）</dd>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- Dependency array patterns -->
+                <section>
+                    <h2>依存配列による実行制御</h2>
+
+                    <ol>
+                        <li class="fragment">
+                            <p>毎回実行</p>
+                            <pre><code data-lang="jsx">useEffect(() => {
+  console.log('毎回のレンダリング後に実行');
+}); // 依存配列なし</code></pre>
+                        </li>
+
+                        <li class="fragment">
+                            <p>初回のみ実行</p>
+                            <pre><code data-lang="jsx">useEffect(() => {
+  console.log('マウント時のみ実行');
+}, []); // 空の依存配列</code></pre>
+                        </li>
+
+                        <li class="fragment">
+                            <p>条件付き実行</p>
+                            <pre><code data-lang="jsx">useEffect(() => {
+  console.log('userIdが変わった時のみ実行');
+}, [userId]); // userIdを監視して、変わったら実行</code></pre>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- useEffect flow -->
+                <section>
+                    <h2><code>useEffect</code>の実行フロー</h2>
+
+                    <div class="split">
                         <div class="font-smaller">
                             <pre><code data-lang="jsx">import { useEffect } from "react";
 
@@ -957,78 +1043,36 @@ function Component() {
   return &lt;div&gt;...&lt;/div&gt;;
 }</code></pre>
                         </div>
+                        <div class="flow-diagram">
+                            <div class="part fragment" data-fragment-index="0">
+                                <h4>1. レンダリング完了</h4>
+                                <p>コンポーネントのJSXが仮想DOMに変換され、実DOMが更新される</p>
+                            </div>
 
-                        <dl>
-                            <dt>エフェクト関数</dt>
-                            <dd>副作用を実行する関数</dd>
-                            <dt>クリーンアップ関数</dt>
-                            <dd>リソース解放（オプション）</dd>
-                            <dt>依存配列</dt>
-                            <dd>参照する値の一覧（オプション）</dd>
-                        </dl>
-                    </div>
-                </section>
+                            <div class="flow-arrow fragment" data-fragment-index="1"></div>
 
-                <!-- Dependency array patterns -->
-                <section>
-                    <h2>依存配列による実行制御</h2>
+                            <div class="part fragment" data-fragment-index="1">
+                                <h4>2. 依存配列チェック</h4>
+                                <p>前回の値と比較し、変更があるかを確認</p>
+                                <ul class="compact-list">
+                                    <li>初回実行時：常に実行</li>
+                                    <li>再レンダリング時：依存値の変更時のみ</li>
+                                </ul>
+                            </div>
 
-                    <ol>
-                        <li>
-                            <p>毎回実行</p>
-                            <pre><code data-lang="jsx">useEffect(() => {
-  console.log('毎回のレンダリング後に実行');
-}); // 依存配列なし</code></pre>
-                        </li>
+                            <div class="flow-arrow fragment" data-fragment-index="2"></div>
 
-                        <li>
-                            <p>初回のみ実行</p>
-                            <pre><code data-lang="jsx">useEffect(() => {
-  console.log('マウント時のみ実行');
-}, []); // 空の依存配列</code></pre>
-                        </li>
+                            <div class="part fragment" data-fragment-index="2">
+                                <h4>3. クリーンアップ実行</h4>
+                                <p>前回のエフェクトのクリーンアップ関数（ある場合）</p>
+                            </div>
 
-                        <li>
-                            <p>条件付き実行</p>
-                            <pre><code data-lang="jsx">useEffect(() => {
-  console.log('userIdが変わった時のみ実行');
-}, [userId]); // userIdに依存</code></pre>
-                        </li>
-                    </ol>
-                </section>
+                            <div class="flow-arrow fragment" data-fragment-index="3"></div>
 
-                <section>
-                    <h2>useEffectの実行フロー</h2>
-
-                    <div class="flow-diagram">
-                        <div class="part">
-                            <h4>1. レンダリング完了</h4>
-                            <p>コンポーネントのJSXが仮想DOMに変換され、実DOMが更新される</p>
-                        </div>
-
-                        <div class="flow-arrow"></div>
-
-                        <div class="part">
-                            <h4>2. 依存配列チェック</h4>
-                            <p>前回の値と比較し、変更があるかを確認</p>
-                            <ul class="compact-list">
-                                <li>初回実行時：常に実行</li>
-                                <li>再レンダリング時：依存値の変更時のみ</li>
-                            </ul>
-                        </div>
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="part">
-                            <h4>3. クリーンアップ実行</h4>
-                            <p>前回のエフェクトのクリーンアップ関数（ある場合）</p>
-                        </div>
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="part">
-                            <h4>4. 新しいエフェクト実行</h4>
-                            <p>setup関数が実行され、副作用処理を行う</p>
+                            <div class="part fragment" data-fragment-index="3">
+                                <h4>4. 新しいエフェクト実行</h4>
+                                <p>setup関数が実行され、副作用処理を行う</p>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1045,51 +1089,77 @@ function Component() {
                         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
                 </section>
 
+                <!-- Practical example flow -->
                 <section>
-                    <h2>useEffectの動作フロー</h2>
+                    <h2><code>useEffect</code>の動作フロー</h2>
 
-                    <ol class="list-flow">
-                        <li>
-                            <strong>コンポーネントマウント</strong>：
-                            コンポーネントが初回レンダリングされ、<code>useEffect</code>が実行される
-                            <pre><code data-lang="jsx">useEffect(() => { /* 副作用処理 */ }, [name])</code></pre>
-                        </li>
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>初回表示時</h4>
+                            <ol class="list-flow">
+                                <li>
+                                    <strong>コンポーネントマウント</strong>：<br>
+                                    <code>selectedPokemon="jigglypuff"</code>で<code>PokemonCard</code>が初回レンダリング
+                                    <pre><code data-lang="jsx">&lt;PokemonCard name="jigglypuff" /&gt;</code></pre>
+                                </li>
 
-                        <li>
-                            <strong>非同期データ取得開始</strong>：
-                            <code>loading</code>状態をtrueに設定し、APIからPokemonデータを取得開始
-                            <pre><code data-lang="jsx">setLoading(true);
-const response = await fetch(`/api/pokemon/${name}`)</code></pre>
-                        </li>
+                                <li>
+                                    <strong>useEffect実行</strong>：<br>
+                                    レンダリング完了後、<code>useEffect</code>が実行される<br>
+                                    <code>loading: true</code>、<code>fetch</code>でデータ取得開始
+                                    <pre><code data-lang="jsx">useEffect(() => {
+  setLoading(true);
+  fetch(`https://pokeapi.co/api/v2/pokemon/jigglypuff`)
+  ...
+</code></pre>
+                                </li>
 
-                        <li>
-                            <strong>状態更新とUI再レンダリング</strong>：
-                            データ取得完了後、<code>pokemon</code>と<code>loading</code>の状態を更新しUIが再描画される
-                            <pre><code data-lang="jsx">if (!cancelled) {
-    setPokemon(pokemonData);
-    setLoading(false);
-}</code></pre>
-                        </li>
+                                <li>
+                                    <strong>データ取得と状態更新</strong>：<br>
+                                    <code>loading: true → false</code>、<code>pokemon: null → データ</code>
+                                    <pre><code data-lang="jsx">
+.then((pokemonData) => {
+  setPokemon(pokemonData);
+  setLoading(false);
+});</code></pre>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="fragment">
+                            <h4>ボタンクリック時</h4>
+                            <ol class="list-flow" start="4">
+                                <li>
+                                    <strong>state変更</strong>：<br>
+                                    <code>selectedPokemon: "jigglypuff" → "pikachu"</code>
+                                    <pre><code data-lang="jsx">&lt;button onClick={() => setSelectedPokemon("pikachu")}&gt;</code></pre>
+                                </li>
 
-                        <li>
-                            <strong>依存配列による再実行</strong>：
-                            <code>name</code>が変更されると、<code>useEffect</code>が再度実行される
-                            <pre><code data-lang="jsx">}, [name]); // 依存配列</code></pre>
-                        </li>
+                                <li>
+                                    <strong>propsの変更検知</strong>：<br>
+                                    <code>name: "jigglypuff" → "pikachu"</code>
+                                    <pre><code data-lang="jsx">&lt;PokemonCard name="pikachu" /&gt; // propsが変更された</code></pre>
+                                </li>
 
-                        <li>
-                            <strong>クリーンアップ処理</strong>：
-                            コンポーネントアンマウント時や再実行前にクリーンアップ関数が呼ばれる
-                            <pre><code data-lang="jsx">return () => {
-    cancelled = true; // 進行中のリクエストをキャンセル
-};</code></pre>
-                        </li>
-                    </ol>
+                                <li>
+                                    <strong>useEffect再実行</strong>：<br>
+                                    依存配列<code>[name]</code>の値が変わったため、useEffectが再度実行される
+                                    <pre><code data-lang="jsx">}, [name]); // "pikachu"に変更されたので再実行</code></pre>
+                                </li>
+
+                                <li>
+                                    <strong>新しいデータ取得</strong>：<br>
+                                    ピカチュウのデータを取得し、UIが更新される
+                                    <pre><code data-lang="jsx">fetch(`https://pokeapi.co/api/v2/pokemon/pikachu`)</code></pre>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
                 </section>
 
                 <!-- Lifecycle with useEffect -->
                 <section>
-                    <h2>useEffectとライフサイクル</h2>
+                    <h2><code>useEffect</code>とライフサイクル</h2>
 
                     <div class="lifecycle compact">
                         <div class="mount">
@@ -1098,14 +1168,14 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                                 <li>コンポーネント初期化</li>
                                 <li>初回レンダリング</li>
                                 <li>DOM更新</li>
-                                <li><strong>useEffect実行</strong></li>
+                                <li><strong><code>useEffect</code>実行</strong></li>
                             </ol>
                         </div>
 
                         <div class="update">
                             <h3>更新</h3>
                             <ol>
-                                <li>state/props変更検知</li>
+                                <li>stateやpropsの変更検知</li>
                                 <li>再レンダリング</li>
                                 <li>DOM差分更新</li>
                                 <li><strong>前のエフェクトクリーンアップ</strong></li>
@@ -1130,7 +1200,7 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                     <p>フックを正しく使用するための重要な制約</p>
                     <br>
                     <div class="comparison">
-                        <div>
+                        <div class="fragment">
                             <h4>ルール1：トップレベルでのみ呼び出し</h4>
                             <ul class="compact">
                                 <li>ループ、条件分岐、ネストした関数内で呼び出してはいけない</li>
@@ -1139,7 +1209,7 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                             </ul>
                         </div>
 
-                        <div>
+                        <div class="fragment">
                             <h4>ルール2：React関数からのみ呼び出し</h4>
                             <ul class="compact">
                                 <li>Reactコンポーネントから呼び出す</li>
@@ -1207,7 +1277,7 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                     <h2>よくあるミス</h2>
 
                     <ul class="compact-list">
-                        <li>
+                        <li class="fragment">
                             <p>依存配列の漏れ</p>
                             <div class="split">
                                 <pre><code data-lang="jsx">useEffect(() => {
@@ -1216,8 +1286,16 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                                 <span><strong>対策：</strong> ESLint plugin-react-hooksを使用</span>
                             </div>
                         </li>
-
-                        <li>
+                        <li class="fragment">
+                            <p>無限ループ</p>
+                            <div class="split">
+                                <pre><code data-lang="jsx">useEffect(() => {
+    setCount(count + 1); // countに依存
+}, [count]); // 無限ループ発生</code></pre>
+                                <p><strong>対策：</strong> 関数型更新を使用: <code>setCount(c => c + 1)</code></p>
+                            </div>
+                        </li>
+                        <li class="fragment">
                             <p>クリーンアップ忘れ</p>
                             <div class="split">
                                 <pre><code data-lang="jsx">useEffect(() => {
@@ -1227,23 +1305,13 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                                 <p><strong>対策：</strong> 必ずクリーンアップ関数でリソース解放</p>
                             </div>
                         </li>
-
-                        <li>
-                            <p>無限ループ</p>
-                            <div class="split">
-                                <pre><code data-lang="jsx">useEffect(() => {
-  setCount(count + 1); // countに依存
-}, [count]); // 無限ループ発生</code></pre>
-                                <p><strong>対策：</strong> 関数型更新を使用: <code>setCount(c => c + 1)</code></p>
-                            </div>
-                        </li>
                     </ul>
                 </section>
 
-                <!-- Strict Mode mention -->
+                <!-- Strict Mode -->
                 <section>
                     <h2>開発環境での注意点</h2>
-                    <p>React 18のStrict Mode</p>
+                    <p>ReactのStrict Mode</p>
 
                     <div class="comparison">
                         <div>
@@ -1270,14 +1338,13 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                     </div>
                 </section>
 
-                <!-- useLayoutEffect mention -->
+                <!-- useLayoutEffect -->
                 <section>
-                    <h2>useLayoutEffectとの違い</h2>
-                    <p>99%の場合はuseEffectで十分</p>
+                    <h2><code>useLayoutEffect</code>との違い</h2>
 
                     <div class="comparison">
                         <div>
-                            <h3>useEffect</h3>
+                            <h3><code>useEffect</code></h3>
                             <ul class="compact">
                                 <li>ブラウザの描画後に実行</li>
                                 <li>非同期実行</li>
@@ -1287,7 +1354,7 @@ const response = await fetch(`/api/pokemon/${name}`)</code></pre>
                         </div>
 
                         <div>
-                            <h3>useLayoutEffect</h3>
+                            <h3><code>useLayoutEffect</code></h3>
                             <ul class="compact">
                                 <li>ブラウザの描画前に実行</li>
                                 <li>同期実行</li>
@@ -1302,25 +1369,27 @@ useLayoutEffect(() => {
   const rect = ref.current.getBoundingClientRect();
   setDimensions({ width: rect.width, height: rect.height });
 }, []);</code></pre>
+
+                    <p class="note">99%の場合は<code>useEffect</code>で十分</p>
                 </section>
 
                 <!-- まとめ -->
                 <section>
                     <h2>まとめ</h2>
 
-                    <dd>
-                    <dt>純粋性を保つ</dt>
-                    <dd>レンダリング中は副作用を避ける</dd>
+                    <dl>
+                        <dt>純粋性を保つ</dt>
+                        <dd>レンダリング中は副作用を避ける</dd>
 
-                    <dt>適切なタイミング</dt>
-                    <dd>useEffectで副作用を安全に実行</dd>
+                        <dt>適切なタイミング</dt>
+                        <dd>useEffectで副作用を安全に実行</dd>
 
-                    <dt>依存関係の管理</dt>
-                    <dd>依存配列で実行タイミングを制御</dd>
+                        <dt>依存関係の管理</dt>
+                        <dd>依存配列で実行タイミングを制御</dd>
 
-                    <dt>リソースの解放</dt>
-                    <dd>クリーンアップでメモリリーク防止</dd>
-                    </dd>
+                        <dt>リソースの解放</dt>
+                        <dd>クリーンアップでメモリリーク防止</dd>
+                    </dl>
                 </section>
             </section>
 
@@ -1330,6 +1399,7 @@ useLayoutEffect(() => {
                     <h4>理解度チェック①【ライフサイクル】</h4>
                     <div class="quiz">
                         <h3>Reactコンポーネントの正しいライフサイクルの順序は？</h3>
+                        <br>
                         <div class="quiz-options">
                             <div class="quiz-option">A) 更新 → マウント → アンマウント</div>
                             <div class="quiz-option custom correct-answer fragment" data-fragment-index="1">B) マウント → 更新
@@ -1415,15 +1485,13 @@ useEffect(() => {
     }
     
     StatusAPI.subscribe(userId, handleStatusChange);
-    
-    // クリーンアップなし
   }, [userId]);
   
   return &lt;div&gt;Status: {status}&lt;/div&gt;;
 }</code></pre>
-                        <div class="quiz-options small">
-                            <div class="quiz-option">A) StatusAPIの使い方が間違い</div>
-                            <div class="quiz-option">B) 依存配列にuserIdが含まれている</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>useEffect</code>の使い方が間違い</div>
+                            <div class="quiz-option">B) 依存配列に<code>userId</code>が含まれている</div>
                             <div class="quiz-option fragment custom correct-answer" data-fragment-index="1">C)
                                 サブスクリプションが解除されない</div>
                             <div class="quiz-option">D) 特に問題なし</div>
@@ -1453,10 +1521,10 @@ useEffect(() => {
   return &lt;&gt;...&lt;/&gt;;
 }</code></pre>
                         <div class="quiz-options">
-                            <div class="quiz-option">A) fetchDataが定義されていない</div>
+                            <div class="quiz-option">A) <code>fetchData</code>が定義されていない</div>
                             <div class="quiz-option custom fragment correct-answer" data-fragment-index="1">B)
                                 条件分岐内でフックを呼んでいる</div>
-                            <div class="quiz-option">C) useEffectの依存配列が間違い</div>
+                            <div class="quiz-option">C) <code>useEffect</code>の依存配列が間違い</div>
                             <div class="quiz-option">D) 特に問題なし</div>
                         </div>
                     </div>
