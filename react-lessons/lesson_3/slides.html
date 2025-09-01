@@ -1541,7 +1541,7 @@ useEffect(() => {
                     <h3>1つの課題 (15-20分)</h3>
 
                     <p>今日学んだ内容を実際に使ってみよう！</p>
-                    <div class="note"><a
+                    <div class="note"><a target="_blank"
                             href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_3/task.md">react-lessons/lesson_3/task.md</a>
                     </div>
                 </section>
@@ -1560,7 +1560,7 @@ useEffect(() => {
                     </ul>
 
                     <pre><code data-lang="typescript">function ZanpakutoLoader({ name }: { name: string }) {
-  const [result, setResult] = useState<Zanpakuto | null>(null);
+  const [zanpakuto, setZanpakuto] = useState&lt;Zanpakuto | null&gt;(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -1571,7 +1571,7 @@ useEffect(() => {
   return &lt;div&gt;{/* ローディング、結果、エラーの表示 */}&lt;/div&gt;;
 }</code></pre>
 
-                    <div class="note"><a
+                    <div class="note"><a target="_blank"
                             href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_3/task.md">react-lessons/lesson_3/task.md</a>
                     </div>
                 </section>
@@ -1644,10 +1644,7 @@ useEffect(() => {
             transition: 'slide',
             transitionSpeed: 'fast',
             backgroundTransition: 'fade',
-            plugins: [RevealNotes, RevealTimer, RevealMarkdown],
-            highlight: {
-                escapeHTML: true
-            }
+            plugins: [RevealNotes, RevealTimer, RevealMarkdown]
         });
     </script>
 </body>

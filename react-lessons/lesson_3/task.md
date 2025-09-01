@@ -18,13 +18,13 @@
 
 ```tsx
 function ZanpakutoLoader({ name }: { name: string }) {
-  const [result, setResult] = useState<Zanpakuto | null>(null);
+  const [zanpakuto, setZanpakuto] = useState<Zanpakuto | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // name が変更された時に loadZanpakto を呼び出す処理を書く
-  }, [name]);
+  });
 
   return <div>{/* ローディング、結果、エラーの表示 */}</div>;
 }
