@@ -459,7 +459,9 @@
                 <section>
                     <h1>前回の復習</h1>
                     <p>React基礎②のおさらい</p>
-                    <aside class="notes">前回(ぜんかい)学(まな)んだreactの基本(きほん)を復習(ふくしゅう)しましょう</aside>
+                    <aside class="notes">まず、<ruby>前回<rt>ぜんかい</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>確認<rt>かくにん
+                            </rt></ruby>します。<br>
+                        わからないところがあったら<ruby>質問<rt>しつもん</rt></ruby>してください。</aside>
                 </section>
 
                 <section>
@@ -490,6 +492,14 @@ return (
                     <div class="note fragment" data-fragment-index="1">
                         イベントハンドラーは関数を直接渡す、アロー関数で引数を渡すことも可能
                     </div>
+                    <aside class="notes">イベント<ruby>処理<rt>しょり</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>を<ruby>確認<rt>かくにん
+                            </rt></ruby>します。<br>
+                        イベントハンドラーは<ruby>関数<rt>かんすう</rt></ruby>を<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>渡<rt>わた</rt>
+                        </ruby>します。<br>
+                        <ruby>引数<rt>ひきすう</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>したい<ruby>場合<rt>ばあい</rt></ruby>はアロー<ruby>関数
+                            <rt>かんすう</rt>
+                        </ruby>を<ruby>使<rt>つか</rt></ruby>います。
+                    </aside>
                 </section>
 
                 <section>
@@ -526,6 +536,13 @@ setItems([...items, 'nata']); // 新しい配列を作成</code></pre>
                     <div class="note fragment" data-fragment-index="2">
                         必ずセッター関数を使用、オブジェクト/配列は新しく作成
                     </div>
+                    <aside class="notes">useStateは<ruby>状態<rt>じょうたい</rt></ruby>を<ruby>管理<rt>かんり</rt>
+                        </ruby>するreactの<ruby>機能<rt>きのう</rt></ruby>です。<br>
+                        <ruby>直接<rt>ちょくせつ</rt></ruby><ruby>変更<rt>へんこう</rt></ruby>するとreactが<ruby>気<rt>き</rt>
+                        </ruby>づかないことがあるため、<br>
+                        <ruby>オブジェクト</ruby>や<ruby>配列<rt>はいれつ</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しく<ruby>作成<rt>さくせい
+                            </rt></ruby>してください。
+                    </aside>
                 </section>
 
                 <section>
@@ -560,6 +577,17 @@ return (
                         ・「Controlled」では、Reactが状態を管理します<br>
                         ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
                     </div>
+                    <aside class="notes">
+                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力値<rt>あたい</rt></ruby>を<ruby>状態<rt>じょうたい
+                            </rt></ruby><ruby>経由<rt>けいゆ</rt></ruby>で<ruby>一元管理<rt>いちげんかんり</rt></ruby>するしくみ。<br>
+                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、Stateが<ruby>更新
+                            <rt>こうしん</rt>
+                        </ruby>される。<br>
+                        inputの<ruby>表示<rt>ひょうじ</rt></ruby><ruby>値<rt>あたい</rt></ruby>は<ruby>常<rt>つね</rt>
+                        </ruby>にStateに<ruby>依存<rt>いぞん</rt></ruby>。<br>
+                        この<ruby>構造<rt>こうぞう</rt></ruby>により、<ruby>検証<rt>けんしょう</rt></ruby>や<ruby>制御<rt>せいぎょ</rt>
+                        </ruby>が<ruby>容易<rt>ようい</rt></ruby>になる。
+                    </aside>
                 </section>
             </section>
 
@@ -572,8 +600,8 @@ return (
                 <section>
                     <h2>SPAの基本概念</h2>
                     <div class="spa-concept">
-                        <h3>シングルページアプリケーション = 単一HTMLファイル</h3>
-                        <ul>
+                        <h3 class="fragment">シングルページアプリケーション = 単一HTMLファイル</h3>
+                        <ul class="fragment">
                             <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
                             <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
                             <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
@@ -581,7 +609,7 @@ return (
                         </ul>
                     </div>
 
-                    <div class="example">
+                    <div class="example fragment">
                         <pre><code data-lang="html">
 <!-- 最初から最後まで、このHTMLファイル1つだけ -->
 &lt;!DOCTYPE html&gt;
@@ -591,10 +619,18 @@ return (
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
-    &lt;script src="app.jsx"&gt;&lt;/script&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
                     </div>
+                    <aside class="notes">
+                        SPAは「シングルページアプリケーション」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
+                        <ruby>普通<rt>ふつう</rt></ruby>のWebサイトは<ruby>複数<rt>ふくすう</rt></ruby>のHTMLファイルがありますが、<br>
+                        SPAは1つのHTMLファイルだけを<ruby>使<rt>つか</rt></ruby>います。<br>
+                        ページを<ruby>移動<rt>いどう</rt></ruby>してもHTMLファイルは<ruby>変<rt>か</rt></ruby>わりません。<br>
+                        JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
+                        </ruby>します。
+                    </aside>
                 </section>
 
                 <section>
@@ -626,6 +662,14 @@ react-app/
                             <p class="note">全ページ = 1つのHTMLファイル内で切り替え</p>
                         </div>
                     </div>
+                    <aside class="notes">
+                        <ruby>従来<rt>じゅうらい</rt></ruby>のWebサイトは<ruby>各<rt>かく</rt></ruby>ページに<ruby>別<rt>べつ</rt>
+                        </ruby>のHTMLファイルが<ruby>必要<rt>ひつよう</rt></ruby>です。<br>
+                        SPAは<ruby>最初<rt>さいしょ</rt></ruby>のindex.htmlだけを<ruby>使<rt>つか</rt></ruby>います。<br>
+                        React、Vue、Angularなどがこの<ruby>方式<rt>ほうしき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>っています。<br>
+                        <ruby>開発<rt>かいはつ</rt></ruby><ruby>時<rt>じ</rt></ruby>はファイルが<ruby>分<rt>わ</rt>
+                        </ruby>かれていても、<ruby>最終的<rt>さいしゅうてき</rt></ruby>に1つにまとまります。
+                    </aside>
                 </section>
 
                 <section>
@@ -656,6 +700,15 @@ react-app/
                             </ol>
                         </div>
                     </div>
+                    <aside class="notes">
+                        MPAは「マルチページアプリ」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
+                        <ruby>従来<rt>じゅうらい</rt></ruby>の<ruby>方法<rt>ほうほう</rt></ruby>では<ruby>新<rt>あたら</rt>
+                        </ruby>しいページを<ruby>読<rt>よ</rt></ruby>み<ruby>込<rt>こ</rt></ruby>むとき、<br>
+                        <ruby>画面<rt>がめん</rt></ruby>が<ruby>一瞬<rt>いっしゅん</rt></ruby><ruby>白<rt>しろ</rt></ruby>くなります。<br>
+                        SPAはページ<ruby>遷移<rt>せんい</rt></ruby>が<ruby>速<rt>はや</rt></ruby>くて、アプリみたいに<ruby>感<rt>かん</rt>
+                        </ruby>じます。<br>
+                        YouTubeやメルカリもSPAの<ruby>技術<rt>ぎじゅつ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>っています。
+                    </aside>
                 </section>
 
                 <section>
@@ -688,6 +741,14 @@ const showAbout = () => {
                         </div>
                     </div>
                     <p class="note">実際にはルーティングライブラリを使用することが多い</p>
+                    <aside class="notes">
+                        <ruby>実際<rt>じっさい</rt></ruby>のSPAではReact Routerなどのライブラリを<ruby>使<rt>つか</rt></ruby>います。<br>
+                        この<ruby>例<rt>れい</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>にするために<ruby>基本的<rt>きほんてき</rt>
+                        </ruby>な<ruby>書<rt>か</rt></ruby>き<ruby>方<rt>かた</rt></ruby>です。<br>
+                        <ruby>状態<rt>じょうたい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってどのコンテンツを<ruby>表示<rt>ひょうじ</rt>
+                        </ruby>するか<ruby>決<rt>き</rt></ruby>めます。<br>
+                        URLも<ruby>同時<rt>どうじ</rt></ruby>に<ruby>変更<rt>へんこう</rt></ruby>することができます。
+                    </aside>
                 </section>
 
                 <section>
@@ -710,6 +771,14 @@ const showAbout = () => {
                             </ul>
                         </div>
                     </div>
+                    <aside class="notes">
+                        SPAは<ruby>最初<rt>さいしょ</rt></ruby>にすべてのJavaScriptをダウンロードするため、<br>
+                        <ruby>初回<rt>しょかい</rt></ruby>のロード<ruby>時間<rt>じかん</rt></ruby>が<ruby>長<rt>なが</rt>
+                        </ruby>くなることがあります。<br>
+                        SEOは「Search Engine Optimization」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
+                        GoogleやYahooなどの<ruby>検索<rt>けんさく</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>っかかりにくい<ruby>問題<rt>もんだい</rt>
+                        </ruby>があります。
+                    </aside>
                 </section>
 
                 <!-- The SPA Problem -->
@@ -726,6 +795,14 @@ const showAbout = () => {
                         <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
                         <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
                     </ul>
+                    <aside class="notes">
+                        これらの<ruby>技術<rt>ぎじゅつ</rt></ruby>でSPAの<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt>
+                        </ruby>できます。<br>
+                        SSRはサーバーでHTMLを<ruby>作<rt>つく</rt></ruby>ってから<ruby>送<rt>おく</rt></ruby>る<ruby>方法<rt>ほうほう</rt>
+                        </ruby>です。<br>
+                        SSGはWebサイトを<ruby>作<rt>つく</rt></ruby>る<ruby>時<rt>とき</rt></ruby>に<ruby>全<rt>すべ</rt>
+                        </ruby>てのHTMLを<ruby>用意<rt>ようい</rt></ruby>します。
+                    </aside>
                 </section>
 
                 <!-- SPA Solutions -->
@@ -750,6 +827,15 @@ const showAbout = () => {
                         <li><strong>課題:</strong> 初回ロード重い、SEOに弱い</li>
                         <li><strong>実践解:</strong> フレームワークでレンダリング戦略を補完</li>
                     </ul>
+                    <aside class="notes">
+                        SPAは<ruby>速<rt>はや</rt></ruby>くて<ruby>便利<rt>べんり</rt></ruby>ですが、<ruby>問題<rt>もんだい</rt>
+                        </ruby>もあります。<br>
+                        <ruby>実際<rt>じっさい</rt></ruby>の<ruby>開発<rt>かいはつ</rt></ruby>ではフレームワークを<ruby>使<rt>つか</rt>
+                        </ruby>って<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt></ruby>します。<br>
+                        ReactだけでなくVueやAngularでもSPAを<ruby>作<rt>つく</rt></ruby>れます。<br>
+                        <ruby>基本<rt>きほん</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>を<ruby>理解<rt>りかい
+                            </rt></ruby>することが<ruby>大切<rt>たいせつ</rt></ruby>です。
+                    </aside>
                 </section>
             </section>
 
@@ -798,6 +884,15 @@ const showAbout = () => {
                             </ul>
                         </div>
                     </div>
+                    <aside class="notes">
+                        コンポーネントは人間と同じように<ruby>生<rt>う</rt></ruby>まれて、<ruby>成長<rt>せいちょう</rt></ruby>して、<ruby>死<rt>し</rt>
+                        </ruby>にます。<br>
+                        マウントは「<ruby>生<rt>う</rt></ruby>まれる」、<ruby>更新<rt>こうしん</rt></ruby>は「<ruby>成長<rt>せいちょう</rt>
+                        </ruby>する」、アンマウントは「<ruby>死<rt>し</rt></ruby>ぬ」です。<br>
+                        Reactはこの3つの<ruby>段階<rt>だんかい</rt></ruby>でコンポーネントを<ruby>管理<rt>かんり</rt></ruby>します。<br>
+                        <ruby>仮想<rt>かそう</rt></ruby>DOMは<ruby>実際<rt>じっさい</rt></ruby>のDOMより<ruby>軽<rt>かる</rt>
+                        </ruby>くて<ruby>速<rt>はや</rt></ruby>いです。
+                    </aside>
                 </section>
 
                 <!-- Why Pure components -->
@@ -805,15 +900,17 @@ const showAbout = () => {
                     <h2>純粋コンポーネント</h2>
                     <p>Reactの基本原則：同じ入力には同じ出力</p>
                     <br>
-                    <h3>純粋関数の特徴</h3>
-                    <ul>
-                        <li>同じ<code>props</code>で常に同じJSXを返す</li>
-                        <li>レンダリング中に外部状態を変更しない</li>
-                        <li>外部の変数に依存しない</li>
-                    </ul>
+                    <div class="fragment">
+                        <h3>純粋関数の特徴</h3>
+                        <ul>
+                            <li>同じ<code>props</code>で常に同じJSXを返す</li>
+                            <li>レンダリング中に外部状態を変更しない</li>
+                            <li>外部の変数に依存しない</li>
+                        </ul>
+                    </div>
 
                     <div class="comparison">
-                        <div class="part">
+                        <div class="part fragment">
                             <h4 class="success">純粋なコンポーネント</h4>
                             <pre><code data-lang="jsx">function PureComponent({ name }) {
   return (
@@ -821,7 +918,7 @@ const showAbout = () => {
   );
 }</code></pre>
                         </div>
-                        <div class="part">
+                        <div class="part fragment">
                             <h4 class="error">不純なコンポーネント</h4>
                             <pre><code data-lang="jsx">function ImpureComponent({ name }) {
   document.title = `Welcome ${name}`; // 副作用
@@ -830,6 +927,17 @@ const showAbout = () => {
 }</code></pre>
                         </div>
                     </div>
+                    <aside class="notes">
+                        <ruby>純粋<rt>じゅんすい</rt></ruby><ruby>関数<rt>かんすう</rt></ruby>は<ruby>数学<rt>すうがく</rt></ruby>の<ruby>関数
+                            <rt>かんすう</rt>
+                        </ruby>と同じです。<br>
+                        同じ<ruby>入力<rt>にゅうりょく</rt></ruby>なら<ruby>必<rt>かなら</rt></ruby>ず同じ<ruby>結果<rt>けっか</rt>
+                        </ruby>が<ruby>出<rt>で</rt></ruby>ます。<br>
+                        <ruby>副作用<rt>ふくさよう</rt></ruby>は<ruby>外<rt>そと</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>に<ruby>影響
+                            <rt>えいきょう</rt>
+                        </ruby>を<ruby>与<rt>あた</rt></ruby>えることです。<br>
+                        <ruby>純粋<rt>じゅんすい</rt></ruby>なコンポーネントはテストしやすくてバグが少ないです。
+                    </aside>
                 </section>
 
                 <!-- Side effects -->
@@ -842,8 +950,8 @@ const showAbout = () => {
                             <h3>データ操作</h3>
                             <ul class="compact-list">
                                 <li>API呼び出し</li>
-                                <li>ローカルストレージ</li>
-                                <li>データベース操作</li>
+                                <li>データベース操作、ローカルストレージ</li>
+                                <li>I/O操作</li>
                             </ul>
                         </div>
 
@@ -880,6 +988,15 @@ const showAbout = () => {
                         <br>
                         例：無限ループ、予期しない再レンダリング
                     </div>
+
+                    <aside class="notes">
+                        <ruby>現実<rt>げんじつ</rt></ruby>のアプリでは<ruby>外<rt>そと</rt></ruby>の<ruby>世界<rt>せかい</rt>
+                        </ruby>とやりとりが必要です。<br>
+                        APIからデータを<ruby>取<rt>と</rt></ruby>る、ボタンを<ruby>押<rt>お</rt></ruby>したときの<ruby>音<rt>おと</rt>
+                        </ruby>を<ruby>鳴<rt>な</rt></ruby>らすなど。<br>
+                        これらはすべて<ruby>副作用<rt>ふくさよう</rt></ruby>です。<br>
+                        レンダリング<ruby>中<rt>ちゅう</rt></ruby>に<ruby>副作用<rt>ふくさよう</rt></ruby>をするとバグになります。
+                    </aside>
                 </section>
 
                 <!-- useEffect intro -->
@@ -912,13 +1029,25 @@ const showAbout = () => {
                             <ul>
                                 <li>計算された差分を実DOMに適用</li>
                                 <li>副作用を安全に実行</li>
-                                <li>useEffectが実行されるタイミング</li>
+                                <li>useEffectはペイント後に実行（非同期）</li>
                             </ul>
                             <div class="part success">
                                 副作用OK
                             </div>
                         </div>
                     </div>
+                    <aside class="notes">
+                        レンダーフェーズは「<ruby>計算<rt>けいさん</rt></ruby>」、<ruby>コミットフェーズ<rt></rt>
+                        </ruby>は「<ruby>実行<rt>じっこう</rt></ruby>」です。<br>
+                        レンダーフェーズは<ruby>何度<rt>なんど</rt></ruby>も<ruby>実行<rt>じっこう</rt>
+                        </ruby>される<ruby>場合<rt>ばあい</rt></ruby>があります。<br>
+                        コミットフェーズは<ruby>必<rt>かなら</rt></ruby>ず<ruby>一回<rt>いっかい</rt></ruby>だけ<ruby>実行
+                            <rt>じっこう</rt>
+                        </ruby>されます。<br>
+                        <code>useEffect</code>はコミットフェーズで<ruby>実行<rt>じっこう</rt></ruby>されるので<ruby>安全
+                            <rt>あんぜん</rt>
+                        </ruby>です。
+                    </aside>
                 </section>
 
                 <!-- useEffect basic form -->
@@ -957,6 +1086,15 @@ function MyComponent() {
   return &lt;div&gt;...&lt;/div&gt;;
 }</code></pre>
                     </div>
+                    <aside class="notes">
+                        セットアップは<ruby>実際<rt>じっさい</rt></ruby>に<ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>行<rt>おこな
+                            </rt>
+                        </ruby>う<ruby>処理<rt>しょり</rt></ruby>を<ruby>書<rt>か</rt></ruby>く<ruby>関数<rt>かんすう</rt>
+                        </ruby>です。<br>
+                        <code>dependencies</code>でいつ<ruby>実行<rt>じっこう</rt></ruby>するかをReactに<ruby>教<rt>おし</rt>
+                        </ruby>えます。<br>
+                        <code>useEffect</code>は<ruby>必<rt>かなら</rt></ruby>ずReactからインポートしてください。<br>
+                    </aside>
                 </section>
 
                 <!-- useEffect syntax -->
@@ -967,13 +1105,13 @@ function MyComponent() {
                             <pre><code data-lang="jsx">import { useEffect } from "react";
 
 function Component() {
+    function cleanup() { // クリーンアップ関数：リソースの解放
+        console.log("アンマウント時や次のエフェクト実行前");
+    }
+
     function setup() { // エフェクト関数：副作用を実行
         console.log("DOM更新後に実行される");
         return cleanup;
-    }
-
-    function cleanup() { // クリーンアップ関数：リソースの解放
-        console.log("アンマウント時や次のエフェクト実行前");
     }
 
     useEffect(setup, [/* 依存配列 */]);
@@ -990,6 +1128,14 @@ function Component() {
                             <dd>参照する値の一覧（オプション）</dd>
                         </dl>
                     </div>
+                    <aside class="notes">
+                        セットアップ<ruby>関数<rt>かんすう</rt></ruby>からクリーンアップ<ruby>関数<rt>かんすう</rt>
+                        </ruby>を<ruby>返<rt>かえ</rt>
+                        </ruby>すことができます。<br>
+                        クリーンアップ<ruby>関数<rt>かんすう</rt></ruby>でリソースを<ruby>片付<rt>かたづ</rt></ruby>けます。<br>
+                        クリーンアップは<ruby>コンポーネント<rt></rt></ruby>が<ruby>消<rt>き</rt></ruby>える<ruby>前<rt>まえ</rt>
+                        </ruby>に<ruby>実行<rt>じっこう</rt></ruby>されます。
+                    </aside>
                 </section>
 
                 <!-- Dependency array patterns -->
@@ -1018,6 +1164,16 @@ function Component() {
 }, [userId]); // userIdを監視して、変わったら実行</code></pre>
                         </li>
                     </ol>
+                    <aside class="notes">
+                        <ruby>依存<rt>いぞん</rt></ruby><ruby>配列<rt>はいれつ</rt></ruby>でいつ<ruby>実行<rt>じっこう</rt>
+                        </ruby>するかを<ruby>決<rt>き</rt></ruby>めます。<br>
+                        <ruby>配列<rt>はいれつ</rt></ruby>なしは「<ruby>毎回<rt>まいかい</rt></ruby>」という<ruby>意味<rt>いみ</rt>
+                        </ruby>です。<br>
+                        <ruby>空<rt>から</rt></ruby>の<ruby>配列<rt>はいれつ</rt></ruby>は「<ruby>最初<rt>さいしょ</rt>
+                        </ruby>だけ」という<ruby>意味<rt>いみ</rt></ruby>です。<br>
+                        <ruby>値<rt>あたい</rt></ruby>を<ruby>入<rt>い</rt></ruby>れると「その<ruby>値<rt>あたい</rt></ruby>が<ruby>変<rt>か
+                            </rt></ruby>わったとき」です。
+                    </aside>
                 </section>
 
                 <!-- useEffect flow -->
@@ -1071,10 +1227,22 @@ function Component() {
 
                             <div class="part fragment" data-fragment-index="3">
                                 <h4>4. 新しいエフェクト実行</h4>
-                                <p>setup関数が実行され、副作用処理を行う</p>
+                                <p>セットアップ関数が実行され、副作用処理を行う</p>
                             </div>
                         </div>
                     </div>
+                    <aside class="notes">
+                        <code>useEffect</code>の<ruby>実行<rt>じっこう</rt></ruby>の<ruby>流<rt>なが</rt></ruby>れを<ruby>説明<rt>せつめい
+                            </rt></ruby>します。<br>
+                        1. まずコンポーネントがレンダリングされます<br>
+                        2. <ruby>次<rt>つぎ</rt></ruby>に<ruby>依存<rt>いぞん</rt></ruby><ruby>配列<rt>はいれつ</rt></ruby>の<ruby>値<rt>
+                                あたい</rt></ruby>をチェックします<br>
+                        3. <ruby>値<rt>あたい</rt></ruby>が<ruby>変<rt>か</rt></ruby>わっていたら、<ruby>古<rt>ふる</rt>
+                        </ruby>いセットアップ<ruby>関数<rt>かんすう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>します<br>
+                        4. <ruby>最後<rt>さいご</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しいセットアップ<ruby>関数<rt>かんすう</rt>
+                        </ruby>を<ruby>実行<rt>じっこう</rt></ruby>します<br>
+                        この<ruby>順番<rt>じゅんばん</rt></ruby>はいつも<ruby>同<rt>おな</rt></ruby>じです。
+                    </aside>
                 </section>
 
                 <!-- Practical example -->
@@ -1087,6 +1255,15 @@ function Component() {
                         title="PokemonCard"
                         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
                         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                    <aside class="notes">
+                        <ruby>実際<rt>じっさい</rt></ruby>のアプリでよくあるパターンです。<br>
+                        <ruby>最初<rt>さいしょ</rt></ruby>はloading: trueで「<ruby>読込中<rt>よみこみちゅう</rt></ruby>」を<ruby>表示<rt>ひょうじ
+                            </rt></ruby>します。<br>
+                        データが<ruby>来<rt>き</rt></ruby>たらloading: falseにして<ruby>結果<rt>けっか</rt></ruby>を<ruby>表示<rt>ひょうじ</rt>
+                        </ruby>します。<br>
+                        propsが<ruby>変<rt>か</rt></ruby>わると<ruby>自動的<rt>じどうてき</rt></ruby>に<ruby>新<rt>あたら</rt>
+                        </ruby>しいデータを<ruby>取<rt>と</rt></ruby>ります。
+                    </aside>
                 </section>
 
                 <!-- Practical example flow -->
@@ -1094,16 +1271,16 @@ function Component() {
                     <h2><code>useEffect</code>の動作フロー</h2>
 
                     <div class="comparison">
-                        <div class="fragment">
-                            <h4>初回表示時</h4>
+                        <div>
+                            <h4 class="fragment">初回表示時</h4>
                             <ol class="list-flow">
-                                <li>
+                                <li class="fragment">
                                     <strong>コンポーネントマウント</strong>：<br>
                                     <code>selectedPokemon="jigglypuff"</code>で<code>PokemonCard</code>が初回レンダリング
                                     <pre><code data-lang="jsx">&lt;PokemonCard name="jigglypuff" /&gt;</code></pre>
                                 </li>
 
-                                <li>
+                                <li class="fragment">
                                     <strong>useEffect実行</strong>：<br>
                                     レンダリング完了後、<code>useEffect</code>が実行される<br>
                                     <code>loading: true</code>、<code>fetch</code>でデータ取得開始
@@ -1114,7 +1291,7 @@ function Component() {
 </code></pre>
                                 </li>
 
-                                <li>
+                                <li class="fragment">
                                     <strong>データ取得と状態更新</strong>：<br>
                                     <code>loading: true → false</code>、<code>pokemon: null → データ</code>
                                     <pre><code data-lang="jsx">
@@ -1125,28 +1302,28 @@ function Component() {
                                 </li>
                             </ol>
                         </div>
-                        <div class="fragment">
-                            <h4>ボタンクリック時</h4>
+                        <div>
+                            <h4 class="fragment">ボタンクリック時</h4>
                             <ol class="list-flow" start="4">
-                                <li>
+                                <li class="fragment">
                                     <strong>state変更</strong>：<br>
                                     <code>selectedPokemon: "jigglypuff" → "pikachu"</code>
                                     <pre><code data-lang="jsx">&lt;button onClick={() => setSelectedPokemon("pikachu")}&gt;</code></pre>
                                 </li>
 
-                                <li>
+                                <li class="fragment">
                                     <strong>propsの変更検知</strong>：<br>
                                     <code>name: "jigglypuff" → "pikachu"</code>
                                     <pre><code data-lang="jsx">&lt;PokemonCard name="pikachu" /&gt; // propsが変更された</code></pre>
                                 </li>
 
-                                <li>
+                                <li class="fragment">
                                     <strong>useEffect再実行</strong>：<br>
                                     依存配列<code>[name]</code>の値が変わったため、useEffectが再度実行される
                                     <pre><code data-lang="jsx">}, [name]); // "pikachu"に変更されたので再実行</code></pre>
                                 </li>
 
-                                <li>
+                                <li class="fragment">
                                     <strong>新しいデータ取得</strong>：<br>
                                     ピカチュウのデータを取得し、UIが更新される
                                     <pre><code data-lang="jsx">fetch(`https://pokeapi.co/api/v2/pokemon/pikachu`)</code></pre>
@@ -1192,6 +1369,21 @@ function Component() {
                             </ol>
                         </div>
                     </div>
+                    <p class="note">
+                        <a href="https://julesblom.com/writing/react-hook-component-timeline/" target="_blank"
+                            rel="noopener">
+                            ビジュアル解説はこちら
+                        </a>
+                    <p>
+                    <aside class="notes">
+                        useEffectはライフサイクルの<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>部分<rt>ぶぶん</rt></ruby>です。<br>
+                        マウント<ruby>時<rt>じ</rt></ruby>、<ruby>更新時<rt>こうしんじ</rt></ruby>、アンマウント<ruby>時<rt>じ</rt>
+                        </ruby>に<ruby>実行
+                            <rt>じっこう</rt>
+                        </ruby>されます。<br>
+                        クリーンアップでメモリリークを<ruby>防<rt>ふせ</rt></ruby>ぎます。<br>
+                        リンク<ruby>先<rt>さき</rt></ruby>のビジュアル<ruby>解説<rt>かいせつ</rt></ruby>もぜひ<ruby>見<rt>み</rt></ruby>てください。
+                    </aside>
                 </section>
 
                 <!-- Rule of Hooks -->
@@ -1218,6 +1410,17 @@ function Component() {
                             </ul>
                         </div>
                     </div>
+
+                    <aside class="notes">
+                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
+                        </ruby>です。<br>
+                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
+                        フックを<ruby>使<rt>つか</rt></ruby>うときは<ruby>必<rt>かなら</rt></ruby>ずルールを<ruby>守<rt>まも</rt>
+                        </ruby>ってください。<br><br>
+
+                        フックはReactコンポーネントの<ruby>最上位<rt>さいじょうい</rt></ruby>でのみ<ruby>呼<rt>よ</rt></ruby>び<ruby>出<rt>だ</rt>
+                        </ruby>し<ruby>可能<rt>かのう</rt></ruby>です。
+                    </aside>
                 </section>
 
                 <!-- Rule of Hooks Violations -->
@@ -1225,7 +1428,7 @@ function Component() {
                     <h2>フックのルール違反例</h2>
 
                     <div class="comparison">
-                        <div class="pattern">
+                        <div class="pattern fragment">
                             <h4 class="error">条件分岐内でのフック</h4>
                             <pre><code data-lang="jsx">function Component({ condition }) {
   if (condition) {
@@ -1240,7 +1443,7 @@ function Component() {
 }</code></pre>
                         </div>
 
-                        <div class="pattern">
+                        <div class="pattern fragment">
                             <h4 class="success">正しい書き方</h4>
                             <pre><code data-lang="jsx">function Component({ condition }) {
   const [state, setState] = useState(0); // OK!
@@ -1256,7 +1459,7 @@ function Component() {
                         </div>
                     </div>
 
-                    <div class="pattern">
+                    <div class="pattern fragment">
                         <h4 class="error">ループ内でのフック</h4>
                         <pre><code data-lang="jsx">function Component({ items }) {
   return items.map(item => {
@@ -1267,9 +1470,12 @@ function Component() {
 }</code></pre>
                     </div>
 
-                    <div class="warning">
+                    <div class="warning fragment">
                         フックの実行順序が変わると、Reactの内部状態管理が破綻します
                     </div>
+                    <aside class="notes">
+                        ルールを<ruby>守<rt>まも</rt></ruby>らないとエラーになったりバグが<ruby>起<rt>お</rt></ruby>きます。<br>
+                    </aside>
                 </section>
 
                 <!-- Common mistakes -->
@@ -1306,6 +1512,18 @@ function Component() {
                             </div>
                         </li>
                     </ul>
+                    <aside class="notes">
+                        1. <ruby>依存<rt>いぞん</rt></ruby><ruby>配列<rt>はいれつ</rt></ruby>に<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>値
+                            <rt>
+                                あたい</rt>
+                        </ruby>を<ruby>入<rt>い</rt></ruby>れ<ruby>忘<rt>わす</rt></ruby>れることが<ruby>多<rt>おお
+                            </rt></ruby>いです。<br>
+                        リンターがルール<ruby>違反<rt>いはん</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてくれます。<br>
+                        2. <ruby>無限<rt>むげん</rt></ruby>ループが<ruby>発生<rt>はっせい</rt></ruby>することがあります。<br>
+                        3. タイマーやサブスクリプションは<ruby>必<rt>かなら</rt></ruby>ず<ruby>解除<rt>かいじょ</rt></ruby>してください。<br>
+                        メモリリークの<ruby>原因<rt>げんいん</rt></ruby>になります。
+
+                    </aside>
                 </section>
 
                 <!-- Strict Mode -->
@@ -1336,6 +1554,14 @@ function Component() {
                     <div class="note">
                         <strong>重要:</strong> 開発環境で2回実行されても正常に動作するようにクリーンアップを実装する
                     </div>
+
+                    <aside class="notes">
+                        <ruby>開発中<rt>かいはつちゅう</rt></ruby>は<ruby>2回<rt>かい</rt></ruby><ruby>実行<rt>じっこう</rt>
+                        </ruby>されますが、これは<ruby>正常<rt>せいじょう</rt></ruby>です。
+                        <ruby>バグ<rt>ばぐ</rt></ruby>を<ruby>見<rt>み</rt></ruby>つけやすくするためのReactの<ruby>機能<rt>きのう</rt>
+                        </ruby>です。
+                        <ruby>本番<rt>ほんばん</rt></ruby>では<ruby>1回<rt>かい</rt></ruby>だけ<ruby>実行<rt>じっこう</rt></ruby>されます。
+                    </aside>
                 </section>
 
                 <!-- useLayoutEffect -->
@@ -1371,6 +1597,21 @@ useLayoutEffect(() => {
 }, []);</code></pre>
 
                     <p class="note">99%の場合は<code>useEffect</code>で十分</p>
+
+                    <aside class="notes">
+                        <code>useLayoutEffect</code>は、<ruby>画面<rt>がめん</rt></ruby>が<ruby>見える前<rt>みえるまえ</rt>
+                        </ruby>に<ruby>実行<rt>じっこう</rt></ruby>されるため、サイズやレイアウトを<ruby>測る<rt>はかる</rt></ruby>ときに<ruby>便利
+                            <rt>べんり</rt>
+                        </ruby>です。<br>
+
+                        <ruby>大抵<rt>たいてい</rt></ruby>はuseEffectで<ruby>十分<rt>じゅうぶん</rt></ruby>ですが、useLayoutEffectは<ruby>特別
+                            <rt>とくべつ</rt>
+                        </ruby>な<ruby>場合<rt>ばあい</rt></ruby>にのみ<ruby>使<rt>つか</rt>
+                        </ruby>います。<br>たとえば、DOM<ruby>要素<rt>ようそ</rt></ruby>のサイズを<ruby>測<rt>はか</rt></ruby>る<ruby>時<rt>とき
+                            </rt></ruby>など、<ruby>限定的<rt>げんていてき</rt></ruby>な<ruby>用途<rt>ようと</rt></ruby>です。<br><ruby>迷<rt>
+                                まよ
+                            </rt></ruby>ったらuseEffectを<ruby>使<rt>つか</rt></ruby>ってください。
+                    </aside>
                 </section>
 
                 <!-- まとめ -->
