@@ -465,6 +465,69 @@
                 </section>
 
                 <section>
+                    <h2>JSX = JavaScript + HTML風の文法</h2>
+                    <div class="syntax-review">
+                        <pre><code data-lang="jsx">// 変数の表示
+const name = "Ichigo";
+&lt;h1&gt;Hello, {name}!&lt;/h1&gt;</code></pre>
+                        <pre><code data-lang="jsx">
+// 条件表示
+{isLoggedIn ? &lt;Profile /&gt; : &lt;Login /&gt;}
+{user.isAdmin && &lt;AdminPanel /&gt;}
+</code></pre>
+                        <pre><code data-lang="jsx">
+// リスト表示  
+{todos.map(todo =&gt; 
+  &lt;li key={todo.id}&gt;{todo.text}&lt;/li&gt;
+)}</code></pre>
+                    </div>
+
+                    <div class="note">
+                        <code>{}</code>でJavaScript、<code>key</code>は必須
+                    </div>
+                    <aside class="notes">
+                        ReactではJSXという<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>文法<rt>ぶんぽう</rt></ruby>を<ruby>使<rt>つ</rt>
+                        </ruby>います。<br>
+                        jsxはhtmlみたいな<ruby>文法<rt>ぶんぽう</rt></ruby>をjavascriptで<ruby>使<rt>つか</rt></ruby>えます。<br>
+                        <ruby>波格好<rt>なみかっこ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってjavascriptを<ruby>書<rt>か</rt>
+                        </ruby>きます。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>コンポーネント = 関数</h2>
+                    <div class="syntax-review">
+                        <pre><code data-lang="jsx">// コンポーネント定義（大文字で開始）
+function UserCard({ name, email, children }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        <pre><code data-lang="jsx">
+// 使用
+&lt;UserCard name="Kurotsuchi Mayuri" email="m.kurotsuchi@seireitei.co.jp"&gt;
+  &lt;button&gt;編集&lt;/button&gt;
+&lt;/UserCard&gt;</code></pre>
+                    </div>
+
+                    <div class="note">
+                        <code>props</code> = 関数の引数、<code>children</code> = タグの中身
+                    </div>
+                    <aside class="notes">
+                        Reactの<ruby>コンポーネント</ruby>は<ruby>関数<rt>かんすう</rt></ruby>として<ruby>書<rt>か</rt>
+                        </ruby>きます。<br><ruby>名前<rt>なまえ</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>大文字<rt>おおもじ</rt>
+                        </ruby>から<ruby>始<rt>はじ</rt></ruby>めます。<br>
+                        この<ruby>関数<rt>かんすう</rt></ruby>は、<ruby>props<rt>プロップス</rt></ruby>という<ruby>データ</ruby>を<ruby>受<rt>う
+                            </rt>
+                        </ruby>け<ruby>取<rt>と</rt></ruby>って、<ruby>JSX</ruby>を<ruby>返<rt>かえ</rt></ruby>します。
+                    </aside>
+                </section>
+
+                <section>
                     <h2>イベント処理</h2>
                     <div class="fragment" data-fragment-index="0">
                         <p>Reactでは、イベントハンドラーはJSXの属性として指定されます</p>
@@ -492,8 +555,9 @@ return (
                     <div class="note fragment" data-fragment-index="1">
                         イベントハンドラーは関数を直接渡す、アロー関数で引数を渡すことも可能
                     </div>
-                    <aside class="notes">イベント<ruby>処理<rt>しょり</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>を<ruby>確認<rt>かくにん
-                            </rt></ruby>します。<br>
+                    <aside class="notes">ユーザーの<ruby>操作<rt>そうさ</rt>
+                        </ruby>に<ruby>反応<rt>はんのう</rt></ruby>するためにイベント<ruby>処理<rt>しょり</rt></ruby>を<ruby>使<rt>つか
+                            </rt></ruby>います。<br>
                         イベントハンドラーは<ruby>関数<rt>かんすう</rt></ruby>を<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>渡<rt>わた</rt>
                         </ruby>します。<br>
                         <ruby>引数<rt>ひきすう</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>したい<ruby>場合<rt>ばあい</rt></ruby>はアロー<ruby>関数
@@ -503,7 +567,8 @@ return (
                 </section>
 
                 <section>
-                    <h2>状態管理【useState】</h2>
+                    <h2>ステート = 再レンダリングを引き起こす変数</h2>
+                    <h4 class="fragment" data-fragment-index="0">状態管理【useState】</h4>
                     <div class="fragment" data-fragment-index="0">
                         <pre><code data-lang="jsx">import { useState } from 'react'; // フックをインポート</code></pre>
                     </div>
