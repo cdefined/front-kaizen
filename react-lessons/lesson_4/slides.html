@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta lang="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React 応用②</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <style>
+        :root {
+            --main-header: #667eea;
+            --green: #27ae60;
+            --yellow: #f39c12;
+            --red: #fc5342;
+            --bg: #f8f8f810;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            color: var(--main-header);
+            text-transform: none;
+        }
+
+        .reveal h4,
+        .reveal h3 {
+            margin-bottom: 0;
+        }
+
+        .reveal .pale {
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        ul>li,
+        dl>dd,
+        ol>li {
+            line-height: 2em;
+        }
+
+        ul.compact-list>li,
+        dl.compact-list>dd,
+        ol.compact-list>li {
+            line-height: 1.5em;
+        }
+
+
+        dd {
+            margin-bottom: 0.5em;
+        }
+
+        .arrow {
+            background: none;
+            font-size: 100px;
+            color: var(--main-header);
+            flex: 0;
+        }
+
+        .down-arrow {
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            font-size: 50px;
+            flex: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            justify-content: start;
+        }
+
+        .comparison.centered {
+            align-items: center;
+        }
+
+        .triptych {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1em;
+        }
+
+        .triptych.centered {
+            justify-content: center;
+        }
+
+        .triptych-transformation {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .note {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid var(--main-header);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid var(--red);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .quiz-options.small {
+            font-size: 0.65em;
+        }
+
+        .fragment.correct-answer.visible {
+            border-left: 4px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.3);
+        }
+
+        .reveal pre {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .reveal pre code {
+            padding: 1em;
+        }
+
+        .timer {
+            position: absolute;
+            top: -30px;
+            right: 15px;
+        }
+
+        .comparison-table {
+            font-size: 0.75em;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+        }
+
+        .comparison-table thead th {
+            font-weight: bold;
+        }
+
+        .comparison-table .metric {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .mpa-spa {
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-top: 4px solid var(--main-header);
+            background: var(--bg);
+            width: 50%;
+
+            h3,
+            p {
+                text-align: center;
+            }
+
+            ol {
+                font-size: 0.93em;
+                width: 100%;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            li {
+                list-style-position: inside;
+                background: #667eea15;
+                color: white;
+                padding: 0.75rem 1.5rem;
+                margin: 0.75rem 0;
+                border-radius: 4px;
+            }
+        }
+
+        .lifecycle {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+
+            div {
+                border-radius: 8px;
+                padding: 1.5rem;
+                border-top: 4px solid;
+                border-left: 4px solid;
+                background: var(--bg);
+            }
+
+            p {
+                text-align: center;
+            }
+
+            p,
+            ul {
+                font-size: 0.9em;
+            }
+
+            ol {
+                font-size: 0.8em;
+                margin: 0 5px;
+            }
+
+            ol>li {
+                line-height: 2em;
+            }
+
+            .mount {
+                position: relative;
+                border-color: var(--green);
+
+                h3 {
+                    color: var(--green);
+                    text-align: center;
+                }
+            }
+
+            .mount::after,
+            .update::after {
+                content: "🡆";
+                position: absolute;
+                top: 50%;
+                right: -36px;
+                color: #f8f8f8b0;
+                font-size: 45px;
+                font-weight: bold;
+            }
+
+            .update {
+                position: relative;
+                border-color: var(--yellow);
+
+                h3 {
+                    color: var(--yellow);
+                    text-align: center;
+                }
+            }
+
+            .update::before {
+                content: '⭯';
+                position: absolute;
+                top: -20px;
+                right: -10px;
+                background: var(--yellow);
+                color: white;
+                width: 105px;
+                height: 105px;
+                border-radius: 50%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                font-size: 75px;
+                font-weight: bold;
+            }
+
+            .unmount {
+                border-color: var(--red);
+
+                h3 {
+                    color: var(--red);
+                    text-align: center;
+                }
+            }
+        }
+
+        .four-square {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+
+            div {
+                border-radius: 8px;
+                padding: 1.5rem;
+                background: #f8f8f810;
+                font-size: 0.9em;
+            }
+        }
+
+        .four-square.centered {
+            h3 {
+                text-align: center;
+            }
+        }
+
+        .part,
+        .pattern {
+            border-radius: 8px;
+            padding: 0.5rem;
+            background: var(--bg);
+
+            pre {
+                margin: 0;
+            }
+        }
+
+        .part {
+            margin-top: 0.5em;
+            padding: 0.75rem;
+        }
+
+        .pattern {
+            margin-bottom: 0.5em;
+            font-size: 0.9em;
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .centered {
+            text-align: center;
+        }
+
+        .reveal .success {
+            color: var(--green);
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .reveal .error {
+            color: var(--red);
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .list-flow {
+            font-size: 0.8em;
+            padding: 0;
+        }
+
+        .flow-diagram {
+            font-size: 0.65em;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+
+            .part {
+                margin: 0;
+                text-align: center;
+            }
+
+            .flow-arrow::after {
+                content: "🡇";
+                position: relative;
+                top: 0;
+                left: 50%;
+                color: #f8f8f890;
+                font-size: 30px;
+            }
+        }
+
+        .font-smaller {
+            font-size: 0.9em;
+        }
+
+        .muted {
+            color: #bebebe;
+            font-size: 0.8em;
+        }
+
+        .split-triptych {
+            display: grid;
+            align-items: center;
+            gap: 1em;
+            grid-template-columns: 1fr 3fr 3fr;
+            margin: 1.5em 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section class="title-slide">
+                <h1>React 応用②</h1>
+                <h2>カスタムフック、共通化、振り返り</h2>
+            </section>
+
+            <!-- In previous episode -->
+            <section>
+                <section>
+                    <h1>前回の復習</h1>
+                    <p>React 応用①のおさらい</p>
+                    <aside class="notes">まず、<ruby>前回<rt>ぜんかい</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>確認<rt>かくにん
+                            </rt></ruby>します。<br>
+                        わからないところがあったら<ruby>質問<rt>しつもん</rt></ruby>してください。</aside>
+                </section>
+
+                <section>
+                    <h2>コンポーネント ＝ 関数</h2>
+                    <div class="syntax-review">
+                        <pre><code data-lang="jsx">// コンポーネント定義（大文字で開始）
+function UserCard({ name, email, children }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        <pre><code data-lang="jsx">
+// 使用
+&lt;UserCard name="Kurotsuchi Mayuri" email="m.kurotsuchi@seireitei.co.jp"&gt;
+  &lt;button&gt;編集&lt;/button&gt;
+&lt;/UserCard&gt;</code></pre>
+                    </div>
+
+                    <div class="note">
+                        <code>props</code> = 関数の引数、<code>children</code> = タグの中身
+                    </div>
+                    <aside class="notes">
+                        Reactの<ruby>コンポーネント</ruby>は<ruby>関数<rt>かんすう</rt></ruby>として<ruby>書<rt>か</rt>
+                        </ruby>きます。<br><ruby>名前<rt>なまえ</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>大文字<rt>おおもじ</rt>
+                        </ruby>から<ruby>始<rt>はじ</rt></ruby>めます。<br>
+                        この<ruby>関数<rt>かんすう</rt></ruby>は、<ruby>props<rt>プロップス</rt></ruby>という<ruby>データ</ruby>を<ruby>受<rt>う
+                            </rt>
+                        </ruby>け<ruby>取<rt>と</rt></ruby>って、<ruby>JSX</ruby>を<ruby>返<rt>かえ</rt></ruby>します。
+                    </aside>
+                </section>
+                <section>
+                    <h2>状態 ＝ 再レンダーを引き起こす変数</h2>
+                    <div class="comparison">
+                        <pre><code data-lang="jsx">
+import React, { useState } from 'react';
+
+function LikeButton() {
+  // [現在の値, セッター関数] = useState(初期値)
+  const [likes, setLikes] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setLikes(likes + 1)}&gt;
+        ♡ {likes}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </code></pre>
+                        <div>
+                            <h4>動作の流れ</h4>
+                            <ol class="font-smaller">
+                                <li><code>useState(0)</code> → 初期値0でいいね数を作成</li>
+                                <li>ボタンクリック → <code>setLikes(likes + 1)</code></li>
+                                <li>状態更新 → コンポーネント再レンダリング</li>
+                                <li>新しい値でUI更新</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="note">
+                        <strong>重要：</strong>状態が変わるたびに関数コンポーネント全体が再実行される
+                    </div>
+                    <aside class="notes">この 例（れい）では、likes（らいくす）という 名前（なまえ）で 数（かず）を 覚（おぼ）えています。<br>
+                        ボタンを 押（お）すと、setLikes（せっとらいくす）で 数（かず）が ひとつ 増（ふ）えます。<br>
+                        そうすると、画面（がめん）の 数字（すうじ）も 変（か）わります。</aside>
+                </section>
+
+                <section>
+                    <h2>制御されたコンポーネント ＝ 状態 ＋ イベントハンドラー</h2>
+                    <br>
+
+                    <div class="comparison">
+                        <div>
+                            <h4>基本構造</h4>
+                            <pre><code data-lang="jsx">// 3つの要素が必須
+const [value, setValue] = useState('');        // 1. 状態
+
+return (
+  &lt;input 
+    value={value}                              // 2. input要素
+    onChange={(e) => setValue(e.target.value)} // 3. ハンドラー関数
+  /&gt;
+);</code></pre>
+                        </div>
+
+                        <div>
+                            <h4>重要なポイント</h4>
+                            <ul class="compact-list">
+                                <li><code>value</code>は必ずstate由来</li>
+                                <li><code>onChange</code>でstateを更新</li>
+                                <li>状態変更 → 再レンダリング</li>
+                                <li>Reactが完全に制御</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        ・「Controlled」では、Reactが扱います<br>
+                        ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
+                    </div>
+                    <aside class="notes">
+                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力値<rt>あたい</rt></ruby>を<ruby>状態<rt>じょうたい
+                            </rt></ruby><ruby>経由<rt>けいゆ</rt></ruby>で<ruby>一元管理<rt>いちげんかんり</rt></ruby>するしくみ。<br>
+                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、Stateが<ruby>更新
+                            <rt>こうしん</rt>
+                        </ruby>される。<br>
+                        inputの<ruby>表示<rt>ひょうじ</rt></ruby><ruby>値<rt>あたい</rt></ruby>は<ruby>常<rt>つね</rt>
+                        </ruby>にStateに<ruby>依存<rt>いぞん</rt></ruby>。<br>
+                        この<ruby>構造<rt>こうぞう</rt></ruby>により、<ruby>検証<rt>けんしょう</rt></ruby>や<ruby>制御<rt>せいぎょ</rt>
+                        </ruby>が<ruby>容易<rt>ようい</rt></ruby>になる。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>シングルページアプリケーション ＝ 単一HTMLファイル</h2>
+                    <div class="spa-concept">
+                        <ul>
+                            <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
+                            <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
+                            <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
+                            <li>URLが変わる場合もあるが、実際には<strong>ページリロードしない</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="example">
+                        <pre><code data-lang="html">
+<!-- 最初から最後まで、このHTMLファイル1つだけ -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;React App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    <aside class="notes">
+                        SPAは「シングルページアプリケーション」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
+                        <ruby>普通<rt>ふつう</rt></ruby>のWebサイトは<ruby>複数<rt>ふくすう</rt></ruby>のHTMLファイルがありますが、<br>
+                        SPAは1つのHTMLファイルだけを<ruby>使<rt>つか</rt></ruby>います。<br>
+                        ページを<ruby>移動<rt>いどう</rt></ruby>してもHTMLファイルは<ruby>変<rt>か</rt></ruby>わりません。<br>
+                        JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
+                        </ruby>します。
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>エフェクト ＝ 副作用を「いつ実行するか」で制御する仕組み</h3>
+                    <br>
+                    <div class="comparison">
+                        <div class="font-smaller">
+                            <pre><code data-lang="jsx">import { useEffect } from "react";
+
+function Component() {
+    function cleanup() { // クリーンアップ関数：リソースの解放
+        console.log("アンマウント時や次のエフェクト実行前");
+    }
+
+    function setup() { // エフェクト関数：副作用を実行
+        console.log("DOM更新後に実行される");
+        return cleanup;
+    }
+
+    useEffect(setup, [/* 依存配列 */]);
+
+    return &lt;div&gt;...&lt;/div&gt;;
+}</code></pre>
+                        </div>
+                        <dl>
+                            <dt>エフェクト関数</dt>
+                            <dd>副作用を実行する関数</dd>
+                            <dt>クリーンアップ関数（オプション）</dt>
+                            <dd>リソース解放</dd>
+                            <dt>依存配列（オプション）</dt>
+                            <dd>よる実行制御</dd>
+                        </dl>
+                    </div>
+                    <div class="note">
+                        純粋コンポーネント ＝ 同じpropsなら同じJSX、外部状態変更禁止<br>
+                        副作用 ＝ 純粋性を破る外部世界との相互作用、API・DOM・イベント等
+                    </div>
+                    <aside class="notes">
+                        セットアップ<ruby>関数<rt>かんすう</rt></ruby>からクリーンアップ<ruby>関数<rt>かんすう</rt>
+                        </ruby>を<ruby>返<rt>かえ</rt>
+                        </ruby>すことができます。<br>
+                        クリーンアップ<ruby>関数<rt>かんすう</rt></ruby>でリソースを<ruby>片付<rt>かたづ</rt></ruby>けます。<br>
+                        クリーンアップは<ruby>コンポーネント<rt></rt></ruby>が<ruby>消<rt>き</rt></ruby>える<ruby>前<rt>まえ</rt>
+                        </ruby>に<ruby>実行<rt>じっこう</rt></ruby>されます。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>コンポーネントのライフサイクル</h2>
+
+                    <div class="lifecycle compact">
+                        <div class="mount">
+                            <h3>マウント</h3>
+                            <ol>
+                                <li>コンポーネント初期化</li>
+                                <li>初回レンダリング</li>
+                                <li>DOM更新</li>
+                                <li><strong><code>useEffect</code>実行</strong></li>
+                            </ol>
+                        </div>
+
+                        <div class="update">
+                            <h3>更新</h3>
+                            <ol>
+                                <li>stateやpropsの変更検知</li>
+                                <li>再レンダリング</li>
+                                <li>DOM差分更新</li>
+                                <li>前のエフェクトクリーンアップ</li>
+                                <li>新しいエフェクト実行</li>
+                            </ol>
+                        </div>
+
+                        <div class="unmount">
+                            <h3>アンマウント</h3>
+                            <ol>
+                                <li>全エフェクトクリーンアップ</li>
+                                <li>DOMから削除</li>
+                                <li>メモリ解放</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <p class="note">
+                        <a href="https://julesblom.com/writing/react-hook-component-timeline/" target="_blank"
+                            rel="noopener">
+                            ビジュアル解説はこちら
+                        </a>
+                    <p>
+                    <aside class="notes">
+                        useEffectはライフサイクルの<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>部分<rt>ぶぶん</rt></ruby>です。<br>
+                        マウント<ruby>時<rt>じ</rt></ruby>、<ruby>更新時<rt>こうしんじ</rt></ruby>、アンマウント<ruby>時<rt>じ</rt>
+                        </ruby>に<ruby>実行
+                            <rt>じっこう</rt>
+                        </ruby>されます。<br>
+                        クリーンアップでメモリリークを<ruby>防<rt>ふせ</rt></ruby>ぎます。<br>
+                        リンク<ruby>先<rt>さき</rt></ruby>のビジュアル<ruby>解説<rt>かいせつ</rt></ruby>もぜひ<ruby>見<rt>み</rt></ruby>てください。
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h1>カスタムフック</h1>
+                    <p>コンポーネント間でのロジック共有</p>
+                </section>
+
+                <!-- Rule of Hooks -->
+                <section>
+                    <h2>フックのルール</h2>
+                    <p>フックを正しく使用するための重要な制約</p>
+                    <br>
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>ルール1：トップレベルでのみ呼び出し</h4>
+                            <ul class="compact">
+                                <li>ループ、条件分岐、ネストした関数内で呼び出してはいけない</li>
+                                <li>コンポーネントの最上位で呼び出す</li>
+                                <li>フックの実行順序を保証</li>
+                            </ul>
+                        </div>
+
+                        <div class="fragment">
+                            <h4>ルール2：React関数からのみ呼び出し</h4>
+                            <ul class="compact">
+                                <li>Reactコンポーネントから呼び出す</li>
+                                <li>カスタムフックから呼び出す</li>
+                                <li>通常のJavaScript関数からは呼び出してはいけない</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
+                        </ruby>です。<br>
+                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
+                        フックを<ruby>使<rt>つか</rt></ruby>うときは<ruby>必<rt>かなら</rt></ruby>ずルールを<ruby>守<rt>まも</rt>
+                        </ruby>ってください。<br><br>
+
+                        フックはReactコンポーネントの<ruby>最上位<rt>さいじょうい</rt></ruby>でのみ<ruby>呼<rt>よ</rt></ruby>び<ruby>出<rt>だ</rt>
+                        </ruby>し<ruby>可能<rt>かのう</rt></ruby>です。
+                    </aside>
+                </section>
+
+                <!-- Rule of Hooks Violations -->
+                <section>
+                    <h2>フックのルール違反例</h2>
+
+                    <div class="comparison">
+                        <div class="pattern fragment">
+                            <h4 class="error">条件分岐内でのフック</h4>
+                            <pre><code data-lang="jsx">function Component({ condition }) {
+  if (condition) {
+    const [state, setState] = useState(0); // NG!
+    
+    useEffect(() => {
+      // ...
+    }, []);
+  }
+  
+  return &lt;div&gt;...&lt;/div&gt;;
+}</code></pre>
+                        </div>
+
+                        <div class="pattern fragment">
+                            <h4 class="success">正しい書き方</h4>
+                            <pre><code data-lang="jsx">function Component({ condition }) {
+  const [state, setState] = useState(0); // OK!
+  
+  useEffect(() => {
+    if (condition) {
+      // 条件分岐はフック内部で
+    }
+  }, [condition]);
+  
+  return &lt;div&gt;...&lt;/div&gt;;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="pattern fragment">
+                        <h4 class="error">ループ内でのフック</h4>
+                        <pre><code data-lang="jsx">function Component({ items }) {
+  return items.map(item => {
+    const [state, setState] = useState(0); // NG!
+
+    return &lt;div key={item.id}&gt;{item.name}&lt;/div&gt;;
+  });
+}</code></pre>
+                    </div>
+
+                    <div class="warning fragment">
+                        フックの実行順序が変わると、Reactの内部状態管理が破綻します
+                    </div>
+                    <aside class="notes">
+                        ルールを<ruby>守<rt>まも</rt></ruby>らないとエラーになったりバグが<ruby>起<rt>お</rt></ruby>きます。<br>
+                    </aside>
+                </section>
+
+                <!-- まとめ -->
+                <section>
+                    <h2>まとめ</h2>
+
+                    <dl>
+                        <dt></dt>
+                        <dd></dd>
+                    </dl>
+                </section>
+            </section>
+
+            <section>
+                <!-- Quiz 5: Rules of Hooks -->
+                <section>
+                    <h4>理解度チェック⑤【フックのルール】</h4>
+                    <div class="quiz">
+                        <h3>このコードの問題は？</h3>
+                        <pre><code data-lang="jsx">function Component({ showData }) {
+  if (showData) {
+    const [data, setData] = useState(null);
+    
+    useEffect(() => {
+      fetchData().then(setData);
+    }, []);
+  }
+  
+  return &lt;&gt;...&lt;/&gt;;
+}</code></pre>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>fetchData</code>が定義されていない</div>
+                            <div class="quiz-option custom fragment correct-answer" data-fragment-index="1">B)
+                                条件分岐内でフックを呼んでいる</div>
+                            <div class="quiz-option">C) <code>useEffect</code>の依存配列が間違い</div>
+                            <div class="quiz-option">D) 特に問題なし</div>
+                        </div>
+                    </div>
+                    <div class="fragment note" data-fragment-index="1">
+                        <strong>答え:</strong> B) フックは必ずトップレベルで呼び出す必要がある
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice -->
+            <section>
+                <section>
+                    <h1>React 実践演習</h1>
+                    <h3>1つの課題 (15-20分)</h3>
+
+                    <p>今日学んだ内容を実際に使ってみよう！</p>
+                    <div class="note"><a target="_blank"
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_4/task.md">react-lessons/lesson_4/task.md</a>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="timer"></div>
+
+                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
+
+                    <p><strong><code>&lt;ZanpakutoLoader&gt;</code> コンポーネントを作成してください</strong></p>
+                    <ul class="compact-list">
+                        <li>ローディング中は「読み込み中...」と表示</li>
+                        <li>成功時は <code>name</code> と <code>powerLevel</code> を表示</li>
+                        <li>失敗時はエラーメッセージを表示</li>
+                        <li><code>useState</code> と <code>useEffect</code> を組み合わせて実装すること</li>
+                    </ul>
+
+                    <pre><code data-lang="typescript">function ZanpakutoLoader({ name }: { name: string }) {
+  const [zanpakuto, setZanpakuto] = useState&lt;Zanpakuto | null&gt;(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // name が変更された時に loadZanpakto を呼び出す処理を書く
+  }, [name]);
+
+  return &lt;div&gt;{/* ローディング、結果、エラーの表示 */}&lt;/div&gt;;
+}</code></pre>
+
+                    <div class="note"><a target="_blank"
+                            href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_4/task.md">react-lessons/lesson_4/task.md</a>
+                    </div>
+                </section>
+                <section>
+                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
+                    <iframe
+                        src="https://codesandbox.io/embed/mgy7j3?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1&expanddevtools=1"
+                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
+                        title="Zanpakuto Loader"
+                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+                </section>
+            </section>
+
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h1>第4回まとめ</h1>
+
+                    <h2>今日学んだこと</h2>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>宿題・実践課題</h1>
+
+                    <h3>完全な斬魄刀フォームを作成してください</h3>
+                    <div class="note"><a
+                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_4/homework"
+                            target="_blank">react-lessons/lesson_4/homework</a></div>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.min.js"></script>
+    <script src="../../scripts/reveal-timer-plugin.js"></script>
+    <script type="module">
+        import { codeToHtml } from 'https://esm.sh/shiki@3.0.0';
+
+        const codeBlocks = document.querySelectorAll('pre code[data-lang]');
+
+        for (const block of codeBlocks) {
+            const lang = block.dataset.lang;
+            const theme = block.dataset.theme || 'night-owl'; // 'material-theme-darker'
+            const rawCode = block.textContent.trim();
+
+            const html = await codeToHtml(rawCode, { lang, theme });
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const shikiHTML = wrapper.firstElementChild;
+
+            const pre = block.closest('pre');
+            if (pre && shikiHTML) pre.replaceWith(shikiHTML);
+        }
+    </script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            width: 1800,
+            height: 900,
+            margin: 0.1,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealNotes, RevealTimer, RevealMarkdown]
+        });
+    </script>
+</body>
+
+</html>
