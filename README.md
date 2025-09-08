@@ -1,6 +1,8 @@
-# TypeScript
+# フロントエンド勉強会
 
-## 1. TypeScript 入門 ①
+## TypeScript
+
+### 1. TypeScript 入門 ①
 
 型システム、コンパイル設定、基本型、型推論、Union 型、関数の型、void と never
 
@@ -9,7 +11,7 @@
 - [プレゼンテーションの演習課題](/typescript-lessons/lesson_1/task.md)
 - [宿題・実践課題](/typescript-lessons/lesson_1/homework/README.md)
 
-## 2. TypeScript 入門 ②
+### 2. TypeScript 入門 ②
 
 interface、type、型の拡、enum、クラス、ジェネリクス、ユーティリティ型
 
@@ -18,14 +20,16 @@ interface、type、型の拡、enum、クラス、ジェネリクス、ユーテ
 - [プレゼンテーションの演習課題](/typescript-lessons/lesson_2/task.md)
 - [宿題・実践課題](/typescript-lessons/lesson_2/homework/README.md)
 
-## 3. React 基礎 ①
+## React
+
+### 1. React 基礎 ①
 
 React とは、JSX、コンポーネント、Props の使い方
 
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_1/slides.html)
 - [プレゼンテーションの演習課題・実践課題](/react-lessons/lesson_1/task.md)
 
-## 4. React 基礎 ②
+### 2. React 基礎 ②
 
 useState、イベント処理、フォーム
 
@@ -33,7 +37,7 @@ useState、イベント処理、フォーム
 - [プレゼンテーションの演習課題](/react-lessons/lesson_2/task.md)
 - [宿題・実践課題](/react-lessons/lesson_2/homework/README.md)
 
-## 5. React 応用 ①
+### 3. React 応用 ①
 
 SPA とは、ライフサイクル、useEffect
 
