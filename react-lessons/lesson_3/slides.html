@@ -860,7 +860,7 @@ const showAbout = () => {
                         <li><strong>パフォーマンス</strong> : バンドルが大きくなりがち</li>
                         <li><strong>複雑性</strong> : クライアントサイドでの状態管理が複雑</li>
                     </ul>
-                    <img src="./images/cursed.png" alt="SPAが呪われたな技術" />
+                    <img src="./images/cursed.png" alt="SPAが呪われた技術" />
 
                     <aside class="notes">
                         これらの<ruby>技術<rt>ぎじゅつ</rt></ruby>でSPAの<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt>
@@ -1453,98 +1453,6 @@ function Component() {
                     </aside>
                 </section>
 
-                <!-- Rule of Hooks -->
-                <section>
-                    <h2>フックのルール</h2>
-                    <p>フックを正しく使用するための重要な制約</p>
-                    <br>
-                    <div class="comparison">
-                        <div class="fragment">
-                            <h4>ルール1：トップレベルでのみ呼び出し</h4>
-                            <ul class="compact">
-                                <li>ループ、条件分岐、ネストした関数内で呼び出してはいけない</li>
-                                <li>コンポーネントの最上位で呼び出す</li>
-                                <li>フックの実行順序を保証</li>
-                            </ul>
-                        </div>
-
-                        <div class="fragment">
-                            <h4>ルール2：React関数からのみ呼び出し</h4>
-                            <ul class="compact">
-                                <li>Reactコンポーネントから呼び出す</li>
-                                <li>カスタムフックから呼び出す</li>
-                                <li>通常のJavaScript関数からは呼び出してはいけない</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <aside class="notes">
-                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
-                        </ruby>です。<br>
-                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
-                        フックを<ruby>使<rt>つか</rt></ruby>うときは<ruby>必<rt>かなら</rt></ruby>ずルールを<ruby>守<rt>まも</rt>
-                        </ruby>ってください。<br><br>
-
-                        フックはReactコンポーネントの<ruby>最上位<rt>さいじょうい</rt></ruby>でのみ<ruby>呼<rt>よ</rt></ruby>び<ruby>出<rt>だ</rt>
-                        </ruby>し<ruby>可能<rt>かのう</rt></ruby>です。
-                    </aside>
-                </section>
-
-                <!-- Rule of Hooks Violations -->
-                <section>
-                    <h2>フックのルール違反例</h2>
-
-                    <div class="comparison">
-                        <div class="pattern fragment">
-                            <h4 class="error">条件分岐内でのフック</h4>
-                            <pre><code data-lang="jsx">function Component({ condition }) {
-  if (condition) {
-    const [state, setState] = useState(0); // NG!
-    
-    useEffect(() => {
-      // ...
-    }, []);
-  }
-  
-  return &lt;div&gt;...&lt;/div&gt;;
-}</code></pre>
-                        </div>
-
-                        <div class="pattern fragment">
-                            <h4 class="success">正しい書き方</h4>
-                            <pre><code data-lang="jsx">function Component({ condition }) {
-  const [state, setState] = useState(0); // OK!
-  
-  useEffect(() => {
-    if (condition) {
-      // 条件分岐はフック内部で
-    }
-  }, [condition]);
-  
-  return &lt;div&gt;...&lt;/div&gt;;
-}</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="pattern fragment">
-                        <h4 class="error">ループ内でのフック</h4>
-                        <pre><code data-lang="jsx">function Component({ items }) {
-  return items.map(item => {
-    const [state, setState] = useState(0); // NG!
-
-    return &lt;div key={item.id}&gt;{item.name}&lt;/div&gt;;
-  });
-}</code></pre>
-                    </div>
-
-                    <div class="warning fragment">
-                        フックの実行順序が変わると、Reactの内部状態管理が破綻します
-                    </div>
-                    <aside class="notes">
-                        ルールを<ruby>守<rt>まも</rt></ruby>らないとエラーになったりバグが<ruby>起<rt>お</rt></ruby>きます。<br>
-                    </aside>
-                </section>
-
                 <!-- Common mistakes -->
                 <section>
                     <h2>よくあるミス</h2>
@@ -1809,35 +1717,6 @@ useEffect(() => {
                         <div class="note">
                             <strong>答え:</strong> C) アンマウント時や次のエフェクト前にunsubscribeが必要
                         </div>
-                    </div>
-                </section>
-
-                <!-- Quiz 5: Rules of Hooks -->
-                <section>
-                    <h4>理解度チェック⑤【フックのルール】</h4>
-                    <div class="quiz">
-                        <h3>このコードの問題は？</h3>
-                        <pre><code data-lang="jsx">function Component({ showData }) {
-  if (showData) {
-    const [data, setData] = useState(null);
-    
-    useEffect(() => {
-      fetchData().then(setData);
-    }, []);
-  }
-  
-  return &lt;&gt;...&lt;/&gt;;
-}</code></pre>
-                        <div class="quiz-options">
-                            <div class="quiz-option">A) <code>fetchData</code>が定義されていない</div>
-                            <div class="quiz-option custom fragment correct-answer" data-fragment-index="1">B)
-                                条件分岐内でフックを呼んでいる</div>
-                            <div class="quiz-option">C) <code>useEffect</code>の依存配列が間違い</div>
-                            <div class="quiz-option">D) 特に問題なし</div>
-                        </div>
-                    </div>
-                    <div class="fragment note" data-fragment-index="1">
-                        <strong>答え:</strong> B) フックは必ずトップレベルで呼び出す必要がある
                     </div>
                 </section>
             </section>
