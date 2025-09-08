@@ -1066,10 +1066,10 @@ const showAbout = () => {
                     </aside>
                 </section>
 
-                <!-- useEffect intro -->
+                <!-- Rendering and commit phases -->
                 <section>
-                    <h2>useEffect：副作用の安全な実行</h2>
-                    <p>Reactが提供する副作用管理の仕組み</p>
+                    <h2>副作用はいつ実行できる？</h2>
+                    <p>Reactの実行フェーズを理解する</p>
                     <div class="comparison">
                         <div class="part fragment">
                             <div>
@@ -1091,12 +1091,12 @@ const showAbout = () => {
                             <div>
                                 <h3 class="centered">コミットフェーズ</h3>
                                 <p class="centered">仮想DOM → 実DOM</p>
-                                <p class="centered muted">実際にDOMを「更新」する段階 </p>
+                                <p class="centered muted">実際にDOMを「更新」する段階</p>
                             </div>
                             <ul>
                                 <li>計算された差分を実DOMに適用</li>
-                                <li>副作用を安全に実行</li>
-                                <li>useEffectはペイント後に実行（非同期）</li>
+                                <li>副作用を安全に実行可能</li>
+                                <li>安定した実行環境</li>
                             </ul>
                             <div class="part success">
                                 副作用OK
@@ -1104,16 +1104,69 @@ const showAbout = () => {
                         </div>
                     </div>
                     <aside class="notes">
-                        レンダーフェーズは「<ruby>計算<rt>けいさん</rt></ruby>」、<ruby>コミットフェーズ<rt></rt>
-                        </ruby>は「<ruby>実行<rt>じっこう</rt></ruby>」です。<br>
-                        レンダーフェーズは<ruby>何度<rt>なんど</rt></ruby>も<ruby>実行<rt>じっこう</rt>
-                        </ruby>される<ruby>場合<rt>ばあい</rt></ruby>があります。<br>
-                        コミットフェーズは<ruby>必<rt>かなら</rt></ruby>ず<ruby>一回<rt>いっかい</rt></ruby>だけ<ruby>実行
-                            <rt>じっこう</rt>
-                        </ruby>されます。<br>
-                        <code>useEffect</code>はコミットフェーズで<ruby>実行<rt>じっこう</rt></ruby>されるので<ruby>安全
-                            <rt>あんぜん</rt>
-                        </ruby>です。
+                        <ruby>副作用<rt>ふくさよう</rt></ruby>は<ruby>安全<rt>あんぜん</rt></ruby>なタイミングで<ruby>実行<rt>じっこう</rt>
+                        </ruby>する<ruby>必要<rt>ひつよう</rt></ruby>があります。<br>
+                        レンダーフェーズは<ruby>計算<rt>けいさん</rt></ruby>の<ruby>段階<rt>だんかい</rt></ruby>なので<ruby>副作用<rt>ふくさよう</rt>
+                        </ruby>は<ruby>禁止<rt>きんし</rt></ruby>です。<br>
+                        <ruby>何度<rt>なんど</rt></ruby>も<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>される<ruby>可能性<rt>
+                                かのうせい</rt></ruby>があるからです。<br>
+                        コミットフェーズは<ruby>安定<rt>あんてい</rt></ruby>しているので<ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt>
+                        </ruby>できます。
+                    </aside>
+                </section>
+
+                <!-- How to perform side-effects -->
+                <section>
+                    <h2>Reactで副作用を実行する方法</h2>
+                    <p>副作用のタイミングによって使い分ける</p>
+
+                    <div class="comparison">
+                        <div class="part fragment">
+                            <h3 class="centered">ユーザーアクション時</h3>
+                            <p class="centered">イベントハンドラー</p>
+                            <ul class="compact-list">
+                                <li>ボタンクリック、フォーム送信</li>
+                                <li>ユーザー操作が起点</li>
+                                <li>予測可能なタイミング</li>
+                            </ul>
+                            <pre class="fragment"><code data-lang="jsx">function Button() {
+  function handleClick() {
+    fetch('/api/data'); // 副作用OK
+  }
+  
+  return &lt;button onClick={handleClick}&gt;受信する&lt;/button&gt;;
+}</code></pre>
+                        </div>
+
+                        <div class="part fragment">
+                            <h3 class="centered">コンポーネント状態変化時</h3>
+                            <p class="centered"><code>useEffect</code></p>
+                            <ul class="compact-list">
+                                <li>データ取得、購読・解除</li>
+                                <li>自動実行が必要</li>
+                                <li>レンダリング後に安全に実行</li>
+                            </ul>
+                            <pre class="fragment"><code data-lang="jsx">function Profile({ userId }) {
+  useEffect(() => { // userIdが変わったら自動でデータ取得
+    fetch(`/api/users/${userId}`);
+  }, [userId]);
+
+  return &lt;&gt;...&lt;&gt;;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        <ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>する<ruby>方法<rt>ほうほう</rt>
+                        </ruby>は<ruby>主<rt>おも</rt></ruby>に2つあります。<br>
+                        1つめはイベントハンドラーです。<ruby>普通<rt>ふつう</rt></ruby>の<ruby>関数<rt>かんすう</rt></ruby>なので<ruby>副作用<rt>ふくさよう
+                            </rt></ruby>を<ruby>自由<rt>じゆう</rt></ruby>に<ruby>書<rt>か</rt></ruby>けます。<br>
+                        2つめは<code>useEffect</code>です。<ruby>自動的<rt>じどうてき</rt></ruby>に<ruby>副作用<rt>ふくさよう</rt>
+                        </ruby>を<ruby>実行<rt>じっこう</rt></ruby>したい<ruby>時<rt>とき</rt></ruby>に<ruby>使<rt>つか</rt>
+                        </ruby>います。<br>
+                        <ruby>大抵<rt>たいてい</rt></ruby>はイベントハンドラーで<ruby>十分<rt>じゅうぶん</rt></ruby>ですが、<ruby>自動実行<rt>じどうじっこう
+                            </rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>場合<rt>ばあい</rt>
+                        </ruby>は<code>useEffect</code>を<ruby>使<rt>つか</rt></ruby>います。
                     </aside>
                 </section>
 
