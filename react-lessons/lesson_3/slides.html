@@ -465,7 +465,7 @@
                 </section>
 
                 <section>
-                    <h2>JSX = JavaScript + HTML風の文法</h2>
+                    <h2>JSX ＝ JavaScript ＋ HTML風の文法</h2>
                     <div class="syntax-review">
                         <pre><code data-lang="jsx">// 変数の表示
 const name = "Ichigo";
@@ -489,13 +489,13 @@ const name = "Ichigo";
                         ReactではJSXという<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>文法<rt>ぶんぽう</rt></ruby>を<ruby>使<rt>つ</rt>
                         </ruby>います。<br>
                         jsxはhtmlみたいな<ruby>文法<rt>ぶんぽう</rt></ruby>をjavascriptで<ruby>使<rt>つか</rt></ruby>えます。<br>
-                        <ruby>波格好<rt>なみかっこ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってjavascriptを<ruby>書<rt>か</rt>
+                        <ruby>波括弧<rt>なみかっこ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってjavascriptを<ruby>書<rt>か</rt>
                         </ruby>きます。
                     </aside>
                 </section>
 
                 <section>
-                    <h2>コンポーネント = 関数</h2>
+                    <h2>コンポーネント ＝ 関数</h2>
                     <div class="syntax-review">
                         <pre><code data-lang="jsx">// コンポーネント定義（大文字で開始）
 function UserCard({ name, email, children }) {
@@ -528,9 +528,9 @@ function UserCard({ name, email, children }) {
                 </section>
 
                 <section>
-                    <h2>イベント処理</h2>
-                    <div class="fragment" data-fragment-index="0">
-                        <p>Reactでは、イベントハンドラーはJSXの属性として指定されます</p>
+                    <h2>イベント処理 ＝ ユーザー操作に応じて関数を実行</h2>
+                    <div>
+                        <p>イベントハンドラーはJSXの属性として指定されます</p>
                         <pre><code data-lang="jsx">// ボタンクリックの基本
 const handleClick = () => {
   alert('押したよ！');
@@ -538,7 +538,7 @@ const handleClick = () => {
 
 return &lt;button onClick={handleClick}&gt;押す&lt;/button&gt;;</code></pre>
                     </div>
-                    <div class="fragment" data-fragment-index="1">
+                    <div>
                         <pre><code data-lang="jsx">
 // 複数ボタン + データ渡し
 const characters = ['Rena', 'Satoko', 'Rika'];
@@ -552,7 +552,7 @@ return (
   &lt;/div&gt;
 );</code></pre>
                     </div>
-                    <div class="note fragment" data-fragment-index="1">
+                    <div class="note">
                         イベントハンドラーは関数を直接渡す、アロー関数で引数を渡すことも可能
                     </div>
                     <aside class="notes">ユーザーの<ruby>操作<rt>そうさ</rt>
@@ -567,12 +567,11 @@ return (
                 </section>
 
                 <section>
-                    <h2>ステート = 再レンダリングを引き起こす変数</h2>
-                    <h4 class="fragment" data-fragment-index="0">状態管理【useState】</h4>
-                    <div class="fragment" data-fragment-index="0">
+                    <h2>状態 ＝ 再レンダーを引き起こす変数</h2>
+                    <div>
                         <pre><code data-lang="jsx">import { useState } from 'react'; // フックをインポート</code></pre>
                     </div>
-                    <div class="fragment triptych-transformation" data-fragment-index="1">
+                    <div class="triptych-transformation">
                         <pre><code data-lang="jsx">// 基本構文
 const [likes, setLikes] = useState(0); // 初期値は0
 
@@ -587,7 +586,7 @@ const likesState = useState(0);
 // likesState[1] = セッター関数
 likesState[1](likesState[0] + 1);</code></pre>
                     </div>
-                    <div class="fragment" data-fragment-index="2">
+                    <div class="fragment" data-fragment-index="0">
                         <pre><code data-lang="jsx">
 // オブジェクトの更新
 const [user, setUser] = useState({ name: 'Ichigo', age: 17 });
@@ -598,23 +597,30 @@ const [items, setItems] = useState(['bat', 'knife']);
 setItems([...items, 'nata']); // 新しい配列を作成</code></pre>
                     </div>
 
-                    <div class="note fragment" data-fragment-index="2">
+                    <div class="note fragment" data-fragment-index="0">
                         必ずセッター関数を使用、オブジェクト/配列は新しく作成
                     </div>
-                    <aside class="notes">useStateは<ruby>状態<rt>じょうたい</rt></ruby>を<ruby>管理<rt>かんり</rt>
-                        </ruby>するreactの<ruby>機能<rt>きのう</rt></ruby>です。<br>
-                        <ruby>直接<rt>ちょくせつ</rt></ruby><ruby>変更<rt>へんこう</rt></ruby>するとreactが<ruby>気<rt>き</rt>
-                        </ruby>づかないことがあるため、<br>
-                        <ruby>オブジェクト</ruby>や<ruby>配列<rt>はいれつ</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しく<ruby>作成<rt>さくせい
-                            </rt></ruby>してください。
+                    <aside class="notes">
+                        useStateは<ruby>状態<rt>じょうたい</rt></ruby>を<ruby>管理<rt>かんり</rt></ruby>するReactの<ruby>機能<rt>きのう</rt>
+                        </ruby>です。<br>
+                        <ruby>現在<rt>げんざい</rt></ruby>の<ruby>値<rt>あたい</rt></ruby>と<ruby>更新<rt>こうしん</rt>
+                        </ruby>するための<ruby>関数<rt>かんすう</rt></ruby>を<ruby>配列<rt>はいれつ</rt></ruby>として<ruby>返<rt>かえ</rt>
+                        </ruby>す<ruby>関数<rt>かんすう</rt></ruby>です。<br><br>
+
+                        <ruby>直接<rt>ちょくせつ</rt></ruby><ruby>変更<rt>へんこう</rt></ruby>するとReactは<ruby>変更<rt>へんこう</rt>
+                        </ruby>を<ruby>検知<rt>けんち</rt></ruby>できず、<ruby>再描画<rt>さいびょうが</rt></ruby>されません。<br>
+                        <ruby>オブジェクト</ruby>や<ruby>配列<rt>はいれつ</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>する<ruby>際<rt>さい
+                            </rt></ruby>は、<ruby>必<rt>かなら
+                            </rt></ruby>ず<ruby>新<rt>あたら</rt></ruby>しく<ruby>作成<rt>さくせい</rt></ruby>してください。
                     </aside>
                 </section>
 
                 <section>
-                    <h2>制御されたコンポーネント【Controlled Component】</h2>
+                    <h2>制御されたコンポーネント ＝ 状態 ＋ イベントハンドラー</h2>
+                    <br>
 
                     <div class="comparison">
-                        <div class="fragment">
+                        <div>
                             <h4>基本構造</h4>
                             <pre><code data-lang="jsx">// 3つの要素が必須
 const [value, setValue] = useState('');        // 1. 状態
@@ -627,7 +633,7 @@ return (
 );</code></pre>
                         </div>
 
-                        <div class="fragment">
+                        <div>
                             <h4>重要なポイント</h4>
                             <ul class="compact-list">
                                 <li><code>value</code>は必ずstate由来</li>
@@ -638,14 +644,16 @@ return (
                         </div>
                     </div>
 
-                    <div class="note fragment">
-                        ・「Controlled」では、Reactが状態を管理します<br>
+                    <div class="note">
+                        ・「Controlled」では、Reactが扱います<br>
                         ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
                     </div>
                     <aside class="notes">
-                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力値<rt>あたい</rt></ruby>を<ruby>状態<rt>じょうたい
+                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力<rt>にゅうりょく</rt></ruby><ruby>値<rt>あたい</rt>
+                        </ruby>を<ruby>状態<rt>じょうたい
                             </rt></ruby><ruby>経由<rt>けいゆ</rt></ruby>で<ruby>一元管理<rt>いちげんかんり</rt></ruby>するしくみ。<br>
-                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、Stateが<ruby>更新
+                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、<ruby>状態<rt>
+                                じょうたい</rt></ruby>が<ruby>更新
                             <rt>こうしん</rt>
                         </ruby>される。<br>
                         inputの<ruby>表示<rt>ひょうじ</rt></ruby><ruby>値<rt>あたい</rt></ruby>は<ruby>常<rt>つね</rt>
@@ -665,7 +673,7 @@ return (
                 <section>
                     <h2>SPAの基本概念</h2>
                     <div class="spa-concept">
-                        <h3 class="fragment">シングルページアプリケーション = 単一HTMLファイル</h3>
+                        <h3>シングルページアプリケーション ＝ 単一HTMLファイル</h3>
                         <ul class="fragment">
                             <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
                             <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
@@ -733,7 +741,8 @@ react-app/
                         SPAは<ruby>最初<rt>さいしょ</rt></ruby>のindex.htmlだけを<ruby>使<rt>つか</rt></ruby>います。<br>
                         React、Vue、Angularなどがこの<ruby>方式<rt>ほうしき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>っています。<br>
                         <ruby>開発<rt>かいはつ</rt></ruby><ruby>時<rt>じ</rt></ruby>はファイルが<ruby>分<rt>わ</rt>
-                        </ruby>かれていても、<ruby>最終的<rt>さいしゅうてき</rt></ruby>に1つにまとまります。
+                        </ruby>かれていても、ビルドでバンドルファイルに<ruby>変換<rt>
+                                へんかん</rt></ruby>されます。
                     </aside>
                 </section>
 
@@ -807,9 +816,9 @@ const showAbout = () => {
                     </div>
                     <p class="note">実際にはルーティングライブラリを使用することが多い</p>
                     <aside class="notes">
-                        <ruby>実際<rt>じっさい</rt></ruby>のSPAではReact Routerなどのライブラリを<ruby>使<rt>つか</rt></ruby>います。<br>
                         この<ruby>例<rt>れい</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>にするために<ruby>基本的<rt>きほんてき</rt>
                         </ruby>な<ruby>書<rt>か</rt></ruby>き<ruby>方<rt>かた</rt></ruby>です。<br>
+                        <ruby>実際<rt>じっさい</rt></ruby>のSPAではReact Routerなどのライブラリを<ruby>使<rt>つか</rt></ruby>います。<br>
                         <ruby>状態<rt>じょうたい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってどのコンテンツを<ruby>表示<rt>ひょうじ</rt>
                         </ruby>するか<ruby>決<rt>き</rt></ruby>めます。<br>
                         URLも<ruby>同時<rt>どうじ</rt></ruby>に<ruby>変更<rt>へんこう</rt></ruby>することができます。
@@ -863,12 +872,17 @@ const showAbout = () => {
                     <img src="./images/cursed.png" alt="SPAが呪われた技術" width="300px" />
 
                     <aside class="notes">
-                        これらの<ruby>技術<rt>ぎじゅつ</rt></ruby>でSPAの<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt>
-                        </ruby>できます。<br>
-                        SSRはサーバーでHTMLを<ruby>作<rt>つく</rt></ruby>ってから<ruby>送<rt>おく</rt></ruby>る<ruby>方法<rt>ほうほう</rt>
-                        </ruby>です。<br>
-                        SSGはWebサイトを<ruby>作<rt>つく</rt></ruby>る<ruby>時<rt>とき</rt></ruby>に<ruby>全<rt>すべ</rt>
-                        </ruby>てのHTMLを<ruby>用意<rt>ようい</rt></ruby>します。
+                        <ruby>純粋<rt>じゅんすい</rt></ruby>なSPAには<ruby>問題<rt>もんだい</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いがあります。
+                        <br>
+                        JavaScriptが<ruby>読<rt>よ</rt></ruby>み<ruby>込<rt>こ</rt></ruby>まれるまで<ruby>何<rt>なに</rt>
+                        </ruby>も<ruby>表示
+                            <rt>ひょうじ</rt>
+                        </ruby>されません。<br>
+                        <ruby>大<rt>おお</rt></ruby>きなアプリになると<ruby>読<rt>よ</rt></ruby>み<ruby>込<rt>こ</rt></ruby>み<ruby>時間<rt>
+                                じかん
+                            </rt></ruby>がとても<ruby>長<rt>なが</rt></ruby>くなります。<br>
+                        <ruby>現在<rt>げんざい</rt></ruby>は<ruby>他<rt>ほか</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby>と<ruby>組<rt>く
+                            </rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせて<ruby>使<rt>つか</rt></ruby>います。
                     </aside>
                 </section>
 
@@ -885,6 +899,15 @@ const showAbout = () => {
                     <div class="note">
                         純粋SPAの問題を解決するためのフレームワーク：<br>Next.js、React Router/Remix、Astro、Gatsbyなど
                     </div>
+
+                    <aside class="notes">
+                        これらの<ruby>技術<rt>ぎじゅつ</rt></ruby>でSPAの<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt>
+                        </ruby>できます。<br>
+                        SSRはサーバーでHTMLを<ruby>作<rt>つく</rt></ruby>ってから<ruby>送<rt>おく</rt></ruby>る<ruby>方法<rt>ほうほう</rt>
+                        </ruby>です。<br>
+                        SSGはWebサイトを<ruby>作<rt>つく</rt></ruby>る<ruby>時<rt>とき</rt></ruby>に<ruby>全<rt>すべ</rt>
+                        </ruby>てのHTMLを<ruby>用意<rt>ようい</rt></ruby>します。
+                    </aside>
                 </section>
                 <section>
                     <h2>まとめ：SPA</h2>
@@ -1163,15 +1186,15 @@ const showAbout = () => {
                     <aside class="notes">
                         <ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>する<ruby>方法<rt>ほうほう</rt>
                         </ruby>は<ruby>主<rt>おも</rt></ruby>に2つあります。<br>
-                        1つめはイベントハンドラーです。<ruby>レンダリング<rt>れんだりんぐ</rt></ruby>サイクルの<ruby>外<rt>そと</rt></ruby>で<ruby>実行<rt>
+                        1つめはイベントハンドラーです。レンダリングサイクルの<ruby>外<rt>そと</rt></ruby>で<ruby>実行<rt>
                                 じっこう</rt></ruby>される<ruby>普通<rt>ふつう</rt></ruby>の<ruby>関数<rt>かんすう</rt></ruby>なので<ruby>副作用
                             <rt>ふくさよう</rt>
                         </ruby>を<ruby>自由<rt>じゆう</rt></ruby>に<ruby>書<rt>か</rt></ruby>けます。<br>
-                        2つめは<code>useEffect</code>です。<ruby>コミット<rt>こみっと</rt></ruby>フェーズで<ruby>安全<rt>あんぜん</rt>
-                        </ruby>に<ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>し、<ruby>依存関係<rt>いそんかんけい
+                        2つめは<code>useEffect</code>です。コミットフェーズで<ruby>安全<rt>あんぜん</rt>
+                        </ruby>に<ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>し、<ruby>依存関係<rt>いぞんかんけい
                             </rt></ruby>の<ruby>変化<rt>へんか</rt></ruby>に<ruby>自動<rt>じどう</rt></ruby>で<ruby>反応<rt>はんのう</rt>
                         </ruby>します。<br>
-                        <ruby>ユーザー<rt>ゆーざー</rt></ruby>のアクションには イベントハンドラー、<ruby>状態<rt>じょうたい</rt></ruby>の<ruby>変化<rt>へんか
+                        ユーザーのアクションには イベントハンドラー、<ruby>状態<rt>じょうたい</rt></ruby>の<ruby>変化<rt>へんか
                             </rt></ruby>への<ruby>反応<rt>はんのう</rt></ruby>には<code>useEffect</code>を<ruby>使<rt>つか</rt>
                         </ruby>います。
                     </aside>
