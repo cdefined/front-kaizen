@@ -88,6 +88,7 @@
         }
 
         .comparison.centered {
+            text-align: left;
             align-items: center;
         }
 
@@ -361,9 +362,10 @@
 
         .split {
             display: grid;
-            grid-template-columns: 1.2fr 2fr;
+            grid-template-columns: 1.5fr 2fr;
             gap: 20px;
             align-items: center;
+            justify-items: stretch;
         }
 
         .centered {
@@ -468,7 +470,7 @@ function UserCard({ name, email, children }) {
                     </div>
 
                     <div class="note">
-                        <code>props</code> = 関数の引数、<code>children</code> = タグの中身
+                        <code>props</code> = 関数の引数<br><code>children</code> = タグの中身
                     </div>
                     <aside class="notes">
                         Reactの<ruby>コンポーネント</ruby>は<ruby>関数<rt>かんすう</rt></ruby>として<ruby>書<rt>か</rt>
@@ -551,9 +553,11 @@ return (
                         ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
                     </div>
                     <aside class="notes">
-                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力値<rt>あたい</rt></ruby>を<ruby>状態<rt>じょうたい
+                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力<rt>にゅうりょく</rt></ruby><ruby>値<rt>あたい</rt>
+                        </ruby>を<ruby>状態<rt>じょうたい
                             </rt></ruby><ruby>経由<rt>けいゆ</rt></ruby>で<ruby>一元管理<rt>いちげんかんり</rt></ruby>するしくみ。<br>
-                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、Stateが<ruby>更新
+                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、<ruby>状態<rt>
+                                じょうたい</rt></ruby>が<ruby>更新
                             <rt>こうしん</rt>
                         </ruby>される。<br>
                         inputの<ruby>表示<rt>ひょうじ</rt></ruby><ruby>値<rt>あたい</rt></ruby>は<ruby>常<rt>つね</rt>
@@ -564,7 +568,7 @@ return (
                 </section>
 
                 <section>
-                    <h2>シングルページアプリケーション ＝ 単一HTMLファイル</h2>
+                    <h2>シングルページアプリ【SPA】＝ 単一HTMLファイル</h2>
                     <div class="spa-concept">
                         <ul>
                             <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
@@ -584,7 +588,7 @@ return (
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
-    &lt;script src="bundle.js"&gt;&lt;/script&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt; &lt;!-- アプリケーションのコード --&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
                     </div>
@@ -596,6 +600,75 @@ return (
                         JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
                         </ruby>します。
                     </aside>
+                </section>
+
+                <section>
+                    <h2>なぜ純粋コンポーネントが必要なのか？</h2>
+                    <div class="centered part"><code>コンポーネント(props, state) → JSX</code></div>
+
+
+                    <div class="split">
+                        <div>
+                            <div class="fragment" data-fragment-index="0">
+                                <p><strong>Reactの要求:</strong></p>
+                                <ul class="compact-list">
+                                    <li>同じ入力 → 同じ出力</li>
+                                    <li>外の世界に直接触らない</li>
+                                </ul>
+                            </div>
+                            <div class="fragment" data-fragment-index="1">
+                                <p><strong>理由:</strong> レンダー中、Reactは勝手に</p>
+                                <ul class="compact-list">
+                                    <li>コンポーネントを複数回実行</li>
+                                    <li>途中でキャンセル・やり直し</li>
+                                    <li>最適化のため結果を破棄</li>
+                                    <li>開発環境では2回実行</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="fragment" data-fragment-index="0">
+                            <br>
+                            <div class="font-smaller centered">
+                                副作用 ＝ 純粋性を破る外部世界との相互作用
+                            </div>
+                            <img width="100%" src="./images/component-world.svg" alt="コンポーネント＋外の世界" />
+                        </div>
+                    </div>
+
+                    <div class="warning fragment" data-fragment-index="1">
+                        外の世界を直接触ると → 副作用が何回も実行される
+                    </div>
+                </section>
+
+                <section>
+                    <h2>管理された副作用</h2>
+
+                    <div class="split">
+                        <div>
+                            <div>
+                                <h5>ユーザーアクション時 ✅</h5>
+                                <pre><code data-lang="jsx">function handleClick() {
+  fetch('/api/data'); // 予測可能
+}</code></pre>
+                            </div>
+
+                            <div>
+                                <h5>コンポーネント状態変化時 ✅</h5>
+                                <pre><code data-lang="jsx">useEffect(() => {
+  fetch('/api/data'); // 安全なタイミング
+}, []);</code></pre>
+                            </div>
+                            <div>
+                                <h5>レンダー中 ❌</h5>
+                                <pre><code data-lang="jsx">function Component() {
+  fetch('/api/data'); // 同じAPIを何回も叩く
+  document.title = "hello"; // タイトルがチカチカする
+  ...
+}</code></pre>
+                            </div>
+                        </div>
+                        <img src="./images/component-world-bridge.svg" alt="コンポーネントvs外の世界" />
+                    </div>
                 </section>
 
                 <section>
@@ -629,10 +702,6 @@ function Component() {
                             <dd>よる実行制御</dd>
                         </dl>
                     </div>
-                    <div class="note">
-                        純粋コンポーネント ＝ 同じpropsなら同じJSX、外部状態変更禁止<br>
-                        副作用 ＝ 純粋性を破る外部世界との相互作用、API・DOM・イベント等
-                    </div>
                     <aside class="notes">
                         セットアップ<ruby>関数<rt>かんすう</rt></ruby>からクリーンアップ<ruby>関数<rt>かんすう</rt>
                         </ruby>を<ruby>返<rt>かえ</rt>
@@ -653,7 +722,7 @@ function Component() {
                                 <li>コンポーネント初期化</li>
                                 <li>初回レンダリング</li>
                                 <li>DOM更新</li>
-                                <li><strong><code>useEffect</code>実行</strong></li>
+                                <li><code>useEffect</code>実行</li>
                             </ol>
                         </div>
 
