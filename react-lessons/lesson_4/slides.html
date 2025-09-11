@@ -116,6 +116,12 @@
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+
+            ol,
+            ul,
+            dl {
+                margin-left: 0.2em;
+            }
         }
 
         .warning {
@@ -235,12 +241,30 @@
             gap: 2rem;
             margin-top: 2rem;
 
-            div {
+            >div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
                 border-radius: 8px;
                 padding: 1.5rem;
                 border-top: 4px solid;
                 border-left: 4px solid;
                 background: var(--bg);
+
+                >div {
+                    font-size: 0.9em;
+                    border-radius: 8px;
+                    padding: 0.15rem;
+                    background: var(--bg);
+
+                    div {
+                        margin: 0.2em 0 0.5em 0;
+                    }
+
+                    ul {
+                        margin: 0 0.5em 0.2em;
+                    }
+                }
             }
 
             p {
@@ -255,10 +279,7 @@
             ol {
                 font-size: 0.8em;
                 margin: 0 5px;
-            }
-
-            ol>li {
-                line-height: 2em;
+                margin-bottom: 0.5em;
             }
 
             .mount {
@@ -629,14 +650,14 @@ return (
                         <div class="fragment" data-fragment-index="0">
                             <br>
                             <div class="font-smaller centered">
-                                副作用 ＝ 純粋性を破る外部世界との相互作用
+                                副作用 ＝ 外部世界との相互作用
                             </div>
                             <img width="100%" src="./images/component-world.svg" alt="コンポーネント＋外の世界" />
                         </div>
                     </div>
 
                     <div class="warning fragment" data-fragment-index="1">
-                        外の世界を直接触ると → 副作用が何回も実行される
+                        外の世界を直接触ると → 副作用がいつ何回実行されるかわからない
                     </div>
                 </section>
 
@@ -699,8 +720,15 @@ function Component() {
                             <dt>クリーンアップ関数（オプション）</dt>
                             <dd>リソース解放</dd>
                             <dt>依存配列（オプション）</dt>
-                            <dd>よる実行制御</dd>
+                            <dd>実行制御</dd>
                         </dl>
+                    </div>
+                    <div class="note">
+                        <ul class="compact-list">
+                            <li><strong>依存配列なし</strong> → 毎回実行</li>
+                            <li><strong>空の依存配列 <code>[]</code></strong> → 初回のみ</li>
+                            <li><strong>値を指定 <code>[userId]</code></strong> → 値変更時のみ</li>
+                        </ul>
                     </div>
                     <aside class="notes">
                         セットアップ<ruby>関数<rt>かんすう</rt></ruby>からクリーンアップ<ruby>関数<rt>かんすう</rt>
@@ -718,32 +746,60 @@ function Component() {
                     <div class="lifecycle compact">
                         <div class="mount">
                             <h3>マウント</h3>
-                            <ol>
+                            <ol class="compact-list">
                                 <li>コンポーネント初期化</li>
                                 <li>初回レンダリング</li>
                                 <li>DOM更新</li>
                                 <li><code>useEffect</code>実行</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <ul class="compact-list">
+                                    <li>初回ページ読み込み</li>
+                                    <li>親コンポーネントが初回作成</li>
+                                    <li>条件付きレンダリング<br>
+                                        <pre><code data-lang="jsx">{show && &lt;Component /&gt;} // show → true</code></pre>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="update">
                             <h3>更新</h3>
-                            <ol>
-                                <li>stateやpropsの変更検知</li>
+                            <ol class="compact-list">
+                                <li><code>state</code>や<code>props</code>の変更検知</li>
                                 <li>再レンダリング</li>
                                 <li>DOM差分更新</li>
                                 <li>前のエフェクトクリーンアップ</li>
                                 <li>新しいエフェクト実行</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <ul class="compact-list">
+                                    <li><code>setState</code>呼び出し</li>
+                                    <li>親から<code>props</code>が変更</li>
+                                    <li><code>useEffect</code>依存配列の値変更</li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="unmount">
                             <h3>アンマウント</h3>
-                            <ol>
+                            <ol class="compact-list">
                                 <li>全エフェクトクリーンアップ</li>
                                 <li>DOMから削除</li>
                                 <li>メモリ解放</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <ul class="compact-list">
+                                    <li>親コンポーネントが削除</li>
+                                    <li>ページを閉じる/離脱</li>
+                                    <li>条件付きレンダリング<br>
+                                        <pre><code data-lang="jsx">{show && &lt;Component /&gt;} // show → false</code></pre>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <p class="note">
