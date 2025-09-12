@@ -449,6 +449,16 @@
             grid-template-columns: 1fr 3fr 3fr;
             margin: 1.5em 0;
         }
+
+        .quote {
+            padding-left: 1em;
+            margin-bottom: 1em;
+        }
+
+        .quote:before {
+            content: "|";
+            color: var(--main-header);
+        }
     </style>
 </head>
 
@@ -468,6 +478,41 @@
                     <aside class="notes">まず、<ruby>前回<rt>ぜんかい</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>確認<rt>かくにん
                             </rt></ruby>します。<br>
                         わからないところがあったら<ruby>質問<rt>しつもん</rt></ruby>してください。</aside>
+                </section>
+
+                <section>
+                    <h2>シングルページアプリ【SPA】＝ 単一HTMLファイル</h2>
+                    <div class="spa-concept">
+                        <ul>
+                            <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
+                            <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
+                            <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
+                            <li>URLが変わる場合もあるが、実際には<strong>ページリロードしない</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="example">
+                        <pre><code data-lang="html">
+<!-- 最初から最後まで、このHTMLファイル1つだけ -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;React App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt; &lt;!-- アプリケーションのコード --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    <aside class="notes">
+                        SPAは「シングルページアプリケーション」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
+                        <ruby>普通<rt>ふつう</rt></ruby>のWebサイトは<ruby>複数<rt>ふくすう</rt></ruby>のHTMLファイルがありますが、<br>
+                        SPAは1つのHTMLファイルだけを<ruby>使<rt>つか</rt></ruby>います。<br>
+                        ページを<ruby>移動<rt>いどう</rt></ruby>してもHTMLファイルは<ruby>変<rt>か</rt></ruby>わりません。<br>
+                        JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
+                        </ruby>します。
+                    </aside>
                 </section>
 
                 <section>
@@ -514,7 +559,7 @@ function LikeButton() {
 
   return (
     &lt;div&gt;
-      &lt;button onClick={() =&gt; setLikes(likes + 1)}&gt;
+      &lt;button onClick={() =&gt; setLikes((prevLikes) => prevLikes + 1)}&gt;
         ♡ {likes}
       &lt;/button&gt;
     &lt;/div&gt;
@@ -561,8 +606,8 @@ return (
                         <div>
                             <h4>重要なポイント</h4>
                             <ul class="compact-list">
-                                <li><code>value</code>は必ずstate由来</li>
-                                <li><code>onChange</code>でstateを更新</li>
+                                <li><code>value</code>は必ず<code>state</code>由来</li>
+                                <li><code>onChange</code>で<code>state</code>を更新</li>
                                 <li>状態変更 → 再レンダリング</li>
                                 <li>Reactが完全に制御</li>
                             </ul>
@@ -589,41 +634,6 @@ return (
                 </section>
 
                 <section>
-                    <h2>シングルページアプリ【SPA】＝ 単一HTMLファイル</h2>
-                    <div class="spa-concept">
-                        <ul>
-                            <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
-                            <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
-                            <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
-                            <li>URLが変わる場合もあるが、実際には<strong>ページリロードしない</strong></li>
-                        </ul>
-                    </div>
-
-                    <div class="example">
-                        <pre><code data-lang="html">
-<!-- 最初から最後まで、このHTMLファイル1つだけ -->
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;React App&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
-    &lt;script src="bundle.js"&gt;&lt;/script&gt; &lt;!-- アプリケーションのコード --&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-                    </div>
-                    <aside class="notes">
-                        SPAは「シングルページアプリケーション」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
-                        <ruby>普通<rt>ふつう</rt></ruby>のWebサイトは<ruby>複数<rt>ふくすう</rt></ruby>のHTMLファイルがありますが、<br>
-                        SPAは1つのHTMLファイルだけを<ruby>使<rt>つか</rt></ruby>います。<br>
-                        ページを<ruby>移動<rt>いどう</rt></ruby>してもHTMLファイルは<ruby>変<rt>か</rt></ruby>わりません。<br>
-                        JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
-                        </ruby>します。
-                    </aside>
-                </section>
-
-                <section>
                     <h2>なぜ純粋コンポーネントが必要なのか？</h2>
                     <div class="centered part"><code>コンポーネント(props, state) → JSX</code></div>
 
@@ -634,7 +644,7 @@ return (
                                 <p><strong>Reactの要求:</strong></p>
                                 <ul class="compact-list">
                                     <li>同じ入力 → 同じ出力</li>
-                                    <li>外の世界に直接触らない</li>
+                                    <li>レンダー中に副作用を起こさない</li>
                                 </ul>
                             </div>
                             <div class="fragment" data-fragment-index="1">
@@ -643,7 +653,6 @@ return (
                                     <li>コンポーネントを複数回実行</li>
                                     <li>途中でキャンセル・やり直し</li>
                                     <li>最適化のため結果を破棄</li>
-                                    <li>開発環境では2回実行</li>
                                 </ul>
                             </div>
                         </div>
@@ -657,7 +666,7 @@ return (
                     </div>
 
                     <div class="warning fragment" data-fragment-index="1">
-                        外の世界を直接触ると → 副作用がいつ何回実行されるかわからない
+                        レンダー中に副作用を実行すると → いつ何回実行されるかわからない
                     </div>
                 </section>
 
@@ -683,7 +692,7 @@ return (
                                 <h5>レンダー中 ❌</h5>
                                 <pre><code data-lang="jsx">function Component() {
   fetch('/api/data'); // 同じAPIを何回も叩く
-  document.title = "hello"; // タイトルがチカチカする
+  document.title = "バカ"; // タイトルがチカチカする
   ...
 }</code></pre>
                             </div>
@@ -753,7 +762,7 @@ function Component() {
                                 <li><code>useEffect</code>実行</li>
                             </ol>
                             <div class="font-smaller">
-                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <div class="centered"><strong>画面に追加された時</strong></div>
                                 <ul class="compact-list">
                                     <li>初回ページ読み込み</li>
                                     <li>親コンポーネントが初回作成</li>
@@ -774,7 +783,8 @@ function Component() {
                                 <li>新しいエフェクト実行</li>
                             </ol>
                             <div class="font-smaller">
-                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <div class="centered"><strong><code>props</code>や<code>state</code>が変化した時</strong>
+                                </div>
                                 <ul class="compact-list">
                                     <li><code>setState</code>呼び出し</li>
                                     <li>親から<code>props</code>が変更</li>
@@ -791,7 +801,7 @@ function Component() {
                                 <li>メモリ解放</li>
                             </ol>
                             <div class="font-smaller">
-                                <div class="centered"><strong>いつ起きる？</strong></div>
+                                <div class="centered"><strong>画面から削除された時</strong></div>
                                 <ul class="compact-list">
                                     <li>親コンポーネントが削除</li>
                                     <li>ページを閉じる/離脱</li>
@@ -826,6 +836,210 @@ function Component() {
                     <p>コンポーネント間でのロジック共有</p>
                 </section>
 
+                <!-- What is a Hook -->
+                <section>
+                    <h2>フックとは何か</h2>
+                    <p class="quote">Reactの機能に「フック」するための関数</p>
+
+                    <div class="comparison">
+                        <img src="./images/hooked-component.svg" alt="コンポーネントでフック" />
+                        <div class="fragment">
+                            <h3>フックが存在する理由</h3>
+                            <ul>
+                                <li>関数コンポーネントで状態管理が必要になった</li>
+                                <li>ライフサイクルメソッドの機能が必要になった</li>
+                                <li>クラスコンポーネントの複雑さを解決</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="fragment">
+                        <p><strong>フック = Reactの機能を使うための特別な関数</strong></p>
+                    </div>
+
+                </section>
+
+                <!-- Built-in hooks we have known and loved -->
+                <section>
+                    <pre><code data-lang="jsx">// これまで使ったフック
+const [state, setState] = useState(0);     // 状態管理
+const ref = useRef(null);                  // DOM参照
+useEffect(() => {}, []);                   // 副作用
+
+// すべて "use" で始まる特別な関数</code></pre>
+                    <aside class="notes">
+                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
+                        </ruby>です。<br>
+                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
+                    </aside>
+                </section>
+
+                <!-- Built-in Hooks -->
+                <section>
+                    <h2>これまで使ったフック</h2>
+
+                    <pre><code data-lang="jsx">// 状態管理
+const [count, setCount] = useState(0);
+
+// DOM参照
+const inputRef = useRef(null);
+
+// 副作用（サイドエフェクト）
+useEffect(() => {
+    document.title = `カウント: ${count}`;
+}, [count]);
+
+// すべて "use" で始まる特別な関数</code></pre>
+
+                    <div class="fragment">
+                        <p><code>use</code>プレフィックス = 「この関数は内部で他のフックを呼び出す」</p>
+                    </div>
+                </section>
+
+                <!-- What Makes a Function a Hook -->
+                <section>
+                    <h2>関数をフックにするもの</h2>
+
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>フックではない普通の関数</h4>
+                            <pre><code data-lang="jsx">// 誤解を招く命名 - フックではない
+function useFormatPrice(price) {
+    return `¥${price.toLocaleString()}`;
+}
+
+// 他のフックを呼び出していない
+// ただの純粋関数</code></pre>
+                        </div>
+
+                        <div class="fragment">
+                            <h4>実際のフック</h4>
+                            <pre><code data-lang="jsx">// 実際のフック
+function useCounter(initialValue = 0) {
+    const [count, setCount] = useState(initialValue);
+    
+    const increment = () => setCount(count + 1);
+    
+    return [count, increment];
+}
+
+// useState を呼び出している → フック</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="fragment">
+                        <p><strong>フック = 他のフックを呼び出す関数</strong></p>
+                    </div>
+                </section>
+
+                <!-- Mental Model: React's Hook Tracking -->
+                <section>
+                    <h2>Reactのフック追跡システム</h2>
+                    <p>なぜルールが必要なのか</p>
+                </section>
+
+                <section>
+                    <h3>Reactはフックを順序で管理する</h3>
+
+                    <pre><code data-lang="jsx">function MyComponent() {
+    const [name, setName] = useState("");     // フック #1
+    const [age, setAge] = useState(0);        // フック #2
+    useEffect(() => { ... }, []);            // フック #3
+    const [email, setEmail] = useState("");  // フック #4
+    
+    // React内部では配列のように管理
+    // [useState, useState, useEffect, useState]
+}</code></pre>
+
+                    <div class="fragment">
+                        <p>各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>順序が変わると何が起こるか</h3>
+
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>1回目のレンダー</h4>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("田中");  // #1
+    if (showAge) {
+        const [age, setAge] = useState(25);    // #2
+    }
+    const [email, setEmail] = useState("");   // #3
+    
+    // React: [useState, useState, useState]
+}</code></pre>
+                        </div>
+
+                        <div class="fragment">
+                            <h4>2回目のレンダー（showAge = false）</h4>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("田中");  // #1
+    // age のフックがスキップされる！
+    const [email, setEmail] = useState("");   // #2 ← 前回の#3
+    
+    // React: [useState, useState] 
+    // 「あれ？ #3 のフックはどこ？」
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="fragment error">
+                        <p>Reactが混乱 → エラーまたは予期しない動作</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>正しいパターン</h3>
+
+                    <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("田中");      // 常に #1
+    const [age, setAge] = useState(25);            // 常に #2
+    const [email, setEmail] = useState("");       // 常に #3
+    
+    useEffect(() => {
+        if (showAge) {
+            // 条件分岐はフックの内部で
+            console.log(`年齢: ${age}`);
+        }
+    }, [showAge, age]);                            // 常に #4
+}</code></pre>
+
+                    <div class="fragment">
+                        <p>フックの<strong>呼び出し順序</strong>は毎回同じ<br>
+                            <strong>条件分岐</strong>はフックの内部で行う
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>なぜこの理解が重要か</h3>
+
+                    <div class="fragment">
+                        <h4>カスタムフックの仕組み</h4>
+                        <pre><code data-lang="jsx">function useToggle(initialValue) {
+    const [value, setValue] = useState(initialValue); // #N
+    const toggle = () => setValue(!value);             // #N+1 (useCallback等)
+    return [value, toggle];
+}
+
+function MyComponent() {
+    const [isOpen, toggleOpen] = useToggle(false);    // フック #1, #2を消費
+    const [isDark, toggleDark] = useToggle(true);     // フック #3, #4を消費
+    
+    // Reactから見ると普通のフック呼び出しと同じ
+}</code></pre>
+                    </div>
+
+                    <div class="fragment">
+                        <p><strong>カスタムフックは既存のフックの組み合わせ</strong><br>
+                            Reactの追跡システムに新しい魔法は加えない</p>
+                    </div>
+                </section>
+
                 <!-- Rule of Hooks -->
                 <section>
                     <h2>フックのルール</h2>
@@ -852,12 +1066,8 @@ function Component() {
                     </div>
 
                     <aside class="notes">
-                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
-                        </ruby>です。<br>
-                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
                         フックを<ruby>使<rt>つか</rt></ruby>うときは<ruby>必<rt>かなら</rt></ruby>ずルールを<ruby>守<rt>まも</rt>
-                        </ruby>ってください。<br><br>
-
+                        </ruby>ってください。<br>
                         フックはReactコンポーネントの<ruby>最上位<rt>さいじょうい</rt></ruby>でのみ<ruby>呼<rt>よ</rt></ruby>び<ruby>出<rt>だ</rt>
                         </ruby>し<ruby>可能<rt>かのう</rt></ruby>です。
                     </aside>

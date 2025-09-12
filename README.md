@@ -44,6 +44,14 @@ SPA とは、ライフサイクル、useEffect
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_3/slides.html)
 - [プレゼンテーションの演習課題・実践課題](/react-lessons/lesson_3/task.md)
 
+### 4. React 応用 ②
+
+カスタムフック、共通化、振り返り
+
+- [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_4/slides.html)
+- [プレゼンテーションの演習課題](/react-lessons/lesson_4/task.md)
+- [宿題・実践課題](/react-lessons/lesson_4/homework/README.md)
+
 ## コードレビューと提出
 
 ### 準備
