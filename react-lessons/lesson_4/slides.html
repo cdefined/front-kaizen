@@ -68,7 +68,7 @@
         .arrow {
             background: none;
             font-size: 100px;
-            color: var(--main-header);
+            color: #f8f8f890;
             flex: 0;
         }
 
@@ -100,7 +100,7 @@
         }
 
         .triptych.centered {
-            justify-content: center;
+            align-items: center;
         }
 
         .triptych-transformation {
@@ -389,6 +389,12 @@
             justify-items: stretch;
         }
 
+        .simple-split {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            align-items: center;
+        }
+
         .centered {
             text-align: center;
         }
@@ -442,22 +448,10 @@
             font-size: 0.8em;
         }
 
-        .split-triptych {
-            display: grid;
-            align-items: center;
-            gap: 1em;
-            grid-template-columns: 1fr 3fr 3fr;
-            margin: 1.5em 0;
-        }
-
         .quote {
-            padding-left: 1em;
+            padding: 0.3em 0.5em;
             margin-bottom: 1em;
-        }
-
-        .quote:before {
-            content: "|";
-            color: var(--main-header);
+            border-left: 10px solid var(--main-header);
         }
     </style>
 </head>
@@ -838,209 +832,134 @@ function Component() {
 
                 <!-- What is a Hook -->
                 <section>
-                    <h2>フックとは何か</h2>
-                    <p class="quote">Reactの機能に「フック」するための関数</p>
+                    <h2>フックとは</h2>
 
-                    <div class="comparison">
-                        <img src="./images/hooked-component.svg" alt="コンポーネントでフック" />
-                        <div class="fragment">
-                            <h3>フックが存在する理由</h3>
-                            <ul>
-                                <li>関数コンポーネントで状態管理が必要になった</li>
-                                <li>ライフサイクルメソッドの機能が必要になった</li>
-                                <li>クラスコンポーネントの複雑さを解決</li>
-                            </ul>
+                    <p class="quote">コンポーネント内でReactの機能を使うための関数</p>
+                    <div class="simple-split">
+                        <img src="./images/hooked-component.svg" alt="コンポーネントにフック" />
+                        <div>
+                            <p><strong>すべて<code>use</code>で始まる特別な関数 → フック</strong></p>
+                            <pre><code data-lang="jsx">function Counter() {
+    const [count, setCount] = useState(0);        // 状態管理
+    const inputRef = useRef(null);                // DOM参照
+    
+    useEffect(() => {                             // 副作用
+        document.title = `カウント: ${count}`;
+    }, [count]);
+    
+    return &lt;div&gt;カウント: {count}&lt;/div&gt;;
+}</code></pre>
                         </div>
-
                     </div>
 
-                    <div class="fragment">
-                        <p><strong>フック = Reactの機能を使うための特別な関数</strong></p>
-                    </div>
-
-                </section>
-
-                <!-- Built-in hooks we have known and loved -->
-                <section>
-                    <pre><code data-lang="jsx">// これまで使ったフック
-const [state, setState] = useState(0);     // 状態管理
-const ref = useRef(null);                  // DOM参照
-useEffect(() => {}, []);                   // 副作用
-
-// すべて "use" で始まる特別な関数</code></pre>
-                    <aside class="notes">
-                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
-                        </ruby>です。<br>
-                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
-                    </aside>
-                </section>
-
-                <!-- Built-in Hooks -->
-                <section>
-                    <h2>これまで使ったフック</h2>
-
-                    <pre><code data-lang="jsx">// 状態管理
-const [count, setCount] = useState(0);
-
-// DOM参照
-const inputRef = useRef(null);
-
-// 副作用（サイドエフェクト）
-useEffect(() => {
-    document.title = `カウント: ${count}`;
-}, [count]);
-
-// すべて "use" で始まる特別な関数</code></pre>
-
-                    <div class="fragment">
-                        <p><code>use</code>プレフィックス = 「この関数は内部で他のフックを呼び出す」</p>
-                    </div>
+                    <p class="note">
+                        <a href="https://ja.react.dev/reference/react/hooks" rel="noopener">組み込みの React フック</a>
+                    </p>
                 </section>
 
                 <!-- What Makes a Function a Hook -->
                 <section>
-                    <h2>関数をフックにするもの</h2>
+                    <h2>何がフックを「フック」にするのか</h2>
+                    <div class="quote fragment">フック = 他のフック（組み込みのReact機能）を呼び出す関数</div>
 
                     <div class="comparison">
                         <div class="fragment">
-                            <h4>フックではない普通の関数</h4>
-                            <pre><code data-lang="jsx">// 誤解を招く命名 - フックではない
-function useFormatPrice(price) {
-    return `¥${price.toLocaleString()}`;
-}
-
-// 他のフックを呼び出していない
-// ただの純粋関数</code></pre>
-                        </div>
-
-                        <div class="fragment">
                             <h4>実際のフック</h4>
-                            <pre><code data-lang="jsx">// 実際のフック
-function useCounter(initialValue = 0) {
-    const [count, setCount] = useState(initialValue);
+                            <p><code>useState</code>を呼び出している → <strong>フック</strong></p>
+                            <pre><code data-lang="jsx">function useCounter(initial = 0) {
+    const [count, setCount] = useState(initial);
     
     const increment = () => setCount(count + 1);
     
     return [count, increment];
-}
-
-// useState を呼び出している → フック</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="fragment">
-                        <p><strong>フック = 他のフックを呼び出す関数</strong></p>
-                    </div>
-                </section>
-
-                <!-- Mental Model: React's Hook Tracking -->
-                <section>
-                    <h2>Reactのフック追跡システム</h2>
-                    <p>なぜルールが必要なのか</p>
-                </section>
-
-                <section>
-                    <h3>Reactはフックを順序で管理する</h3>
-
-                    <pre><code data-lang="jsx">function MyComponent() {
-    const [name, setName] = useState("");     // フック #1
-    const [age, setAge] = useState(0);        // フック #2
-    useEffect(() => { ... }, []);            // フック #3
-    const [email, setEmail] = useState("");  // フック #4
-    
-    // React内部では配列のように管理
-    // [useState, useState, useEffect, useState]
 }</code></pre>
-
-                    <div class="fragment">
-                        <p>各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している</p>
-                    </div>
-                </section>
-
-                <section>
-                    <h3>順序が変わると何が起こるか</h3>
-
-                    <div class="comparison">
+                        </div>
                         <div class="fragment">
-                            <h4>1回目のレンダー</h4>
-                            <pre><code data-lang="jsx">function Component({ showAge }) {
-    const [name, setName] = useState("田中");  // #1
-    if (showAge) {
-        const [age, setAge] = useState(25);    // #2
-    }
-    const [email, setEmail] = useState("");   // #3
-    
-    // React: [useState, useState, useState]
-}</code></pre>
-                        </div>
-
-                        <div class="fragment">
-                            <h4>2回目のレンダー（showAge = false）</h4>
-                            <pre><code data-lang="jsx">function Component({ showAge }) {
-    const [name, setName] = useState("田中");  // #1
-    // age のフックがスキップされる！
-    const [email, setEmail] = useState("");   // #2 ← 前回の#3
-    
-    // React: [useState, useState] 
-    // 「あれ？ #3 のフックはどこ？」
+                            <h4>フックではない普通の関数</h4>
+                            <p>他のフックを呼び出していない → <strong>ただの関数</strong></p>
+                            <pre><code data-lang="jsx">function formatPrice(price) {
+    return `¥${price.toLocaleString()}`;
 }</code></pre>
                         </div>
                     </div>
-
-                    <div class="fragment error">
-                        <p>Reactが混乱 → エラーまたは予期しない動作</p>
-                    </div>
                 </section>
 
+                <!-- Custom hook -->
                 <section>
-                    <h3>正しいパターン</h3>
+                    <h2>カスタムフック</h2>
 
-                    <pre><code data-lang="jsx">function Component({ showAge }) {
-    const [name, setName] = useState("田中");      // 常に #1
-    const [age, setAge] = useState(25);            // 常に #2
-    const [email, setEmail] = useState("");       // 常に #3
+                    <div class="triptych centered">
+                        <div>
+                            <p><strong>既存のフックを組み合わせて作る独自のフック</strong></p>
+                            <pre><code data-lang="jsx">function useToggle(initialValue = false) {
+    const [value, setValue] = useState(initialValue);
     
-    useEffect(() => {
-        if (showAge) {
-            // 条件分岐はフックの内部で
-            console.log(`年齢: ${age}`);
-        }
-    }, [showAge, age]);                            // 常に #4
-}</code></pre>
-
-                    <div class="fragment">
-                        <p>フックの<strong>呼び出し順序</strong>は毎回同じ<br>
-                            <strong>条件分岐</strong>はフックの内部で行う
-                        </p>
-                    </div>
-                </section>
-
-                <section>
-                    <h3>なぜこの理解が重要か</h3>
-
-                    <div class="fragment">
-                        <h4>カスタムフックの仕組み</h4>
-                        <pre><code data-lang="jsx">function useToggle(initialValue) {
-    const [value, setValue] = useState(initialValue); // #N
-    const toggle = () => setValue(!value);             // #N+1 (useCallback等)
+    const toggle = () => {
+        setValue(!value);
+    };
+    
     return [value, toggle];
-}
-
-function MyComponent() {
-    const [isOpen, toggleOpen] = useToggle(false);    // フック #1, #2を消費
-    const [isDark, toggleDark] = useToggle(true);     // フック #3, #4を消費
-    
-    // Reactから見ると普通のフック呼び出しと同じ
 }</code></pre>
-                    </div>
-
-                    <div class="fragment">
-                        <p><strong>カスタムフックは既存のフックの組み合わせ</strong><br>
-                            Reactの追跡システムに新しい魔法は加えない</p>
+                        </div>
+                        <div class="arrow fragment" data-fragment-index="1">➡</div>
+                        <div class="fragment" data-fragment-index="1">
+                            <p>使用例：</p>
+                            <pre><code data-lang="jsx">function Modal() {
+    const [isOpen, toggleOpen] = useToggle(false);
+    
+    return (
+        &lt;&gt;
+            &lt;button onClick={toggleOpen}&gt;
+                {isOpen ? '閉じる' : '開く'}
+            &lt;/button&gt;
+            {isOpen &amp;&amp; &lt;div&gt;モーダル内容&lt;/div&gt;}
+        &lt;/&gt;
+    );
+}</code></pre>
+                        </div>
                     </div>
                 </section>
 
-                <!-- Rule of Hooks -->
+                <!-- Why make custom hook -->
+                <section>
+                    <h2>カスタムフックを作る理由</h2>
+
+                    <div class="four-square">
+                        <div class="fragment">
+                            <h3>1. ロジックの再利用</h3>
+                            <pre><code data-lang="jsx">// 複数のコンポーネントで同じロジック
+function Profile() {
+    const [isOpen, toggleOpen] = useToggle(false);
+    // ...
+}
+
+function Settings() {
+    const [isVisible, toggleVisible] = useToggle(true);
+    // ...
+}</code></pre>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>2. 複雑なロジックの抽象化</h3>
+                            <pre><code data-lang="jsx">function useApi(url) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    
+    // 複雑なfetchロジック...
+    
+    return { data, loading, error };
+}</code></pre>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>3. テストしやすいコード</h3>
+                            <p>フックは独立してテストできる</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- フックのルール -->
                 <section>
                     <h2>フックのルール</h2>
                     <p>フックを正しく使用するための重要な制約</p>
@@ -1109,23 +1028,88 @@ function MyComponent() {
                         </div>
                     </div>
 
-                    <div class="pattern fragment">
-                        <h4 class="error">ループ内でのフック</h4>
-                        <pre><code data-lang="jsx">function Component({ items }) {
-  return items.map(item => {
-    const [state, setState] = useState(0); // NG!
-
-    return &lt;div key={item.id}&gt;{item.name}&lt;/div&gt;;
-  });
-}</code></pre>
-                    </div>
-
                     <div class="warning fragment">
                         フックの実行順序が変わると、Reactの内部状態管理が破綻します
                     </div>
                     <aside class="notes">
                         ルールを<ruby>守<rt>まも</rt></ruby>らないとエラーになったりバグが<ruby>起<rt>お</rt></ruby>きます。<br>
                     </aside>
+                </section>
+
+                <!-- Mental Model: React's Hook Tracking -->
+                <section>
+                    <h3>Reactはフックを順序で管理する</h3>
+
+                    <pre><code data-lang="jsx">function MyComponent() {
+    const [name, setName] = useState("");     // フック #1
+    const [age, setAge] = useState(0);        // フック #2
+    useEffect(() => { ... }, []);             // フック #3
+    const [email, setEmail] = useState("");   // フック #4
+    
+    // React内部では配列のように管理
+    // [useState, useState, useEffect, useState]
+}</code></pre>
+
+                    <div class="fragment">
+                        <p>各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>順序が変わると何が起こるか</h3>
+
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>1回目のレンダー</h4>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("竜騎");  // #1
+
+    if (showAge) {
+        const [age, setAge] = useState(51);   // #2
+    }
+    const [email, setEmail] = useState("");   // #3
+    
+    // React: [useState, useState, useState]
+}</code></pre>
+                        </div>
+
+                        <div class="fragment">
+                            <h4>2回目のレンダー（showAge = false）</h4>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("竜騎");  // #1
+    // age のフックがスキップされる！
+    const [email, setEmail] = useState("");   // #2 ← 前回の#3
+    
+    // React: [useState, useState] 
+    // 「あれ？ #3 のフックはどこ？」
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="fragment note">
+                        Reactが混乱 → エラーまたは予期しない動作
+                    </div>
+                </section>
+
+                <section>
+                    <h3>カスタムフックも同じルールに従う</h3>
+
+                    <pre><code data-lang="jsx">function useToggle(initialValue) {
+    const [value, setValue] = useState(initialValue); // フック #N
+    return [value, setValue];
+}
+
+function MyComponent() {
+    const [isOpen, toggleOpen] = useToggle(false);    // フック #1を消費
+    const [isDark, toggleDark] = useToggle(true);     // フック #2を消費
+    
+    // Reactから見ると普通のフック呼び出しと同じ
+}</code></pre>
+
+                    <div class="fragment">
+                        <p><strong>カスタムフックは既存のフックの組み合わせ</strong><br>
+                            Reactの追跡システムに新しい魔法は加えない</p>
+                    </div>
                 </section>
 
                 <!-- まとめ -->
