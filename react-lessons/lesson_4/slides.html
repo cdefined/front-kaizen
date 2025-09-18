@@ -100,7 +100,7 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            gap: 1em;
+            gap: 0.25em;
         }
 
         .triptych.centered {
@@ -872,13 +872,15 @@ function Component() {
     useEffect(() => { ... }, []);             // フック #3
     const [email, setEmail] = useState("");   // フック #4
     
-    // React内部では配列のように管理
+    // React内部では配列のように管理（概念的に）
     // [useState, useState, useEffect, useState]
 }</code></pre>
 
-                    <p class="fragment note">
-                        各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している
-                    </p>
+                    <div class="fragment">
+                        <p class="note">
+                            各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している
+                        </p>
+                    </div>
                 </section>
 
                 <section>
@@ -1015,26 +1017,31 @@ function Component() {
 
                     <div class="triptych centered">
                         <div>
-                            <p><strong>既存のフックを組み合わせて作る独自のフック</strong></p>
-                            <pre><code data-lang="jsx">// 1. 名前は「use」で始める
+                            <h5>既存のフックを組み合わせて作る独自のフック</h5>
+                            <pre><code data-lang="jsx">// 1. 名前は「use」で始める（必須）
 function useToggle(initialValue = false) { 
     // 2. 組み込みフックを最上位で呼び出す
     const [value, setValue] = useState(initialValue); 
     
-    // 3. 便利な関数を作る（オプション）
-    const toggle = () => {
-        setValue(!value);
-    };
+    // 3. 必要なロジックを書く
+    const toggle = () => setValue(prev => !prev);
     
-    // 4. 状態や操作関数を返す
+    // 4. 必要なロジックを書く
     return [value, toggle];
-}</code></pre>
+}
+</code></pre>
+                            <ul class="font-smaller fragment" data-fragment-index="1">
+                                <li>useStateを内部で使っている → これはフック</li>
+                                <li>複数のコンポーネントで再利用できる</li>
+                                <li>同じフックのルールが適用される</li>
+                            </ul>
                         </div>
-                        <div class="arrow fragment" data-fragment-index="1">➡</div>
-                        <div class="fragment" data-fragment-index="1">
-                            <p>使用例：</p>
+                        <div class="arrow fragment" data-fragment-index="2">➡</div>
+                        <div class="fragment" data-fragment-index="2">
+                            <h5>使用例：通常のフックと同じように使う</h5>
                             <pre><code data-lang="jsx">function Modal() {
-    const [isOpen, toggleOpen] = useToggle(false);
+    // カスタムフックを呼び出す
+    const [isOpen, toggleOpen] = useToggle(false); 
     
     return (
         &lt;&gt;
@@ -1044,6 +1051,12 @@ function useToggle(initialValue = false) {
             {isOpen &amp;&amp; &lt;div&gt;モーダル内容&lt;/div&gt;}
         &lt;/&gt;
     );
+}
+
+// 他のコンポーネントでも同じロジックを再利用可能
+function Sidebar() {
+    const [isVisible, toggleVisible] = useToggle(true);
+    // ...
 }</code></pre>
                         </div>
                     </div>
@@ -1058,10 +1071,10 @@ function useToggle(initialValue = false) {
                         <div class="fragment">
                             <h4>実際のフック</h4>
                             <p><code>useState</code>を呼び出している → <strong>フック</strong></p>
-                            <pre><code data-lang="jsx">function useCounter(initial = 0) {
-    const [count, setCount] = useState(initial);
+                            <pre><code data-lang="jsx">function useCounter(initialValue = 0) {
+    const [count, setCount] = useState(initialValue);
     
-    const increment = () => setCount(count + 1);
+    const increment = () => setCount(prev => prev + 1);
     
     return [count, increment];
 }</code></pre>
@@ -1076,6 +1089,34 @@ function useToggle(initialValue = false) {
                     </div>
                 </section>
 
+                <!-- Custom hook can call custom hooks -->
+                <section>
+                    <h2>フックは他のフックを呼び出せる</h2>
+                    <div class="quote">カスタムフック同士も組み合わせ可能</div>
+
+                    <pre><code data-lang="jsx">// 基本的なフック
+function useToggle(initialValue = false) {
+    const [value, setValue] = useState(initialValue);
+    const toggle = () => setValue(prev => !prev);
+    return [value, toggle];
+}
+
+// 他のカスタムフックを使うカスタムフック
+function useModal() {
+    const [isOpen, toggleOpen] = useToggle(false);  // カスタムフック呼び出し
+    const [data, setData] = useState(null);         // 組み込みフック呼び出し
+    
+    const openModal = (modalData) => {
+        setData(modalData);
+        toggleOpen();
+    };
+    
+    return { isOpen, data, openModal, closeModal: toggleOpen };
+}</code></pre>
+
+                    <p class="note fragment">フックの中でフックを呼ぶ = 普通のこと</p>
+                </section>
+
                 <!-- Custom hook also obey rule of hooks -->
                 <section>
                     <h2>カスタムフックも同じルールに従う</h2>
@@ -1083,7 +1124,9 @@ function useToggle(initialValue = false) {
                     <div class="fragment">
                         <pre><code data-lang="jsx">function useToggle(initialValue) {
     const [value, setValue] = useState(initialValue); // これは普通のuseState呼び出
-    return [value, setValue];
+    const toggle = () => setValue(prev => !prev);
+    
+    return [value, toggle];
 }
 
 // Reactから見ると：
@@ -1118,7 +1161,7 @@ function MyComponent() {
             .finally(() => setLoading(false));
     }, [userId]);
     
-    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;
+    if (loading) return &lt;div&gt;ユーザーを読み込み中...&lt;/div&gt;;
     // ...
 }</code></pre>
                         <div>
@@ -1136,7 +1179,7 @@ function PostList() {
             .finally(() => setLoading(false));
     }, []);
     
-    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;
+    if (loading) return &lt;div&gt;投稿を読み込み中...&lt;/div&gt;;
     // ...
 }</code></pre>
                         </div>
@@ -1145,17 +1188,17 @@ function PostList() {
                     <ol class="fragment compact-list">
                         <li>この3つの状態パターンが繰り返されている</li>
                         <li>この<code>useEffect</code>の<code>fetch</code>パターンも同じ</li>
-                        <li>バグ修正や機能追加で両方変更する必要がある</li>
                     </ol>
+                    <p class="note fragment">バグ修正や機能追加で両方変更する必要があります</p>
                 </section>
 
-                <!-- With custom hook even sun shines brighter -->
+                <!-- Custom hook use case -->
                 <section>
                     <h2>カスタムフック</h2>
 
                     <div class="triptych centered">
                         <div>
-                            <p><strong>共通ロジックを抽出</strong></p>
+                            <h5>共通状態ロジックを抽出</h5>
                             <pre><code data-lang="jsx">function useApi(url) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -1175,28 +1218,47 @@ function PostList() {
                         </div>
                         <div class="arrow fragment" data-fragment-index="1">➡</div>
                         <div class="fragment" data-fragment-index="1">
-                            <p>使用例：</p>
+                            <h5>使用例：</h5>
                             <pre><code data-lang="jsx">function UserProfile({ userId }) {
-    const { data: user, loading, error } = 
-        useApi(`/api/users/${userId}`);
+    const { data, loading, error } = useApi(`/api/users/${userId}`);
     
-    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;
+    if (loading) return &lt;div&gt;ユーザーを読み込み中...&lt;/div&gt;;
     if (error) return &lt;div&gt;エラー&lt;/div&gt;;
     
-    return &lt;div&gt;{user.name}&lt;/div&gt;;
+    return &lt;div&gt;{data.name}&lt;/div&gt;;
 }
 
 function PostList() {
-    const { data: posts, loading, error } = 
-        useApi('/api/posts');
+    const { data, loading, error } = useApi('/api/posts');
     
-    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;
+    if (loading) return &lt;div&gt;投稿を読み込み中...&lt;/div&gt;;
     if (error) return &lt;div&gt;エラー&lt;/div&gt;;
     
-    return posts.map(post => &lt;div&gt;{post.title}&lt;/div&gt;);
+    return data.map(post => &lt;div&gt;{post.title}&lt;/div&gt;);
 }</code></pre>
                         </div>
                     </div>
+                </section>
+
+                <section>
+                    <h2>なぜレンダリングロジックは含めないのか？</h2>
+                    <div class="quote">フックはロジック、コンポーネントは表示</div>
+                    <pre><code data-lang="jsx">// ❌ 責任が混在 - 再利用しにくい
+function useBadApi(url) {
+    // ... fetchロジック
+    
+    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;  // UIをフックが決めてる
+
+    return data; // フックがデーターもを返してる？
+}
+
+// ✅ データだけを返して、表示は各コンポーネントに任せる
+function useApi(url) {
+    // ... fetchロジック
+
+    return { data, loading, error };  // コンポーネントが表示を決める
+}</code></pre>
+                    <p class="note">フックは状態を管理、コンポーネントがJSXを管理</p>
                 </section>
 
                 <!-- Why make custom hook -->
@@ -1216,24 +1278,32 @@ function Settings() {
     const [isVisible, toggleVisible] = useToggle(true);
     // ...
 }</code></pre>
+                            <p>一度書けば、どこでも使える</p>
                         </div>
 
                         <div class="fragment">
                             <h3>2. 複雑なロジックの抽象化</h3>
                             <pre><code data-lang="jsx">function useApi(url) {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    
-    // 複雑なfetchロジック...
-    
-    return { data, loading, error };
+    // 3つの状態 + useEffect
+    // 複雑なfetchロジック
+    // ...
+}
+
+function Profile() {
+    // シンプルな1行
+    const { data, loading, error } = useApi(url);
 }</code></pre>
+                            <p>実装の詳細を気にしなくていい</p>
                         </div>
 
                         <div class="fragment">
-                            <h3>3. テストしやすいコード</h3>
+                            <h3>3. テストが簡単</h3>
                             <p>フックは独立してテストできる</p>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>4. コンポーネントがすっきり</h3>
+                            <p>ビジネスロジック vs 表示ロジック</p>
                         </div>
                     </div>
                 </section>
@@ -1252,9 +1322,9 @@ function Settings() {
             </section>
 
             <section>
-                <!-- Quiz 5: Rules of Hooks -->
+                <!-- Quiz: Rules of Hooks -->
                 <section>
-                    <h4>理解度チェック⑤【フックのルール】</h4>
+                    <h4>理解度チェック①【フックのルール】</h4>
                     <div class="quiz">
                         <h3>このコードの問題は？</h3>
                         <pre><code data-lang="jsx">function Component({ showData }) {
