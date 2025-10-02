@@ -50,7 +50,6 @@ SPA とは、ライフサイクル、useEffect
 
 - [プレゼンテーション](https://cdefined.github.io/front-kaizen/react-lessons/lesson_4/slides.html)
 - [プレゼンテーションの演習課題](/react-lessons/lesson_4/task.md)
-- [宿題・実践課題](/react-lessons/lesson_4/homework/README.md)
 
 ## コードレビューと提出
 
