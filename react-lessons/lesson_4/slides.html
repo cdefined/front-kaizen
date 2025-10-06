@@ -48,6 +48,10 @@
             text-align: center;
         }
 
+        .reveal pre code {
+            max-height: unset;
+        }
+
         ul>li,
         dl>dd,
         ol>li {
@@ -68,7 +72,7 @@
         .arrow {
             background: none;
             font-size: 100px;
-            color: var(--main-header);
+            color: #f8f8f890;
             flex: 0;
         }
 
@@ -88,6 +92,7 @@
         }
 
         .comparison.centered {
+            text-align: left;
             align-items: center;
         }
 
@@ -95,18 +100,18 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            gap: 1em;
+            gap: 0.25em;
         }
 
         .triptych.centered {
-            justify-content: center;
+            align-items: center;
         }
 
         .triptych-transformation {
             display: flex;
             justify-content: start;
             align-items: center;
-            gap: 20px;
+            gap: 2em;
         }
 
         .note {
@@ -115,6 +120,12 @@
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+
+            ol,
+            ul,
+            dl {
+                margin-left: 0.2em;
+            }
         }
 
         .warning {
@@ -234,12 +245,30 @@
             gap: 2rem;
             margin-top: 2rem;
 
-            div {
+            >div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
                 border-radius: 8px;
                 padding: 1.5rem;
                 border-top: 4px solid;
                 border-left: 4px solid;
                 background: var(--bg);
+
+                >div {
+                    font-size: 0.9em;
+                    border-radius: 8px;
+                    padding: 0.15rem;
+                    background: var(--bg);
+
+                    div {
+                        margin: 0.2em 0 0.5em 0;
+                    }
+
+                    ul {
+                        margin: 0 0.5em 0.2em;
+                    }
+                }
             }
 
             p {
@@ -254,10 +283,7 @@
             ol {
                 font-size: 0.8em;
                 margin: 0 5px;
-            }
-
-            ol>li {
-                line-height: 2em;
+                margin-bottom: 0.5em;
             }
 
             .mount {
@@ -361,8 +387,15 @@
 
         .split {
             display: grid;
-            grid-template-columns: 1.2fr 2fr;
+            grid-template-columns: 1.5fr 2fr;
             gap: 20px;
+            align-items: center;
+            justify-items: stretch;
+        }
+
+        .simple-split {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
             align-items: center;
         }
 
@@ -419,12 +452,10 @@
             font-size: 0.8em;
         }
 
-        .split-triptych {
-            display: grid;
-            align-items: center;
-            gap: 1em;
-            grid-template-columns: 1fr 3fr 3fr;
-            margin: 1.5em 0;
+        .quote {
+            padding: 0.3em 0.5em;
+            margin-bottom: 1em;
+            border-left: 10px solid var(--main-header);
         }
     </style>
 </head>
@@ -444,7 +475,46 @@
                     <p>React 応用①のおさらい</p>
                     <aside class="notes">まず、<ruby>前回<rt>ぜんかい</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>確認<rt>かくにん
                             </rt></ruby>します。<br>
-                        わからないところがあったら<ruby>質問<rt>しつもん</rt></ruby>してください。</aside>
+                        わからないところがあったらChatWorkで<ruby>質問<rt>しつもん</rt></ruby>してください。</aside>
+                </section>
+
+                <section>
+                    <h2>シングルページアプリ【SPA】＝ 単一HTMLファイル</h2>
+                    <div class="spa-concept">
+                        <ul>
+                            <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
+                            <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
+                            <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
+                            <li>URLが変わる場合もあるが、実際には<strong>ページリロードしない</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="example">
+                        <pre><code data-lang="html">
+<!-- 最初から最後まで、このHTMLファイル1つだけ -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;React App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt; &lt;!-- アプリケーションのコード --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    <aside class="notes">
+                        <ruby>従来<rt>じゅうらい</rt></ruby>のサイトは、ページごとに<ruby>別<rt>べつ</rt></ruby>のHTMLファイルを<ruby>読<rt>よ</rt>
+                        </ruby>み<ruby>込<rt>こ</rt></ruby>みます。<br>
+                        でもSPAは<ruby>違<rt>ちが</rt></ruby>います。<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>一度<rt>いちど</rt>
+                        </ruby>だけHTMLを<ruby>読<rt>よ</rt></ruby>み<ruby>込<rt>こ</rt></ruby>んで、あとはJavaScriptで<ruby>中身<rt>
+                                なかみ</rt></ruby>を<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>えます。<br>
+                        だから<ruby>画面<rt>がめん</rt></ruby>の<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>えが<ruby>速<rt>はや
+                            </rt></ruby>いです。<br>
+                        ただし、SPAは<ruby>最初<rt>さいしょ</rt></ruby>にすべてのJavaScriptをダウンロードするため、
+                        <ruby>初回<rt>しょかい</rt></ruby>のロード<ruby>時間<rt>じかん</rt></ruby>が<ruby>長<rt>なが</rt>
+                        </ruby>くなることがあります。<br>
+                    </aside>
                 </section>
 
                 <section>
@@ -468,15 +538,16 @@ function UserCard({ name, email, children }) {
                     </div>
 
                     <div class="note">
-                        <code>props</code> = 関数の引数、<code>children</code> = タグの中身
+                        <code>props</code> = 関数の引数<br><code>children</code> = タグの中身
                     </div>
                     <aside class="notes">
-                        Reactの<ruby>コンポーネント</ruby>は<ruby>関数<rt>かんすう</rt></ruby>として<ruby>書<rt>か</rt>
-                        </ruby>きます。<br><ruby>名前<rt>なまえ</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>大文字<rt>おおもじ</rt>
-                        </ruby>から<ruby>始<rt>はじ</rt></ruby>めます。<br>
-                        この<ruby>関数<rt>かんすう</rt></ruby>は、<ruby>props<rt>プロップス</rt></ruby>という<ruby>データ</ruby>を<ruby>受<rt>う
-                            </rt>
-                        </ruby>け<ruby>取<rt>と</rt></ruby>って、<ruby>JSX</ruby>を<ruby>返<rt>かえ</rt></ruby>します。
+                        Reactのコンポーネントは、ただの<ruby>関数<rt>かんすう</rt></ruby>です。<br>
+                        <ruby>引数<rt>ひきすう</rt></ruby>でデータを<ruby>受<rt>う</rt></ruby>け<ruby>取<rt>と</rt></ruby>って、JSXを<ruby>返
+                            <rt>かえ</rt>
+                        </ruby>します。<br>
+                        childrenは<ruby>特別<rt>とくべつ</rt></ruby>なpropsで、タグの<ruby>間<rt>あいだ</rt></ruby>に<ruby>書<rt>か</rt>
+                        </ruby>いた<ruby>内容<rt>ないよう</rt></ruby>が<ruby>入<rt>はい</rt></ruby>ります。<br>
+                        この<ruby>例<rt>れい</rt></ruby>では、ボタンがchildrenになっています。
                     </aside>
                 </section>
                 <section>
@@ -491,7 +562,7 @@ function LikeButton() {
 
   return (
     &lt;div&gt;
-      &lt;button onClick={() =&gt; setLikes(likes + 1)}&gt;
+      &lt;button onClick={() =&gt; setLikes((prevLikes) => prevLikes + 1)}&gt;
         ♡ {likes}
       &lt;/button&gt;
     &lt;/div&gt;
@@ -512,9 +583,18 @@ function LikeButton() {
                     <div class="note">
                         <strong>重要：</strong>状態が変わるたびに関数コンポーネント全体が再実行される
                     </div>
-                    <aside class="notes">この 例（れい）では、likes（らいくす）という 名前（なまえ）で 数（かず）を 覚（おぼ）えています。<br>
-                        ボタンを 押（お）すと、setLikes（せっとらいくす）で 数（かず）が ひとつ 増（ふ）えます。<br>
-                        そうすると、画面（がめん）の 数字（すうじ）も 変（か）わります。</aside>
+                    <aside class="notes">
+                        <ruby>普通<rt>ふつう</rt></ruby>の<ruby>変数<rt>へんすう</rt></ruby>を<ruby>変<rt>か</rt></ruby>えても、<ruby>画面
+                            <rt>がめん</rt>
+                        </ruby>は<ruby>更新<rt>こうしん</rt></ruby>されません。<br>
+                        でもuseStateで<ruby>作<rt>つく</rt></ruby>った<ruby>変数<rt>へんすう</rt></ruby>なら、<ruby>値<rt>あたい</rt>
+                        </ruby>が<ruby>変<rt>か</rt></ruby>わると<ruby>自動的<rt>じどうてき</rt></ruby>に<ruby>再<rt>さい</rt>
+                        </ruby>レンダリングされます。<br>
+                        setLikesを<ruby>呼<rt>よ</rt></ruby>ぶと、コンポーネント<ruby>全体<rt>ぜんたい</rt></ruby>がもう<ruby>一度<rt>いちど</rt>
+                        </ruby><ruby>実行<rt>じっこう</rt></ruby>されて、<ruby>新<rt>あたら</rt></ruby>しい<ruby>値<rt>あたい</rt>
+                        </ruby>で<ruby>画面<rt>がめん</rt></ruby>が<ruby>描<rt>えが</rt></ruby>かれます。<br>
+                        これがReactの<ruby>基本<rt>きほん</rt></ruby>の<ruby>仕組<rt>しく</rt></ruby>みです。
+                    </aside>
                 </section>
 
                 <section>
@@ -538,8 +618,8 @@ return (
                         <div>
                             <h4>重要なポイント</h4>
                             <ul class="compact-list">
-                                <li><code>value</code>は必ずstate由来</li>
-                                <li><code>onChange</code>でstateを更新</li>
+                                <li><code>value</code>は必ず<code>state</code>由来</li>
+                                <li><code>onChange</code>で<code>state</code>を更新</li>
                                 <li>状態変更 → 再レンダリング</li>
                                 <li>Reactが完全に制御</li>
                             </ul>
@@ -551,50 +631,102 @@ return (
                         ・「Uncontrolled」では、Reactが状態を知らない、DOMに任せます
                     </div>
                     <aside class="notes">
-                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントは、Reactが<ruby>入力値<rt>あたい</rt></ruby>を<ruby>状態<rt>じょうたい
-                            </rt></ruby><ruby>経由<rt>けいゆ</rt></ruby>で<ruby>一元管理<rt>いちげんかんり</rt></ruby>するしくみ。<br>
-                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>するとonChangeイベントが<ruby>発火<rt>はっか</rt></ruby>して、Stateが<ruby>更新
-                            <rt>こうしん</rt>
-                        </ruby>される。<br>
-                        inputの<ruby>表示<rt>ひょうじ</rt></ruby><ruby>値<rt>あたい</rt></ruby>は<ruby>常<rt>つね</rt>
-                        </ruby>にStateに<ruby>依存<rt>いぞん</rt></ruby>。<br>
-                        この<ruby>構造<rt>こうぞう</rt></ruby>により、<ruby>検証<rt>けんしょう</rt></ruby>や<ruby>制御<rt>せいぎょ</rt>
-                        </ruby>が<ruby>容易<rt>ようい</rt></ruby>になる。
+                        input<ruby>要素<rt>ようそ</rt></ruby>を<ruby>直接<rt>ちょくせつ</rt></ruby>DOMに<ruby>任<rt>まか</rt>
+                        </ruby>せると、Reactが<ruby>値<rt>あたい</rt></ruby>を<ruby>知<rt>し</rt></ruby>りません。<br>
+                        <ruby>制御<rt>せいぎょ</rt></ruby>されたコンポーネントでは、inputsの<ruby>値<rt>あたい</rt></ruby>を<ruby>必<rt>かなら</rt>
+                        </ruby>ずstateから<ruby>渡<rt>わた</rt></ruby>します。<br>
+                        ユーザーが<ruby>入力<rt>にゅうりょく</rt></ruby>すると、onChangeでstateを<ruby>更新<rt>こうしん</rt>
+                        </ruby>して、それがまたinputに<ruby>反映<rt>はんえい</rt></ruby>されます。<br>
+                        こうすれば、<ruby>入力<rt>にゅうりょく</rt></ruby>チェックやフォーマットも<ruby>簡単<rt>かんたん</rt></ruby>にできます。
                     </aside>
                 </section>
 
                 <section>
-                    <h2>シングルページアプリケーション ＝ 単一HTMLファイル</h2>
-                    <div class="spa-concept">
-                        <ul>
-                            <li>アプリケーション全体が<strong>1つの<code>index.html</code></strong>から始まる</li>
-                            <li>ページ遷移時も<strong>同じHTMLファイル内</strong>で完結</li>
-                            <li><strong>JavaScript</strong>がDOMを直接操作してコンテンツを切り替える</li>
-                            <li>URLが変わる場合もあるが、実際には<strong>ページリロードしない</strong></li>
-                        </ul>
+                    <h2>なぜ純粋コンポーネントが必要なのか？</h2>
+                    <div class="centered part"><code>コンポーネント(props, state) → JSX</code></div>
+
+
+                    <div class="split">
+                        <div>
+                            <div class="fragment" data-fragment-index="0">
+                                <p><strong>Reactの要求:</strong></p>
+                                <ul class="compact-list">
+                                    <li>同じ入力 → 同じ出力</li>
+                                    <li>レンダー中に副作用を起こさない</li>
+                                </ul>
+                            </div>
+                            <br>
+                            <div class="fragment" data-fragment-index="1">
+                                <p><strong>理由:</strong> レンダー中、Reactは勝手に</p>
+                                <ul class="compact-list">
+                                    <li>コンポーネントを複数回実行</li>
+                                    <li>途中でキャンセル・やり直し</li>
+                                    <li>最適化のため結果を破棄</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="fragment" data-fragment-index="0">
+                            <br>
+                            <div class="font-smaller centered">
+                                副作用 ＝ 外部世界との相互作用
+                            </div>
+                            <img width="100%" src="./images/component-world.svg" alt="コンポーネント＋外の世界" />
+                        </div>
                     </div>
 
-                    <div class="example">
-                        <pre><code data-lang="html">
-<!-- 最初から最後まで、このHTMLファイル1つだけ -->
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;React App&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id="root"&gt;&lt;/div&gt; &lt;!-- ここにReactがコンテンツを描画 --&gt;
-    &lt;script src="bundle.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+                    <div class="warning fragment" data-fragment-index="1">
+                        レンダー中に副作用を実行すると → いつ何回実行されるかわからない
                     </div>
                     <aside class="notes">
-                        SPAは「シングルページアプリケーション」の<ruby>略<rt>りゃく</rt></ruby>です。<br>
-                        <ruby>普通<rt>ふつう</rt></ruby>のWebサイトは<ruby>複数<rt>ふくすう</rt></ruby>のHTMLファイルがありますが、<br>
-                        SPAは1つのHTMLファイルだけを<ruby>使<rt>つか</rt></ruby>います。<br>
-                        ページを<ruby>移動<rt>いどう</rt></ruby>してもHTMLファイルは<ruby>変<rt>か</rt></ruby>わりません。<br>
-                        JavaScriptが<ruby>画面<rt>がめん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>を<ruby>変更<rt>へんこう</rt>
-                        </ruby>します。
+                        Reactは、<ruby>同<rt>おな</rt></ruby>じpropsとstateなら<ruby>同<rt>おな</rt></ruby>じ<ruby>結果<rt>けっか</rt>
+                        </ruby>が<ruby>返<rt>かえ</rt></ruby>ることを<ruby>期待<rt>きたい</rt></ruby>しています。<br>
+                        なぜなら、Reactは<ruby>最適化<rt>さいてきか</rt></ruby>のために、コンポーネントを<ruby>何度<rt>なんど</rt></ruby>も<ruby>実行<rt>
+                                じっこう</rt></ruby>したり、<ruby>途中<rt>とちゅう</rt></ruby>でキャンセルしたりするからです。<br>
+                        もしレンダー<ruby>中<rt>ちゅう</rt></ruby>にAPIを<ruby>叩<rt>たた</rt></ruby>いたら、<ruby>同<rt>おな</rt>
+                        </ruby>じリクエストが<ruby>何回<rt>なんかい</rt></ruby>も<ruby>飛<rt>と</rt></ruby>んでしまいます。<br>
+                        だから<ruby>副作用<rt>ふくさよう</rt></ruby>は、<ruby>決<rt>き</rt></ruby>まったタイミングでだけ<ruby>実行<rt>じっこう</rt>
+                        </ruby>する<ruby>必要<rt>ひつよう</rt></ruby>があります。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>管理された副作用</h2>
+
+                    <div class="split">
+                        <div>
+                            <div>
+                                <h5>ユーザーアクション時 ✅</h5>
+                                <pre><code data-lang="jsx">function handleClick() {
+  fetch('/api/data'); // 予測可能
+}</code></pre>
+                            </div>
+
+                            <div>
+                                <h5>コンポーネント状態変化時 ✅</h5>
+                                <pre><code data-lang="jsx">useEffect(() => {
+  fetch('/api/data'); // 安全なタイミング
+}, []);</code></pre>
+                            </div>
+                            <div>
+                                <h5>レンダー中 ❌</h5>
+                                <pre><code data-lang="jsx">function Component() {
+  fetch('/api/data'); // 同じAPIを何回も叩く
+  document.title = "バカ"; // タイトルがチカチカする
+  ...
+}</code></pre>
+                            </div>
+                        </div>
+                        <img src="./images/component-world-bridge.svg" alt="コンポーネントvs外の世界" />
+                    </div>
+                    <aside class="notes">
+                        <ruby>副作用<rt>ふくさよう</rt></ruby>を<ruby>実行<rt>じっこう</rt></ruby>していい<ruby>場所<rt>ばしょ</rt>
+                        </ruby>は<ruby>二<rt>ふた</rt></ruby>つだけです。<br>
+                        <ruby>一<rt>ひと</rt></ruby>つ<ruby>目<rt>め</rt></ruby>は、ボタンクリックなどのイベントハンドラー。これは<ruby>予測<rt>よそく</rt>
+                        </ruby>できます。<br>
+                        <ruby>二<rt>ふた</rt></ruby>つ<ruby>目<rt>め</rt></ruby>は、useEffect。これは<ruby>安全<rt>あんぜん</rt>
+                        </ruby>なタイミングで<ruby>実行<rt>じっこう</rt></ruby>されます。<br>
+                        レンダー<ruby>中<rt>ちゅう</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>副作用<rt>ふくさよう</rt>
+                        </ruby>を<ruby>書<rt>か</rt></ruby>くと、バグの<ruby>原因<rt>げんいん</rt></ruby>になります。
                     </aside>
                 </section>
 
@@ -626,12 +758,15 @@ function Component() {
                             <dt>クリーンアップ関数（オプション）</dt>
                             <dd>リソース解放</dd>
                             <dt>依存配列（オプション）</dt>
-                            <dd>よる実行制御</dd>
+                            <dd>実行制御</dd>
                         </dl>
                     </div>
                     <div class="note">
-                        純粋コンポーネント ＝ 同じpropsなら同じJSX、外部状態変更禁止<br>
-                        副作用 ＝ 純粋性を破る外部世界との相互作用、API・DOM・イベント等
+                        <ul class="compact-list">
+                            <li><strong>依存配列なし</strong> → 毎回実行</li>
+                            <li><strong>空の依存配列 <code>[]</code></strong> → 初回のみ</li>
+                            <li><strong>値を指定 <code>[userId]</code></strong> → 値変更時のみ</li>
+                        </ul>
                     </div>
                     <aside class="notes">
                         セットアップ<ruby>関数<rt>かんすう</rt></ruby>からクリーンアップ<ruby>関数<rt>かんすう</rt>
@@ -649,32 +784,61 @@ function Component() {
                     <div class="lifecycle compact">
                         <div class="mount">
                             <h3>マウント</h3>
-                            <ol>
+                            <ol class="compact-list">
                                 <li>コンポーネント初期化</li>
                                 <li>初回レンダリング</li>
                                 <li>DOM更新</li>
-                                <li><strong><code>useEffect</code>実行</strong></li>
+                                <li><code>useEffect</code>実行</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong>画面に追加された時</strong></div>
+                                <ul class="compact-list">
+                                    <li>初回ページ読み込み</li>
+                                    <li>親コンポーネントが初回作成</li>
+                                    <li>条件付きレンダリング<br>
+                                        <pre><code data-lang="jsx">{show && &lt;Component /&gt;} // show → true</code></pre>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="update">
                             <h3>更新</h3>
-                            <ol>
-                                <li>stateやpropsの変更検知</li>
+                            <ol class="compact-list">
+                                <li><code>state</code>や<code>props</code>の変更検知</li>
                                 <li>再レンダリング</li>
                                 <li>DOM差分更新</li>
                                 <li>前のエフェクトクリーンアップ</li>
                                 <li>新しいエフェクト実行</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong><code>props</code>や<code>state</code>が変化した時</strong>
+                                </div>
+                                <ul class="compact-list">
+                                    <li><code>setState</code>呼び出し</li>
+                                    <li>親から<code>props</code>が変更</li>
+                                    <li><code>useEffect</code>依存配列の値変更</li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="unmount">
                             <h3>アンマウント</h3>
-                            <ol>
+                            <ol class="compact-list">
                                 <li>全エフェクトクリーンアップ</li>
                                 <li>DOMから削除</li>
                                 <li>メモリ解放</li>
                             </ol>
+                            <div class="font-smaller">
+                                <div class="centered"><strong>画面から削除された時</strong></div>
+                                <ul class="compact-list">
+                                    <li>親コンポーネントが削除</li>
+                                    <li>ページを閉じる/離脱</li>
+                                    <li>条件付きレンダリング<br>
+                                        <pre><code data-lang="jsx">{show && &lt;Component /&gt;} // show → false</code></pre>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <p class="note">
@@ -683,58 +847,181 @@ function Component() {
                             ビジュアル解説はこちら
                         </a>
                     <p>
+
                     <aside class="notes">
-                        useEffectはライフサイクルの<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>部分<rt>ぶぶん</rt></ruby>です。<br>
-                        マウント<ruby>時<rt>じ</rt></ruby>、<ruby>更新時<rt>こうしんじ</rt></ruby>、アンマウント<ruby>時<rt>じ</rt>
-                        </ruby>に<ruby>実行
-                            <rt>じっこう</rt>
-                        </ruby>されます。<br>
-                        クリーンアップでメモリリークを<ruby>防<rt>ふせ</rt></ruby>ぎます。<br>
-                        リンク<ruby>先<rt>さき</rt></ruby>のビジュアル<ruby>解説<rt>かいせつ</rt></ruby>もぜひ<ruby>見<rt>み</rt></ruby>てください。
+                        コンポーネントには<ruby>三<rt>みっ</rt></ruby>つの<ruby>段階<rt>だんかい</rt></ruby>があります。<ruby>生<rt>う</rt>
+                        </ruby>まれて、<ruby>変化<rt>へんか</rt></ruby>して、<ruby>消<rt>き</rt></ruby>えます。<br>
+                        useEffectは、ライフサイクルと<ruby>関係<rt>かんけい</rt></ruby>がありますが、それだけじゃありません。<br>
+                        <ruby>本当<rt>ほんとう</rt></ruby>の<ruby>役割<rt>やくわり</rt></ruby>は、コンポーネントを<ruby>外<rt>そと</rt>
+                        </ruby>の<ruby>世界<rt>せかい</rt></ruby>と<ruby>同期<rt>どうき</rt></ruby>させることです。<br>
+                        「マウント<ruby>時<rt>じ</rt></ruby>に<ruby>実行<rt>じっこう</rt></ruby>」より、「この<ruby>値<rt>あたい</rt>
+                        </ruby>が<ruby>変<rt>か</rt></ruby>わったら<ruby>同期<rt>どうき</rt></ruby>する」と<ruby>考<rt>かんが</rt>
+                        </ruby>える<ruby>方<rt>ほう</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かりやすいです。
                     </aside>
                 </section>
             </section>
 
+            <!-- Hook intro -->
             <section>
                 <section>
-                    <h1>カスタムフック</h1>
-                    <p>コンポーネント間でのロジック共有</p>
+                    <h1>フックとは</h1>
+                    <p><code>use</code>で始まる特別な関数</p>
+                    <aside class="notes">
+                        <ruby>今回<rt>こんかい</rt></ruby>は、フックについて<ruby>学<rt>まな</rt></ruby>びます。<br>
+                        フックはReactの<ruby>大事<rt>だいじ</rt></ruby>な<ruby>機能<rt>きのう</rt></ruby>です。
+                    </aside>
+                </section>
+
+                <!-- What is a Hook -->
+                <section>
+                    <h2>フックとは</h2>
+
+                    <p class="quote">コンポーネント内でReactの機能を使うための関数</p>
+                    <div class="simple-split">
+                        <img src="./images/hooked-component.svg" alt="コンポーネントにフック" />
+                        <div class="fragment">
+                            <p><strong>すべて<code>use</code>で始まる特別な関数 → フック</strong></p>
+                            <pre><code data-lang="jsx">function Counter() {
+    const [count, setCount] = useState(0);        // 状態管理
+    const inputRef = useRef(null);                // DOM参照
+    
+    useEffect(() => {                             // 副作用
+        document.title = `カウント: ${count}`;
+    }, [count]);
+    
+    return &lt;div&gt;カウント: {count}&lt;/div&gt;;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <p class="note fragment">
+                        <a href="https://ja.react.dev/reference/react/hooks" rel="noopener">組み込みの React フック</a>
+                    </p>
+                    <aside class="notes">
+                        フックを<ruby>使<rt>つか</rt></ruby>うと、コンポーネントに<ruby>色々<rt>いろいろ</rt></ruby>な<ruby>機能<rt>きのう</rt>
+                        </ruby>を<ruby>追加<rt>ついか</rt></ruby>できます。<br>
+                        <ruby>例<rt>たと</rt></ruby>えば、データを<ruby>記憶<rt>きおく</rt></ruby>したり、DOMを<ruby>直接<rt>ちょくせつ</rt>
+                        </ruby><ruby>触<rt>さわ</rt></ruby>ったり。<br>
+                        <ruby>名前<rt>なまえ</rt></ruby>が<ruby>必<rt>かなら</rt></ruby>ず<code>use</code>で<ruby>始<rt>はじ</rt>
+                        </ruby>まるので、すぐ<ruby>分<rt>わ</rt></ruby>かります。<br>
+                        <ruby>公式<rt>こうしき</rt></ruby>ドキュメントには、もっとたくさんのフックが<ruby>載<rt>の</rt></ruby>っています。
+                    </aside>
+                </section>
+
+                <!-- Mental Model: React's Hook Tracking -->
+                <section>
+                    <h3>Reactはフックを順序で管理する</h3>
+
+                    <pre><code data-lang="jsx">function MyComponent() {
+    const [name, setName] = useState("");     // フック #1
+    const [age, setAge] = useState(0);        // フック #2
+    useEffect(() => { ... }, []);             // フック #3
+    const [email, setEmail] = useState("");   // フック #4
+    
+    // React内部では配列のように管理（概念的に）
+    // [useState, useState, useEffect, useState]
+}</code></pre>
+
+                    <div class="fragment">
+                        <p class="note">
+                            各レンダー時に<strong>同じ順序</strong>でフックが呼ばれることをReactは期待している
+                        </p>
+                    </div>
+                    <aside class="notes">
+                        Reactは<ruby>内部<rt>ないぶ</rt></ruby>で、どのフックがどの<ruby>値<rt>あたい</rt></ruby>を<ruby>持<rt>も</rt>
+                        </ruby>っているか<ruby>覚<rt>おぼ</rt></ruby>えています。<br>
+                        でも<ruby>名前<rt>なまえ</rt></ruby>では<ruby>覚<rt>おぼ</rt></ruby>えません。<ruby>順番<rt>じゅんばん</rt>
+                        </ruby>で<ruby>覚<rt>おぼ</rt></ruby>えます。<br>
+                        だから、<ruby>毎回<rt>まいかい</rt></ruby><ruby>同<rt>おな</rt></ruby>じ<ruby>順番<rt>じゅんばん</rt></ruby>で<ruby>呼
+                            <rt>よ</rt>
+                        </ruby>ばないといけません。<br>
+                        これが<ruby>分<rt>わ</rt></ruby>かると、<ruby>次<rt>つぎ</rt></ruby>のルールの<ruby>理由<rt>りゆう</rt>
+                        </ruby>が<ruby>理解<rt>りかい</rt></ruby>できます。
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>順序が変わると何が起こるか</h3>
+
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h5>1回目のレンダー：<code>showAge = true</code></h5>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("竜騎");  // #1
+
+    if (showAge) {
+        const [age, setAge] = useState(51);   // #2
+    }
+
+    const [email, setEmail] = useState("");   // #3
+    
+    // React: [useState, useState, useState]
+}</code></pre>
+                            <p>React: <code>[name, age, email]</code></p>
+                        </div>
+
+                        <div class="fragment">
+                            <h5>2回目のレンダー：<code>showAge = false</code></h5>
+                            <pre><code data-lang="jsx">function Component({ showAge }) {
+    const [name, setName] = useState("竜騎");  // #1
+
+    // age のフックがスキップされる！
+
+    const [email, setEmail] = useState("");   // #2 ← 前回の#3
+    
+    // React: [useState, useState] 
+    // 「あれ？ #3 のフックはどこ？」
+}</code></pre>
+                            <p>React: <code>[name, email]</code> ← 順序が変わった！</p>
+                        </div>
+                    </div>
+
+                    <div class="fragment warning">
+                        Reactが混乱 → エラーまたは予期しない動作
+                    </div>
+
+                    <aside class="notes">
+                        もし<ruby>条件<rt>じょうけん</rt></ruby>によってフックを<ruby>呼<rt>よ</rt></ruby>んだり<ruby>呼<rt>よ</rt>
+                        </ruby>ばなかったりすると、<ruby>順番<rt>じゅんばん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。<br>
+                        <ruby>一回目<rt>いっかいめ</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つのフックがあったのに、<ruby>二回目<rt>にかいめ</rt>
+                        </ruby>は<ruby>二<rt>ふた</rt></ruby>つしかない。<br>
+                        Reactは「<ruby>三番目<rt>さんばんめ</rt></ruby>のフックはどこ？」と<ruby>混乱<rt>こんらん</rt></ruby>します。<br>
+                        そして、<ruby>間違<rt>まちが</rt></ruby>った<ruby>値<rt>あたい</rt></ruby>を<ruby>返<rt>かえ</rt>
+                        </ruby>したり、エラーになったりします。
+                    </aside>
                 </section>
 
                 <!-- Rule of Hooks -->
                 <section>
                     <h2>フックのルール</h2>
-                    <p>フックを正しく使用するための重要な制約</p>
-                    <br>
+                    <div class="quote">要するに：毎回同じ順序でフックを呼び出す</div>
+
                     <div class="comparison">
                         <div class="fragment">
                             <h4>ルール1：トップレベルでのみ呼び出し</h4>
-                            <ul class="compact">
-                                <li>ループ、条件分岐、ネストした関数内で呼び出してはいけない</li>
-                                <li>コンポーネントの最上位で呼び出す</li>
-                                <li>フックの実行順序を保証</li>
+                            <ul class="font-smaller">
+                                <li>ループ、条件分岐、ネストした関数内で<br><strong>呼び出してはいけない</strong></li>
+                                <li>コンポーネントやフックの<strong>最上位で呼び出す</strong></li>
                             </ul>
                         </div>
 
                         <div class="fragment">
                             <h4>ルール2：React関数からのみ呼び出し</h4>
-                            <ul class="compact">
+                            <ul class="font-smaller">
                                 <li>Reactコンポーネントから呼び出す</li>
-                                <li>カスタムフックから呼び出す</li>
-                                <li>通常のJavaScript関数からは呼び出してはいけない</li>
+                                <li>または<code>use</code>で始まる関数から呼び出す</li>
                             </ul>
                         </div>
                     </div>
 
                     <aside class="notes">
-                        フックは「use」で<ruby>始<rt>はじ</rt></ruby>まるReactの<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>関数<rt>かんすう</rt>
-                        </ruby>です。<br>
-                        <ruby>今<rt>いま</rt></ruby>まで<ruby>使<rt>つか</rt></ruby>っていたuseStateもuseEffectもフックです。<br>
-                        フックを<ruby>使<rt>つか</rt></ruby>うときは<ruby>必<rt>かなら</rt></ruby>ずルールを<ruby>守<rt>まも</rt>
-                        </ruby>ってください。<br><br>
-
-                        フックはReactコンポーネントの<ruby>最上位<rt>さいじょうい</rt></ruby>でのみ<ruby>呼<rt>よ</rt></ruby>び<ruby>出<rt>だ</rt>
-                        </ruby>し<ruby>可能<rt>かのう</rt></ruby>です。
+                        フックのルールは<ruby>二<rt>ふた</rt></ruby>つだけです。<br>
+                        トップレベルで<ruby>呼<rt>よ</rt></ruby>べば、<ruby>順番<rt>じゅんばん</rt></ruby>が<ruby>変
+                            <rt>か</rt>
+                        </ruby>わらないことを<ruby>保証<rt>ほしょう</rt></ruby>します。<br>
+                        React<ruby>関数<rt>かんすう</rt></ruby>から<ruby>呼<rt>よ</rt></ruby>べば、Reactが<ruby>正<rt>ただ</rt>
+                        </ruby>しく<ruby>管理<rt>かんり</rt></ruby>できることを<ruby>保証<rt>ほしょう</rt></ruby>します。<br>
+                        このルールを<ruby>守<rt>まも</rt></ruby>れば、<ruby>問題<rt>もんだい</rt></ruby>は<ruby>起<rt>お</rt></ruby>きません。
                     </aside>
                 </section>
 
@@ -743,7 +1030,7 @@ function Component() {
                     <h2>フックのルール違反例</h2>
 
                     <div class="comparison">
-                        <div class="pattern fragment">
+                        <div class="pattern fragment" data-fragment-index="0">
                             <h4 class="error">条件分岐内でのフック</h4>
                             <pre><code data-lang="jsx">function Component({ condition }) {
   if (condition) {
@@ -774,22 +1061,21 @@ function Component() {
                         </div>
                     </div>
 
-                    <div class="pattern fragment">
-                        <h4 class="error">ループ内でのフック</h4>
-                        <pre><code data-lang="jsx">function Component({ items }) {
-  return items.map(item => {
-    const [state, setState] = useState(0); // NG!
-
-    return &lt;div key={item.id}&gt;{item.name}&lt;/div&gt;;
-  });
-}</code></pre>
-                    </div>
-
-                    <div class="warning fragment">
+                    <div class="warning fragment" data-fragment-index="0">
                         フックの実行順序が変わると、Reactの内部状態管理が破綻します
                     </div>
+
                     <aside class="notes">
-                        ルールを<ruby>守<rt>まも</rt></ruby>らないとエラーになったりバグが<ruby>起<rt>お</rt></ruby>きます。<br>
+                        <ruby>左側<rt>ひだりがわ</rt></ruby>の<ruby>例<rt>れい</rt></ruby>は、conditionがfalseになると、useStateが<ruby>呼
+                            <rt>よ</rt>
+                        </ruby>ばれなくなります。<br>
+                        これは<ruby>順番<rt>じゅんばん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わるので、ダメです。<br>
+                        <ruby>右側<rt>みぎがわ</rt></ruby>の<ruby>例<rt>れい</rt></ruby>では、フックは<ruby>必<rt>かなら</rt></ruby>ず<ruby>呼
+                            <rt>よ</rt>
+                        </ruby>ばれます。<br>
+                        <ruby>条件<rt>じょうけん</rt></ruby>による<ruby>処理<rt>しょり</rt></ruby>は、フックの<ruby>中<rt>なか</rt>
+                        </ruby>に<ruby>書<rt>か</rt></ruby>きます。これが<ruby>正<rt>ただ</rt></ruby>しい<ruby>方法<rt>ほうほう</rt>
+                        </ruby>です。
                     </aside>
                 </section>
 
@@ -797,17 +1083,439 @@ function Component() {
                 <section>
                     <h2>まとめ</h2>
 
-                    <dl>
-                        <dt></dt>
-                        <dd></dd>
-                    </dl>
+                    <ul>
+                        <li>Reactはフックを呼び出し順序で管理している</li>
+                        <li>毎回同じ順序で呼ぶ必要がある（ルール）</li>
+                        <li>ルールを破ると予期しない動作やエラーが発生</li>
+                        <li>リンター（ESLintなど）でルール違反を自動検出できる</li>
+                    </ul>
+
+                    <aside class="notes">
+                        フックは<ruby>便利<rt>べんり</rt></ruby>ですが、ルールを<ruby>守<rt>まも</rt></ruby>らないと<ruby>危険<rt>きけん</rt>
+                        </ruby>です。<br>
+                        でも、ルールは<ruby>簡単<rt>かんたん</rt></ruby>です。トップレベルで<ruby>呼<rt>よ</rt></ruby>ぶだけ。<br>
+                        ESLintを<ruby>使<rt>つか</rt></ruby>えば、<ruby>間違<rt>まちが</rt></ruby>いを<ruby>自動<rt>じどう</rt>
+                        </ruby>で<ruby>見<rt>み</rt></ruby>つけてくれます。
+                    </aside>
+                </section>
+            </section>
+
+            <!-- Custom hooks -->
+            <section>
+                <section>
+                    <h1>カスタムフック</h1>
+                    <p>コンポーネント間でのロジック共有</p>
+                    <aside class="notes">
+                        <ruby>次<rt>つぎ</rt></ruby>は、<ruby>自分<rt>じぶん</rt></ruby>でフックを<ruby>作<rt>つく</rt></ruby>る<ruby>方法
+                            <rt>ほうほう</rt>
+                        </ruby>を<ruby>学<rt>まな</rt></ruby>びます。<br>
+                        これができると、コードがずっと<ruby>綺麗<rt>きれい</rt></ruby>になります。
+                    </aside>
+                </section>
+
+                <!-- Custom hook anathomy -->
+                <section>
+                    <h2>カスタムフック</h2>
+
+                    <div class="triptych centered">
+                        <div>
+                            <h5>既存のフックを組み合わせて作る独自のフック</h5>
+                            <pre><code data-lang="jsx">// 1. 名前は「use」で始める（必須）
+function useToggle(initialValue = false) { 
+    // 2. 組み込みフックを最上位で呼び出す
+    const [value, setValue] = useState(initialValue); 
+    
+    // 3. 必要なロジックを書く
+    const toggle = () => setValue(prev => !prev);
+    
+    // 4. 必要なロジックを書く
+    return [value, toggle];
+}
+</code></pre>
+                            <ul class="font-smaller fragment" data-fragment-index="1">
+                                <li>useStateを内部で使っている → これはフック</li>
+                                <li>複数のコンポーネントで再利用できる</li>
+                                <li>同じフックのルールが適用される</li>
+                            </ul>
+                        </div>
+                        <div class="arrow fragment" data-fragment-index="2">➡</div>
+                        <div class="fragment" data-fragment-index="2">
+                            <h5>使用例：通常のフックと同じように使う</h5>
+                            <pre><code data-lang="jsx">function Modal() {
+    // カスタムフックを呼び出す
+    const [isOpen, toggleOpen] = useToggle(false); 
+    
+    return (
+        &lt;&gt;
+            &lt;button onClick={toggleOpen}&gt;
+                {isOpen ? '閉じる' : '開く'}
+            &lt;/button&gt;
+            {isOpen &amp;&amp; &lt;div&gt;モーダル内容&lt;/div&gt;}
+        &lt;/&gt;
+    );
+}
+
+// 他のコンポーネントでも同じロジックを再利用可能
+function Sidebar() {
+    const [isVisible, toggleVisible] = useToggle(true);
+    // ...
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        カスタムフックは、<ruby>既存<rt>きぞん</rt></ruby>のフックを<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt>
+                        </ruby>わせて<ruby>作<rt>つく</rt></ruby>ります。<br>
+                        <ruby>名前<rt>なまえ</rt></ruby>を<code>use</code>で<ruby>始<rt>はじ</rt></ruby>めるのは、Reactへの<ruby>約束<rt>
+                                やくそく</rt></ruby>です。<br>
+                        この<ruby>例<rt>れい</rt></ruby>では、useStateを<ruby>使<rt>つか</rt></ruby>っているので、これは<ruby>立派<rt>りっぱ</rt>
+                        </ruby>なフックです。<br>
+                        <ruby>一度<rt>いちど</rt></ruby><ruby>作<rt>つく</rt></ruby>れば、<ruby>色々<rt>いろいろ</rt>
+                        </ruby>なコンポーネントで<ruby>使<rt>つか</rt></ruby>い<ruby>回<rt>まわ</rt></ruby>せます。
+                    </aside>
+                </section>
+
+                <!-- What Makes a Function a Hook -->
+                <section>
+                    <h2>何がフックを「フック」にするのか</h2>
+                    <div class="quote fragment">フック = 他のフック（組み込みのReact機能）を呼び出す関数</div>
+
+                    <div class="comparison">
+                        <div class="fragment">
+                            <h4>実際のフック</h4>
+                            <p><code>useState</code>を呼び出している → <strong>フック</strong></p>
+                            <pre><code data-lang="jsx">function useCounter(initialValue = 0) {
+    const [count, setCount] = useState(initialValue);
+    
+    const increment = () => setCount(prev => prev + 1);
+    
+    return [count, increment];
+}</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <h4>フックではない普通の関数</h4>
+                            <p>他のフックを呼び出していない → <strong>ただの関数</strong></p>
+                            <pre><code data-lang="jsx">function formatPrice(price) {
+    return `¥${price.toLocaleString()}`;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        <ruby>見分<rt>みわ</rt></ruby>け<ruby>方<rt>かた</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>です。<ruby>中<rt>
+                                なか</rt></ruby>で<ruby>他<rt>ほか</rt></ruby>のフックを<ruby>呼<rt>よ</rt></ruby>んでいるか？<br>
+                        <ruby>左側<rt>ひだりがわ</rt></ruby>はuseStateを<ruby>呼<rt>よ</rt></ruby>んでいるので、フックです。<br>
+                        <ruby>右側<rt>みぎがわ</rt></ruby>はフックを<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>呼<rt>よ</rt>
+                        </ruby>んでいません。ただの<ruby>関数<rt>かんすう</rt></ruby>です。<br>
+                        フックじゃない<ruby>関数<rt>かんすう</rt></ruby>なら、<code>use</code>で<ruby>始<rt>はじ</rt></ruby>めちゃダメです。
+                    </aside>
+                </section>
+
+                <!-- Custom hook can call custom hooks -->
+                <section>
+                    <h2>フックは他のフックを呼び出せる</h2>
+                    <div class="quote">カスタムフック同士も組み合わせ可能</div>
+
+                    <pre><code data-lang="jsx">// 基本的なフック
+function useToggle(initialValue = false) {
+    const [value, setValue] = useState(initialValue);
+    const toggle = () => setValue(prev => !prev);
+    return [value, toggle];
+}
+
+// 他のカスタムフックを使うカスタムフック
+function useModal() {
+    const [isOpen, toggleOpen] = useToggle(false);  // カスタムフック呼び出し
+    const [data, setData] = useState(null);         // 組み込みフック呼び出し
+    
+    const openModal = (modalData) => {
+        setData(modalData);
+        toggleOpen();
+    };
+    
+    return { isOpen, data, openModal, closeModal: toggleOpen };
+}</code></pre>
+
+                    <p class="note fragment">フックの中でフックを呼ぶ = 普通のこと</p>
+
+                    <aside class="notes">
+                        フックの<ruby>中<rt>なか</rt></ruby>で、<ruby>別<rt>べつ</rt></ruby>のカスタムフックを<ruby>呼<rt>よ</rt>
+                        </ruby>ぶこともできます。<br>
+                        useModalは、useToggleという<ruby>別<rt>べつ</rt></ruby>のカスタムフックを<ruby>使<rt>つか</rt></ruby>っています。<br>
+                        これは<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>ありません。むしろ<ruby>推奨<rt>すいしょう</rt>
+                        </ruby>されています。<br>
+                        <ruby>小<rt>ちい</rt></ruby>さいフックを<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせて、<ruby>大<rt>
+                                おお</rt></ruby>きいフックを<ruby>作<rt>つく</rt></ruby>る<ruby>感<rt>かん</rt></ruby>じです。
+                    </aside>
+                </section>
+
+                <!-- Custom hook also obey rule of hooks -->
+                <section>
+                    <h2>カスタムフックも同じルールに従う</h2>
+                    <div class="quote">カスタムフックは既存のフックの組み合わせ</div>
+                    <div class="fragment">
+                        <pre><code data-lang="jsx">function useToggle(initialValue) {
+    const [value, setValue] = useState(initialValue); // これは普通のuseState呼び出
+    const toggle = () => setValue(prev => !prev);
+    
+    return [value, toggle];
+}
+
+// Reactから見ると：
+function MyComponent() {
+    const [isOpen, toggleOpen] = useToggle(false);    // useToggleの中のuseState
+    const [isDark, toggleDark] = useToggle(true);     // 2つ目のuseToggleの中のuseState
+    
+    // Reactから見ると普通のフック呼び出しと同じ
+}</code></pre>
+                    </div>
+
+                    <div class="note fragment">
+                        Reactの追跡システムに新しい魔法は加えない
+                    </div>
+
+                    <aside class="notes">
+                        カスタムフックも、<ruby>組<rt>く</rt></ruby>み<ruby>込<rt>こ</rt></ruby>みフックと<ruby>全<rt>まった</rt>
+                        </ruby>く<ruby>同<rt>おな</rt></ruby>じルールに<ruby>従<rt>したが</rt></ruby>います。<br>
+                        Reactから<ruby>見<rt>み</rt></ruby>ると、useToggleの<ruby>中<rt>なか</rt></ruby>のuseStateは、<ruby>普通<rt>ふつう
+                            </rt></ruby>のuseStateです。<br>
+                        だから、<ruby>条件分岐<rt>じょうけんぶんき</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>呼<rt>よ</rt>
+                        </ruby>んだりしちゃダメです。<br>
+                        <ruby>特別<rt>とくべつ</rt></ruby>なことは<ruby>何<rt>なに</rt></ruby>もありません。ただの<ruby>関数<rt>かんすう</rt>
+                        </ruby>の<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせです。
+                    </aside>
+                </section>
+
+                <!-- When custom hooks required -->
+                <section>
+                    <h2>【例】同じロジックを何度も書いている...</h2>
+
+                    <div class="comparison fragment">
+                        <pre><code data-lang="jsx">function UserProfile({ userId }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        fetch(`/api/users/${userId}`)
+            .then(res => res.json())
+            .then(setUser)
+            .catch(setError)
+            .finally(() => setLoading(false));
+    }, [userId]);
+    
+    if (loading) return &lt;div&gt;ユーザーを読み込み中...&lt;/div&gt;;
+    // ...
+}</code></pre>
+                        <div>
+                            <pre><code data-lang="jsx">
+function PostList() {
+    const [posts, setPosts] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        fetch('/api/posts')
+            .then(res => res.json())
+            .then(setPosts)
+            .catch(setError)
+            .finally(() => setLoading(false));
+    }, []);
+    
+    if (loading) return &lt;div&gt;投稿を読み込み中...&lt;/div&gt;;
+    // ...
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <ol class="fragment compact-list">
+                        <li>この3つの状態パターンが繰り返されている</li>
+                        <li>この<code>useEffect</code>の<code>fetch</code>パターンも同じ</li>
+                    </ol>
+                    <p class="note fragment">バグ修正や機能追加で両方変更する必要があります</p>
+
+                    <aside class="notes">
+                        <ruby>二<rt>ふた</rt></ruby>つのコンポーネントが、ほぼ<ruby>同<rt>おな</rt></ruby>じコードを<ruby>書<rt>か</rt>
+                        </ruby>いています。<br>
+                        <ruby>三<rt>みっ</rt></ruby>つのstate、fetch、エラーハンドリング。<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>同<rt>おな
+                            </rt></ruby>じパターンです。<br>
+                        もしバグがあったら、<ruby>両方<rt>りょうほう</rt></ruby><ruby>直<rt>なお</rt></ruby>さないといけません。<ruby>面倒<rt>めんどう
+                            </rt></ruby>ですね。<br>
+                        こういう<ruby>時<rt>とき</rt></ruby>が、カスタムフックを<ruby>作<rt>つく</rt></ruby>るタイミングです。
+                    </aside>
+                </section>
+
+                <!-- Custom hook use case -->
+                <section>
+                    <h2>【例】カスタムフック</h2>
+
+                    <div class="triptych centered">
+                        <div>
+                            <h5>共通状態ロジックを抽出</h5>
+                            <pre><code data-lang="jsx">function useApi(url) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        setLoading(true);
+        fetch(url)
+            .then(res => res.json())
+            .then(setData)
+            .catch(setError)
+            .finally(() => setLoading(false));
+    }, [url]);
+    
+    return { data, loading, error };
+}</code></pre>
+                        </div>
+                        <div class="arrow fragment" data-fragment-index="1">➡</div>
+                        <div class="fragment" data-fragment-index="1">
+                            <h5>使用例：</h5>
+                            <pre><code data-lang="jsx">function UserProfile({ userId }) {
+    const { data, loading, error } = useApi(`/api/users/${userId}`);
+    
+    if (loading) return &lt;div&gt;ユーザーを読み込み中...&lt;/div&gt;;
+    if (error) return &lt;div&gt;エラー&lt;/div&gt;;
+    
+    return &lt;div&gt;{data.name}&lt;/div&gt;;
+}
+
+function PostList() {
+    const { data, loading, error } = useApi('/api/posts');
+    
+    if (loading) return &lt;div&gt;投稿を読み込み中...&lt;/div&gt;;
+    if (error) return &lt;div&gt;エラー&lt;/div&gt;;
+    
+    return data.map(post => &lt;div&gt;{post.title}&lt;/div&gt;);
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        <ruby>共通<rt>きょうつう</rt></ruby>のロジックをuseApiというフックに<ruby>抜<rt>ぬ</rt></ruby>き<ruby>出<rt>だ</rt>
+                        </ruby>しました。<br>
+                        これで、<ruby>二<rt>ふた</rt></ruby>つのコンポーネントはずっとシンプルになりました。<br>
+                        バグ<ruby>修正<rt>しゅうせい</rt></ruby>も、useApiを<ruby>直<rt>なお</rt></ruby>すだけで<ruby>済<rt>す</rt>
+                        </ruby>みます。<br>
+                        <ruby>新<rt>あたら</rt></ruby>しいコンポーネントでも、<ruby>同<rt>おな</rt></ruby>じフックをすぐ<ruby>使<rt>つか</rt>
+                        </ruby>えます。
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>【例】なぜレンダリングロジックは含めないのか？</h2>
+                    <div class="quote">フックはロジック、コンポーネントは表示</div>
+                    <pre><code data-lang="jsx">// ❌ 責任が混在 - 再利用しにくい
+function useBadApi(url) {
+    // ... fetchロジック
+    
+    if (loading) return &lt;div&gt;読み込み中...&lt;/div&gt;;  // UIをフックが決めてる
+
+    return data; // フックがデーターもを返してる？
+}
+
+// ✅ データだけを返して、表示は各コンポーネントに任せる
+function useApi(url) {
+    // ... fetchロジック
+
+    return { data, loading, error };  // コンポーネントが表示を決める
+}</code></pre>
+                    <p class="note">フックは状態を管理、コンポーネントがJSXを管理</p>
+
+                    <aside class="notes">
+                        フックはデータだけを<ruby>返<rt>かえ</rt></ruby>すべきです。JSXは<ruby>返<rt>かえ</rt></ruby>しません。<br>
+                        なぜなら、<ruby>表示<rt>ひょうじ</rt></ruby>の<ruby>仕方<rt>しかた</rt></ruby>は、コンポーネントごとに<ruby>違<rt>ちが</rt>
+                        </ruby>うからです。<br>
+                        ユーザープロフィールと<ruby>投稿<rt>とうこう</rt></ruby>リストでは、ローディング<ruby>画面<rt>がめん</rt></ruby>も<ruby>違<rt>ちが
+                            </rt></ruby>うかもしれません。<br>
+                        フックは「<ruby>何<rt>なに</rt></ruby>」を<ruby>提供<rt>ていきょう</rt></ruby>して、コンポーネントが「どう」<ruby>表示<rt>ひょうじ
+                            </rt></ruby>するか<ruby>決<rt>き</rt></ruby>めます。
+                    </aside>
+                </section>
+
+                <!-- Why make custom hook -->
+                <section>
+                    <h2>カスタムフックを作る理由</h2>
+
+                    <div class="four-square">
+                        <div class="fragment">
+                            <h3>1. ロジックの再利用</h3>
+                            <pre><code data-lang="jsx">// 複数のコンポーネントで同じロジック
+function Profile() {
+    const [isOpen, toggleOpen] = useToggle(false);
+    // ...
+}
+
+function Settings() {
+    const [isVisible, toggleVisible] = useToggle(true);
+    // ...
+}</code></pre>
+                            <p>一度書けば、どこでも使える</p>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>2. 複雑なロジックの抽象化</h3>
+                            <pre><code data-lang="jsx">function useApi(url) {
+    // 3つの状態 + useEffect
+    // 複雑なfetchロジック
+    // ...
+}
+
+function Profile() {
+    // シンプルな1行
+    const { data, loading, error } = useApi(url);
+}</code></pre>
+                            <p>実装の詳細を気にしなくていい</p>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>3. テストが簡単</h3>
+                            <p>フックは独立してテストできる</p>
+                        </div>
+
+                        <div class="fragment">
+                            <h3>4. コンポーネントがすっきり</h3>
+                            <p>ビジネスロジック vs 表示ロジック</p>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        カスタムフックの<ruby>一番<rt>いちばん</rt></ruby>の<ruby>利点<rt>りてん</rt></ruby>は、コードの<ruby>再利用<rt>さいりよう</rt>
+                        </ruby>です。<br>
+                        でも、それだけじゃありません。<ruby>複雑<rt>ふくざつ</rt></ruby>なロジックを<ruby>隠<rt>かく</rt></ruby>すこともできます。<br>
+                        テストも<ruby>書<rt>か</rt></ruby>きやすくなります。フックだけをテストすればいいからです。<br>
+                        <ruby>結果<rt>けっか</rt></ruby>として、コンポーネントは<ruby>表示<rt>ひょうじ</rt></ruby>に<ruby>集中<rt>しゅうちゅう</rt>
+                        </ruby>できます。<ruby>綺麗<rt>きれい</rt></ruby>ですね。
+                    </aside>
+                </section>
+
+                <!-- まとめ -->
+                <section>
+                    <h2>まとめ</h2>
+
+                    <ul>
+                        <li>既存のフックを組み合わせて作る独自のフック</li>
+                        <li>複雑な状態ロジックを抽象化できる</li>
+                        <li>コンポーネント間でロジックを簡単に共有できる</li>
+                        <li>同じフックのルールが適用される</li>
+                    </ul>
+
+                    <aside class="notes">
+                        カスタムフックは、Reactで<ruby>綺麗<rt>きれい</rt></ruby>なコードを<ruby>書<rt>か</rt></ruby>くための<ruby>重要<rt>じゅうよう
+                            </rt></ruby>なテクニックです。<br>
+                        <ruby>最初<rt>さいしょ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しく<ruby>感<rt>かん</rt>
+                        </ruby>じるかもしれませんが、<ruby>慣<rt>な</rt></ruby>れれば<ruby>自然<rt>しぜん</rt></ruby>に<ruby>使<rt>つか</rt>
+                        </ruby>えます。<br>
+                        <ruby>同<rt>おな</rt></ruby>じコードを<ruby>二回<rt>にかい</rt></ruby><ruby>書<rt>か</rt>
+                        </ruby>いたら、カスタムフックを<ruby>考<rt>かんが</rt></ruby>えてみてください。
+                    </aside>
                 </section>
             </section>
 
             <section>
-                <!-- Quiz 5: Rules of Hooks -->
                 <section>
-                    <h4>理解度チェック⑤【フックのルール】</h4>
+                    <h4>理解度チェック①【フックのルール】</h4>
                     <div class="quiz">
                         <h3>このコードの問題は？</h3>
                         <pre><code data-lang="jsx">function Component({ showData }) {
@@ -832,6 +1540,86 @@ function Component() {
                     <div class="fragment note" data-fragment-index="1">
                         <strong>答え:</strong> B) フックは必ずトップレベルで呼び出す必要がある
                     </div>
+                    <aside class="notes">このコードは、<ruby>条件分岐<rt>じょうけんぶんき</rt></ruby>の中で<ruby>フック<rt>ふっく</rt>
+                        </ruby>を<ruby>使<rt>つか</rt></ruby>っています。<br>でも、<ruby>React<rt>りあくと</rt></ruby>では、<ruby>フック
+                            <rt>ふっく</rt>
+                        </ruby>は<ruby>関数<rt>かんすう</rt></ruby>の<ruby>一番上<rt>いちばんうえ</rt></ruby>で<ruby>使<rt>
+                                つか</rt></ruby>わないと<ruby>いけません<rt>いけません</rt></ruby>。<br>だから、Bが<ruby>正解<rt>せいかい</rt>
+                        </ruby>です。</aside>
+                </section>
+
+                <section>
+                    <h4>理解度チェック②【カスタムフック】</h4>
+                    <div class="quiz">
+                        <h3>次のうち、カスタムフックとして正しいものは？</h3>
+                        <div class="comparison">
+                            <pre><code data-lang="jsx">function getUser(id) { // A
+    return fetch(`/users/${id}`); 
+}
+
+function useUser(id) { // C
+    const [user, setUser] = useState(null); 
+    return user; 
+}
+ </code></pre>
+                            <pre><code data-lang="jsx">function useUser(id) { // B
+    return fetch(`/users/${id}`); 
+}
+
+function User(id) { // D
+    const [user, setUser] = useState(null); 
+    return &lt;div&gt;{user}&lt;/div&gt;; 
+}
+</code></pre>
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">A) <code>getUser(id)</code></div>
+                            <div class="quiz-option">B) <code>useUser(id)</code></div>
+                            <div class="quiz-option custom fragment correct-answer" data-fragment-index="1">C)
+                                <code>useUser(id)</code>
+                            </div>
+                            <div class="quiz-option">D) <code>User(id)</code></div>
+                        </div>
+                    </div>
+                    <div class="fragment note" data-fragment-index="1">
+                        <strong>答え:</strong> C) 他のフックを呼んでいて、<code>use</code>で始まる
+                    </div>
+                    <aside class="notes"><ruby>カスタムフック<rt>かすたむふっく</rt></ruby>は、<code>use</code>で<ruby>始<rt>はじ</rt>
+                        </ruby>まり、<ruby>中<rt>なか</rt></ruby>で<ruby>他<rt>ほか</rt></ruby>の<ruby>フック<rt>ふっく</rt>
+                        </ruby>を<ruby>使<rt>つか</rt>
+                        </ruby>います。<br>Cの<code>useUser</code>は<code>useState</code>を<ruby>使<rt>つか</rt>
+                        </ruby>っているので、<ruby>正しい<rt>ただしい</rt></ruby><ruby>カスタムフック<rt>かすたむふっく</rt>
+                        </ruby>です。<br>だから、Cが<ruby>正解<rt>せいかい</rt></ruby>です。</aside>
+                </section>
+
+                <section>
+                    <h4>理解度チェック③【フックの呼び出し】</h4>
+                    <div class="quiz">
+                        <h3>このコードの問題は？</h3>
+                        <pre><code data-lang="jsx">function useCounter() {
+  let count = 0;  // 普通の変数
+  const increment = () => count++;
+
+  return [count, increment];
+}
+</code></pre>
+                        <div class="quiz-options small">
+                            <div class="quiz-option">A) 名前が間違っている</div>
+                            <div class="quiz-option custom fragment correct-answer" data-fragment-index="1">B)
+                                <code>count</code>が<code>useState</code>じゃない → 再レンダリングされない
+                            </div>
+                            <div class="quiz-option">C) <code>increment</code>の書き方が間違い</div>
+                            <div class="quiz-option">D) 問題なし</div>
+                        </div>
+                    </div>
+                    <div class="fragment note" data-fragment-index="1">
+                        <strong>答え:</strong> B) 状態は<code>useState</code>で管理する必要がある
+                    </div>
+                    <aside class="notes">このコードでは、<code>count</code>が<ruby>普通<rt>ふつう</rt></ruby>の<ruby>変数<rt>へんすう</rt>
+                        </ruby>です。<br>でも、<ruby>React<rt>りあくと</rt></ruby>では<ruby>状態<rt>じょうたい</rt>
+                        </ruby>を<code>useState</code>で<ruby>管理<rt>かんり</rt></ruby>しないと、<ruby>再<rt>さい</rt>
+                        </ruby><ruby>レンダリング<rt>れんだりんぐ</rt></ruby>されません。<br>だから、Bが<ruby>正解<rt>せいかい</rt></ruby>です。
+                    </aside>
                 </section>
             </section>
 
@@ -850,40 +1638,51 @@ function Component() {
                 <section>
                     <div class="timer"></div>
 
-                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
+                    <h2><span class="task-number">実践演習</span> ポケモンAPIフック</h2>
 
-                    <p><strong><code>&lt;ZanpakutoLoader&gt;</code> コンポーネントを作成してください</strong></p>
-                    <ul class="compact-list">
-                        <li>ローディング中は「読み込み中...」と表示</li>
-                        <li>成功時は <code>name</code> と <code>powerLevel</code> を表示</li>
-                        <li>失敗時はエラーメッセージを表示</li>
-                        <li><code>useState</code> と <code>useEffect</code> を組み合わせて実装すること</li>
-                    </ul>
+                    <p><strong>共通の<code>fetch</code>パターンを<code>useApi</code>フックに抽出してください</strong></p>
+                    <br>
+                    <div class="triptych-transformation">
+                        <div>
+                            <h4>現在：重複したコード</h4>
+                            <ul class="compact-list font-smaller">
+                                <li><code>PokemonCard</code> で <code>fetch</code></li>
+                                <li><code>TypeInfo</code> でも同じ <code>fetch</code></li>
+                                <li>同じ状態管理パターン</li>
+                            </ul>
+                        </div>
 
-                    <pre><code data-lang="typescript">function ZanpakutoLoader({ name }: { name: string }) {
-  const [zanpakuto, setZanpakuto] = useState&lt;Zanpakuto | null&gt;(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+                        <div class="arrow">→</div>
 
-  useEffect(() => {
-    // name が変更された時に loadZanpakto を呼び出す処理を書く
-  }, [name]);
+                        <div>
+                            <h4>目標：共通化</h4>
+                            <ul class="compact-list font-smaller">
+                                <li><code>useApi(url)</code> を作成</li>
+                                <li>両方のコンポーネントで使用</li>
+                                <li>重複を削除</li>
+                            </ul>
+                        </div>
+                    </div>
 
-  return &lt;div&gt;{/* ローディング、結果、エラーの表示 */}&lt;/div&gt;;
-}</code></pre>
+                    <pre><code data-lang="typescript">function useApi&lt;T&gt;(url: string) {
+  // 1. data, loading, error の状態を管理
+  // 2. useEffect で fetch 処理を実装
+  // 3. { data, loading, error } を返す
+}
+
+// 使用例
+const { data, loading, error } = useApi&lt;Pokemon&gt;(url);</code></pre>
 
                     <div class="note"><a target="_blank"
                             href="https://github.com/cdefined/front-kaizen/blob/master/react-lessons/lesson_4/task.md">react-lessons/lesson_4/task.md</a>
                     </div>
-                </section>
-                <section>
-                    <h2><span class="task-number">課題1</span> 斬魄刀ロアダー</h2>
-                    <iframe
-                        src="https://codesandbox.io/embed/mgy7j3?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1&expanddevtools=1"
-                        style="width:100%; height: 700px; border:0; border-radius: 4px; overflow:hidden;"
-                        title="Zanpakuto Loader"
-                        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-                        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+                    <aside class="notes">
+                        PokemonCard と TypeInfo を見てください。<br>
+                        同じパターンがありますね。<br>
+                        useApi を作って、共通化しましょう。<br>
+                        15分くらいで作ってみてください。
+                    </aside>
                 </section>
             </section>
 
@@ -894,17 +1693,25 @@ function Component() {
 
                     <h2>今日学んだこと</h2>
                     <ul>
-                        <li></li>
+                        <li>フックは React の機能を活用するための特別な関数です</li>
+                        <li>フックのルールを守らないと、バグやエラーが発生する可能性があります</li>
+                        <li>カスタムフックを使えば、状態ロジックを抽象化して再利用できます</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h1>宿題・実践課題</h1>
+                    <h1>次のステップ</h1>
 
-                    <h3>完全な斬魄刀フォームを作成してください</h3>
-                    <div class="note"><a
-                            href="https://github.com/cdefined/front-kaizen/tree/master/react-lessons/lesson_4/homework"
-                            target="_blank">react-lessons/lesson_4/homework</a></div>
+                    <ul>
+                        <li>実際のプロジェクトで使ってみる</li>
+                        <li>質問があればChatWorkで</li>
+                        <li>宿題のプルリクエストは（まだ）大歓迎です</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>お疲れ様でした！</h1>
+                    <p>ありがとうございました</p>
                 </section>
             </section>
         </div>
